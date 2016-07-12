@@ -35,16 +35,19 @@ public class Player : MonoBehaviour
         // transform.position = new Vector2(transform.position.x + Input.GetAxis("Horizontal") * (Time.deltaTime*speed), transform.position.y);
         body.AddForce(new Vector2(Input.GetAxis("Horizontal") * (speed), 0));
 
+        if (Input.GetAxis("Horizontal") < 0)
+            sr.flipX = true;
+        if (Input.GetAxis("Horizontal") > 0)
+            sr.flipX = false;
+
         if (body.velocity.x == 0f && body.velocity.y == 0f)
             anim.Play("idle");
         else if (body.velocity.x > 0 && body.velocity.y == 0f)
         {
-            sr.flipX = false;
             anim.Play("walk");
         }
         else if (body.velocity.y == 0f)
         {
-            anim.Play("walk");
             sr.flipX = true;
         }
         else

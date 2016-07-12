@@ -1,0 +1,481 @@
+fileFormatVersion: 2
+guid: b2d61514cf7fdc2489b77b231e9cdc74
+timeCreated: 1468338093
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: newgeese_0
+    21300002: newgeese_1
+    21300004: newgeese_2
+    21300006: newgeese_3
+    21300008: newgeese_4
+    21300010: newgeese_5
+    21300012: newgeese_6
+    21300014: newgeese_7
+    21300016: newgeese_8
+    21300018: newgeese_9
+    21300020: newgeese_10
+    21300022: newgeese_11
+    21300024: newgeese_12
+    21300026: newgeese_17
+    21300028: newgeese_18
+    21300030: newgeese_19
+    21300032: newgeese_20
+    21300034: newgeese_21
+    21300036: newgeese_22
+    21300038: newgeese_23
+    21300040: newgeese_24
+    21300042: newgeese_27
+    21300044: newgeese_28
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 32
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: newgeese_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 290
+        width: 31
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_1
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 290
+        width: 41
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5.5, y: 11.5}
+        - {x: -20.5, y: 3.5}
+        - {x: -20.5, y: -16.5}
+        - {x: 10.5, y: -16.5}
+        - {x: 20.5, y: -4.5}
+        - {x: 20.5, y: 9.5}
+        - {x: 19.5, y: 11.5}
+    - name: newgeese_2
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 251
+        width: 34
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -2, y: 16}
+        - {x: -17, y: 7}
+        - {x: -17, y: -10}
+        - {x: -15, y: -12}
+        - {x: -7, y: -16}
+        - {x: 4, y: -16}
+        - {x: 11, y: -9}
+        - {x: 17, y: 5}
+        - {x: 17, y: 16}
+    - name: newgeese_3
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 251
+        width: 35
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_4
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 251
+        width: 34
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_5
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 217
+        width: 41
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_6
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 217
+        width: 41
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_7
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 217
+        width: 41
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_8
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 148
+        width: 48
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_9
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 149
+        width: 46
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_10
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 142
+        width: 46
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_11
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 146
+        width: 46
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_12
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 149
+        width: 47
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_17
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 71
+        width: 41
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20.5, y: 18.5}
+        - {x: -20.5, y: -18.5}
+        - {x: 16.5, y: -18.5}
+        - {x: 20.5, y: -10.5}
+        - {x: 20.5, y: 15.5}
+        - {x: 18.5, y: 18.5}
+      - - {x: -11.5, y: -0.5}
+        - {x: -14.5, y: -2.5}
+        - {x: -14.5, y: -6.5}
+        - {x: -12.5, y: -7.5}
+        - {x: -9.5, y: -7.5}
+        - {x: -8.5, y: -6.5}
+        - {x: -8.5, y: -0.5}
+    - name: newgeese_18
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 72
+        width: 37
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -8.5, y: 17.5}
+        - {x: -8.5, y: 14.5}
+        - {x: -5.5, y: 13.5}
+        - {x: -9.5, y: 14.5}
+        - {x: -11.5, y: 17.5}
+        - {x: -17.5, y: 17.5}
+        - {x: -18.5, y: 13.5}
+        - {x: -18.5, y: -2.5}
+        - {x: -6.5, y: -17.5}
+        - {x: 16.5, y: -17.5}
+        - {x: 18.5, y: -12.5}
+        - {x: 18.5, y: 17.5}
+      - - {x: -9.5, y: -1.5}
+        - {x: -11.5, y: -1.5}
+        - {x: -13.5, y: -4.5}
+        - {x: -13.5, y: -7.5}
+        - {x: -11.5, y: -8.5}
+        - {x: -9.5, y: -8.5}
+        - {x: -7.5, y: -5.5}
+        - {x: -7.5, y: -2.5}
+    - name: newgeese_19
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 71
+        width: 41
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20.5, y: 18.5}
+        - {x: -20.5, y: -18.5}
+        - {x: 16.5, y: -18.5}
+        - {x: 20.5, y: -10.5}
+        - {x: 20.5, y: 15.5}
+        - {x: 18.5, y: 18.5}
+      - - {x: -11.5, y: -0.5}
+        - {x: -14.5, y: -2.5}
+        - {x: -14.5, y: -6.5}
+        - {x: -12.5, y: -7.5}
+        - {x: -9.5, y: -7.5}
+        - {x: -8.5, y: -6.5}
+        - {x: -8.5, y: -0.5}
+    - name: newgeese_20
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 72
+        width: 37
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -8.5, y: 17.5}
+        - {x: -8.5, y: 14.5}
+        - {x: -5.5, y: 13.5}
+        - {x: -9.5, y: 14.5}
+        - {x: -11.5, y: 17.5}
+        - {x: -17.5, y: 17.5}
+        - {x: -18.5, y: 13.5}
+        - {x: -18.5, y: -2.5}
+        - {x: -6.5, y: -17.5}
+        - {x: 16.5, y: -17.5}
+        - {x: 18.5, y: -12.5}
+        - {x: 18.5, y: 17.5}
+      - - {x: -9.5, y: -1.5}
+        - {x: -11.5, y: -1.5}
+        - {x: -13.5, y: -4.5}
+        - {x: -13.5, y: -7.5}
+        - {x: -11.5, y: -8.5}
+        - {x: -9.5, y: -8.5}
+        - {x: -7.5, y: -5.5}
+        - {x: -7.5, y: -2.5}
+    - name: newgeese_21
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 71
+        width: 41
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20.5, y: 18.5}
+        - {x: -20.5, y: -18.5}
+        - {x: 16.5, y: -18.5}
+        - {x: 20.5, y: -10.5}
+        - {x: 20.5, y: 15.5}
+        - {x: 18.5, y: 18.5}
+      - - {x: -11.5, y: -0.5}
+        - {x: -14.5, y: -2.5}
+        - {x: -14.5, y: -6.5}
+        - {x: -12.5, y: -7.5}
+        - {x: -9.5, y: -7.5}
+        - {x: -8.5, y: -6.5}
+        - {x: -8.5, y: -0.5}
+    - name: newgeese_22
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 72
+        width: 37
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -8.5, y: 17.5}
+        - {x: -8.5, y: 14.5}
+        - {x: -5.5, y: 13.5}
+        - {x: -9.5, y: 14.5}
+        - {x: -11.5, y: 17.5}
+        - {x: -17.5, y: 17.5}
+        - {x: -18.5, y: 13.5}
+        - {x: -18.5, y: -2.5}
+        - {x: -6.5, y: -17.5}
+        - {x: 16.5, y: -17.5}
+        - {x: 18.5, y: -12.5}
+        - {x: 18.5, y: 17.5}
+      - - {x: -9.5, y: -1.5}
+        - {x: -11.5, y: -1.5}
+        - {x: -13.5, y: -4.5}
+        - {x: -13.5, y: -7.5}
+        - {x: -11.5, y: -8.5}
+        - {x: -9.5, y: -8.5}
+        - {x: -7.5, y: -5.5}
+        - {x: -7.5, y: -2.5}
+    - name: newgeese_23
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 71
+        width: 41
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20.5, y: 18.5}
+        - {x: -20.5, y: -18.5}
+        - {x: 16.5, y: -18.5}
+        - {x: 20.5, y: -10.5}
+        - {x: 20.5, y: 15.5}
+        - {x: 18.5, y: 18.5}
+      - - {x: -11.5, y: -0.5}
+        - {x: -14.5, y: -2.5}
+        - {x: -14.5, y: -6.5}
+        - {x: -12.5, y: -7.5}
+        - {x: -9.5, y: -7.5}
+        - {x: -8.5, y: -6.5}
+        - {x: -8.5, y: -0.5}
+    - name: newgeese_24
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 72
+        width: 37
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -8.5, y: 17.5}
+        - {x: -8.5, y: 14.5}
+        - {x: -5.5, y: 13.5}
+        - {x: -9.5, y: 14.5}
+        - {x: -11.5, y: 17.5}
+        - {x: -17.5, y: 17.5}
+        - {x: -18.5, y: 13.5}
+        - {x: -18.5, y: -2.5}
+        - {x: -6.5, y: -17.5}
+        - {x: 16.5, y: -17.5}
+        - {x: 18.5, y: -12.5}
+        - {x: 18.5, y: 17.5}
+      - - {x: -9.5, y: -1.5}
+        - {x: -11.5, y: -1.5}
+        - {x: -13.5, y: -4.5}
+        - {x: -13.5, y: -7.5}
+        - {x: -11.5, y: -8.5}
+        - {x: -9.5, y: -8.5}
+        - {x: -7.5, y: -5.5}
+        - {x: -7.5, y: -2.5}
+    - name: newgeese_27
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 0
+        width: 16
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: newgeese_28
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 0
+        width: 16
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
