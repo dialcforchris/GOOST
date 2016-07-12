@@ -8,10 +8,14 @@ public class Player : MonoBehaviour
     float jump;
     [SerializeField]
     private Rigidbody2D body;
-	// Use this for initialization
-	void Start () 
+    [SerializeField]
+    private SpriteRenderer sr;
+    [SerializeField]
+    private Animator anim;
+
+    void Awake () 
     {
-	
+        platformManager.instance.NoCollisionsPlease(GetComponent<Collider2D>());
 	}
 	
 	// Update is called once per frame
@@ -27,8 +31,30 @@ public class Player : MonoBehaviour
 
     void Movement()
     {
-       // transform.position = new Vector2(transform.position.x + Input.GetAxis("Horizontal") * (Time.deltaTime*speed), transform.position.y);
-        body.AddForce(new Vector2(Input.GetAxis("Horizontal") * (speed),0));
+        // transform.position = new Vector2(transform.position.x + Input.GetAxis("Horizontal") * (Time.deltaTime*speed), transform.position.y);
+        body.AddForce(new Vector2(Input.GetAxis("Horizontal") * (speed), 0));
+
+        if (body.velocity.x == 0f && body.velocity.y == 0f)
+            anim.Play("idle");
+        else if (body.velocity.x > 0 && body.velocity.y == 0f)
+        {
+            sr.flipX = false;
+            anim.Play("walk");
+        }
+        else if (body.velocity.y == 0f)
+        {
+            anim.Play("walk");
+            sr.flipX = true;
+        }
+        else
+        {
+            if (body.velocity.x > 0)
+                sr.flipX = false;
+            if (body.velocity.x < 0)
+                sr.flipX = true;
+
+            anim.Play("fly");
+        }
     }
 
     bool JustPressed(string _button)
