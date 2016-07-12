@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     float jump;
     [SerializeField]
     private Rigidbody2D body;
+    public 
 	// Use this for initialization
 	void Start () 
     {
