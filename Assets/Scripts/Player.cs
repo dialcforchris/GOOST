@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
 
     void Movement()
     {
+        VelocityCheck();
         // transform.position = new Vector2(transform.position.x + Input.GetAxis("Horizontal") * (Time.deltaTime*speed), transform.position.y);
         body.AddForce(new Vector2(Input.GetAxis("Horizontal") * (speed), 0));
 
@@ -70,5 +71,11 @@ public class Player : MonoBehaviour
         }
         return pressed;
     }
-    
+    void VelocityCheck()
+    {
+        if (body.velocity.magnitude>10 )
+        {
+            body.velocity *= 0.9f;
+        }
+    }
 }
