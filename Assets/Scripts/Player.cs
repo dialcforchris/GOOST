@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Animator anim;
 
-    void Awake () 
+    void Start () 
     {
         platformManager.instance.NoCollisionsPlease(GetComponent<Collider2D>());
 	}
