@@ -1,0 +1,237 @@
+fileFormatVersion: 2
+guid: f8af719047b988c4cb45de6cf979e938
+timeCreated: 1468408383
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: goose_bits_0
+    21300002: goose_bits_1
+    21300004: goose_bits_2
+    21300006: goose_bits_3
+    21300008: goose_bits_4
+    21300010: goose_bits_5
+    21300012: goose_bits_6
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 768
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: goose_bits_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 9
+        width: 636
+        height: 279
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 234, y: -106.5}
+        - {x: 246, y: -93.5}
+        - {x: 269, y: -77.5}
+        - {x: 287, y: -63.5}
+        - {x: 296, y: -51.5}
+        - {x: 311, y: -40.5}
+        - {x: 318, y: -18.5}
+        - {x: 318, y: 36.5}
+        - {x: 313, y: 50.5}
+        - {x: 289, y: 82.5}
+        - {x: 278, y: 95.5}
+        - {x: 238, y: 114.5}
+        - {x: 227, y: 118.5}
+        - {x: 173, y: 134.5}
+        - {x: 151, y: 139.5}
+        - {x: 56, y: 139.5}
+        - {x: 30, y: 134.5}
+        - {x: 11, y: 128.5}
+        - {x: -68, y: 103.5}
+        - {x: -112, y: 77.5}
+        - {x: -166, y: 59.5}
+        - {x: -179, y: 52.5}
+        - {x: -209, y: 29.5}
+        - {x: -240, y: 12.5}
+        - {x: -274, y: 5.5}
+        - {x: -286, y: -2.5}
+        - {x: -288, y: -13.5}
+        - {x: -283, y: -21.5}
+        - {x: -267, y: -20.5}
+        - {x: -314, y: -53.5}
+        - {x: -318, y: -56.5}
+        - {x: -318, y: -77.5}
+        - {x: -292, y: -87.5}
+        - {x: -276, y: -90.5}
+        - {x: -230, y: -78.5}
+        - {x: -219, y: -78.5}
+        - {x: -196, y: -83.5}
+        - {x: -171, y: -87.5}
+        - {x: -132, y: -88.5}
+        - {x: -120, y: -92.5}
+        - {x: -103, y: -111.5}
+        - {x: -31, y: -137.5}
+        - {x: -16, y: -139.5}
+        - {x: 147, y: -139.5}
+        - {x: 164, y: -135.5}
+        - {x: 186, y: -127.5}
+        - {x: 228, y: -110.5}
+    - name: goose_bits_1
+      rect:
+        serializedVersion: 2
+        x: 652
+        y: 192
+        width: 175
+        height: 96
+      alignment: 9
+      pivot: {x: 0.11367292, y: 0.13869302}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 6.107239, y: 82.68547}
+        - {x: -19.892761, y: 73.68547}
+        - {x: -19.892761, y: -2.3145294}
+        - {x: -6.892761, y: -13.314529}
+        - {x: 79.10724, y: -13.314529}
+        - {x: 146.10724, y: -6.3145294}
+        - {x: 155.10724, y: -3.3145294}
+        - {x: 155.10724, y: 22.68547}
+        - {x: 98.10724, y: 82.68547}
+    - name: goose_bits_2
+      rect:
+        serializedVersion: 2
+        x: 843
+        y: 105
+        width: 123
+        height: 183
+      alignment: 9
+      pivot: {x: 0.29447776, y: 0.4646624}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 7.779236, y: 97.96678}
+        - {x: -21.220764, y: 88.96678}
+        - {x: -36.220764, y: 76.96678}
+        - {x: -36.220764, y: -31.033218}
+        - {x: -16.220764, y: -85.03322}
+        - {x: 42.779236, y: -85.03322}
+        - {x: 86.779236, y: -17.033218}
+        - {x: 86.779236, y: 55.96678}
+        - {x: 58.779236, y: 97.96678}
+    - name: goose_bits_3
+      rect:
+        serializedVersion: 2
+        x: 667
+        y: 117
+        width: 63
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5039421, y: 0.049900055}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24.748352, y: 60.806396}
+        - {x: -31.748352, y: 55.806396}
+        - {x: -31.748352, y: 1.8063965}
+        - {x: -25.748352, y: -3.1936035}
+        - {x: 22.251648, y: -3.1936035}
+        - {x: 31.251648, y: 6.8063965}
+        - {x: 31.251648, y: 54.806396}
+        - {x: 23.251648, y: 60.806396}
+    - name: goose_bits_4
+      rect:
+        serializedVersion: 2
+        x: 773
+        y: 59
+        width: 70
+        height: 116
+      alignment: 9
+      pivot: {x: 0.5, y: 0.96625715}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -35, y: 3.9141693}
+        - {x: -35, y: -48.08583}
+        - {x: -9, y: -112.08583}
+        - {x: 19, y: -112.08583}
+        - {x: 35, y: -49.08583}
+        - {x: 35, y: -0.08583069}
+        - {x: 29, y: 3.9141693}
+    - name: goose_bits_5
+      rect:
+        serializedVersion: 2
+        x: 667
+        y: 9
+        width: 51
+        height: 100
+      alignment: 9
+      pivot: {x: 0.672909, y: 0.94091725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 6.6816406, y: 5.908272}
+        - {x: -13.318359, y: 5.908272}
+        - {x: -34.31836, y: -63.09173}
+        - {x: -34.31836, y: -94.09173}
+        - {x: 11.681641, y: -94.09173}
+        - {x: 16.68164, y: -88.09173}
+        - {x: 16.68164, y: -17.091728}
+        - {x: 12.681641, y: -1.0917282}
+    - name: goose_bits_6
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 27
+        width: 129
+        height: 40
+      alignment: 9
+      pivot: {x: 0.117188446, y: 0.588184}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 101.88269, y: 16.472641}
+        - {x: 2.8826904, y: 16.472641}
+        - {x: -15.11731, y: 10.472641}
+        - {x: -15.11731, y: -23.527359}
+        - {x: 85.88269, y: -23.527359}
+        - {x: 113.88269, y: -15.527359}
+        - {x: 113.88269, y: 7.472641}
+        - {x: 111.88269, y: 9.472641}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
