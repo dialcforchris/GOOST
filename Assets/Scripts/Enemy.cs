@@ -12,11 +12,6 @@ public enum EnemyBehavior
 
 public class Enemy : Actor
 {
-    private void Start()
-    {
-        platformManager.instance.NoCollisionsPlease(col);
-    }
-
     public void Spawn()
     {
         //anim.Play("fly");

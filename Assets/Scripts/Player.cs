@@ -28,10 +28,6 @@ public class Player : Actor
         set { _eggLives = value; }
     }
 
-    void Start () 
-    {
-        platformManager.instance.NoCollisionsPlease(GetComponent<Collider2D>());
-	}
 	
 	// Update is called once per frame
 	void Update () 
@@ -44,7 +40,7 @@ public class Player : Actor
         }
         LayAnEgg();
         if (Input.GetKeyDown(KeyCode.DownArrow))
-            platformManager.instance.NoCollisionsPlease(GetComponent<Collider2D>());
+            platformManager.instance.NoCollisionsPlease(legs.legsCollider);
 	}
 
     #region movement
@@ -59,10 +55,13 @@ public class Player : Actor
             transform.localScale = Vector3.one;
 
         if (body.velocity.x == 0f && body.velocity.y == 0f)
-            anim.Play("idle");
+        {
+
+        }
+           // anim.Play("idle");
         else if (body.velocity.x > 0 && body.velocity.y == 0f)
         {
-            anim.Play("walk");
+           // anim.Play("walk");
         }
         else if (body.velocity.y < 0.025f)
         {
@@ -75,7 +74,7 @@ public class Player : Actor
             if (body.velocity.x < 0)
                 transform.localScale = new Vector3(-1, 1, 1);
 
-            anim.Play("fly");
+           // anim.Play("fly");
         }
     }
   
@@ -94,14 +93,9 @@ public class Player : Actor
     {
         if (Input.GetButtonDown("Fire2")&&EggTimer())
         {
-            sp.color = Color.red;
             EggTimer();
             eggMash++;
             mashTime = 0;
-        }
-        else
-        {
-            sp.color = Color.white;
         }
         if (eggMash >= maxEggMash)
         {

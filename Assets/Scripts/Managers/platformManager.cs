@@ -3,20 +3,21 @@ using System.Collections;
 
 public class platformManager : MonoBehaviour {
 
-    public static platformManager instance;
-    [SerializeField]
-    private platform[] allPlatforms;
+    private static platformManager PlatformManager = null;
+    public static platformManager instance {get{return PlatformManager;}}
+
+    [SerializeField] private platform[] allPlatforms = null;
 
 	void Awake ()
     {
-        instance = this;
+        PlatformManager = this;
 	}
 	
     public void NoCollisionsPlease(Collider2D col)
     {
         foreach(platform p in allPlatforms)
         {
-            Physics2D.IgnoreCollision(col, p.thing);
+            Physics2D.IgnoreCollision(col, p.platformCollider);
         }
     }
 

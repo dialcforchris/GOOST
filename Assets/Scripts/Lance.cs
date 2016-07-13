@@ -10,7 +10,7 @@ public class Lance : MonoBehaviour
 
     public bool lanceActive = true;
 
-    private void Start()
+    protected virtual void OnEnable()
     {
         platformManager.instance.NoCollisionsPlease(col);
     }

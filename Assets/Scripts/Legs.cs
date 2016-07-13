@@ -7,6 +7,11 @@ public class Legs : MonoBehaviour
     [SerializeField] private Collider2D col = null;
     public Collider2D legsCollider { get { return col; } }
 
+    protected virtual void OnEnable()
+    {
+        platformManager.instance.NoCollisionsPlease(col);
+    }
+
     private void OnCollisionEnter2D(Collision2D _col)
     {
         while (true)

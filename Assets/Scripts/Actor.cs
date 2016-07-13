@@ -7,7 +7,6 @@ public class Actor : MonoBehaviour
     [SerializeField] protected Collider2D col = null;
     public Collider2D actorCollider { get { return col; } }
     [SerializeField] protected Rigidbody2D body = null;
-    [SerializeField] protected SpriteRenderer sp = null;
     
 
     [SerializeField] protected Lance lance = null;
@@ -19,8 +18,10 @@ public class Actor : MonoBehaviour
 
     protected virtual void OnEnable()
     {
+        platformManager.instance.NoCollisionsPlease(col);
+
         //Ignore collisions with child objects
-        for(int i = 0; i < segments.Length; ++i)
+        for (int i = 0; i < segments.Length; ++i)
         {
             Physics2D.IgnoreCollision(col, segments[i].segmentCollider);
             for(int j = i + 1; j < segments.Length; ++j)
