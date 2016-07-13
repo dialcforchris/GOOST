@@ -6,13 +6,21 @@ public class Egg : MonoBehaviour
 
     public bool getLaid = false;
     private bool inNest = false;
+    [SerializeField]
+    private GameObject brokenEgg;
+    [SerializeField]
+    private GameObject magpie;
+    [SerializeField]
+    Animator ani;
     float hatchTime = 0;
-    float maxHatchTime = 5;
+    float maxHatchTime = 6;
+
 	// Use this for initialization
-	void Awake () 
+	void Start () 
     {
 	    if (getLaid)
         {
+            ani.Play("Laid");
             //do a thing
         }
 	}
@@ -20,6 +28,13 @@ public class Egg : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        if (getLaid)
+        {
+          
+            getLaid = false;
+            
+        }
+       
         Hatch();
 	}
     
@@ -41,7 +56,7 @@ public class Egg : MonoBehaviour
     }
     void Hatch()
     {
-        if (!inNest)
+        if (!inNest||transform.parent ==null)
         {
             if (hatchTime<maxHatchTime)
             {
@@ -49,6 +64,8 @@ public class Egg : MonoBehaviour
             }
             else
             {
+                Instantiate(brokenEgg,new Vector2(transform.position.x,transform.position.y +1),transform.rotation);
+                Destroy(gameObject);
                 //spawn a magpie
                //lets have an eggshell particle system
               //Destroy this
