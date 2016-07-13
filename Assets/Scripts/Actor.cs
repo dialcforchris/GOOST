@@ -7,7 +7,7 @@ public class Actor : MonoBehaviour
     [SerializeField] protected Collider2D col = null;
     public Collider2D actorCollider { get { return col; } }
     [SerializeField] protected Rigidbody2D body = null;
-    [SerializeField] protected SpriteRenderer renderer = null;
+    [SerializeField] protected SpriteRenderer sp = null;
     
 
     [SerializeField] protected Lance lance = null;

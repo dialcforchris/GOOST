@@ -38,6 +38,7 @@ public class Nest : MonoBehaviour
         if (col.gameObject.tag == "Egg")
         {
             eggs--;
+            Debug.Log("somethinng that is an egg left");
             col.gameObject.GetComponent<Egg>().inNest = false;
         }
     }

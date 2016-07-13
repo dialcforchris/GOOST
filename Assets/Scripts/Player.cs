@@ -1,16 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour
+public class Player : Actor
 {
     [SerializeField]
     private float speed;
-    [SerializeField]
-    private Rigidbody2D body;
-    [SerializeField]
-    private SpriteRenderer sr;
-    [SerializeField]
-    private Animator anim;
     [SerializeField]
     private Egg egg;
     private int _playerId = 0;
@@ -100,14 +94,14 @@ public class Player : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire2")&&EggTimer())
         {
-            sr.color = Color.red;
+            sp.color = Color.red;
             EggTimer();
             eggMash++;
             mashTime = 0;
         }
         else
         {
-            sr.color = Color.white;
+            sp.color = Color.white;
         }
         if (eggMash >= maxEggMash)
         {
