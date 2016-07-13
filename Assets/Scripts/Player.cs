@@ -5,13 +5,21 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private float speed;
-    float jump;
+   // float jump;
     [SerializeField]
     private Rigidbody2D body;
     [SerializeField]
     private SpriteRenderer sr;
     [SerializeField]
     private Animator anim;
+    public GameObject eggTrans;
+    float eggtimer = 0;
+    float maxEggTimer = 1.5f;
+    int eggMash = 0;
+    int maxEggMash = 20;
+    float mashTime = 0;
+    float maxMashTime = 0.2f;
+    [SerializeField] Egg egg;
 
     void Start () 
     {
@@ -21,18 +29,19 @@ public class Player : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
-        jump = 0;
+        Debug.Log(eggMash);
+        MashTimer();
         Movement();
         if (Input.GetButtonDown("Fire1"))
         {
             body.AddForce(new Vector2(0, 50));
         }
+        LayAnEgg();
 	}
 
     void Movement()
     {
         VelocityCheck();
-        // transform.position = new Vector2(transform.position.x + Input.GetAxis("Horizontal") * (Time.deltaTime*speed), transform.position.y);
         body.AddForce(new Vector2(Input.GetAxis("Horizontal") * (speed), 0));
 
         if (Input.GetAxis("Horizontal") < 0)
@@ -61,24 +70,64 @@ public class Player : MonoBehaviour
         }
     }
 
-    bool JustPressed(string _button)
-    {
-        bool pressed = false;
-       if (Input.GetButtonDown(_button)&&!pressed)
-       {
-           pressed= true;
-       }
-        if (Input.GetButtonUp(_button)&&pressed)
-        {
-            pressed = false;
-        }
-        return pressed;
-    }
     void VelocityCheck()
     {
         if (body.velocity.magnitude>10 )
         {
             body.velocity *= 0.9f;
         }
+    }
+    void LayAnEgg()
+    {
+        if (Input.GetButtonDown("Fire2")&&EggTimer())
+        {
+            sr.color = Color.red;
+            EggTimer();
+            eggMash++;
+            mashTime = 0;
+        }
+        else
+        {
+            sr.color = Color.white;
+        }
+        if (eggMash >= maxEggMash)
+        {
+            eggMash = 0;
+            eggtimer = 0;
+            Egg e = (Egg)Instantiate(egg, this.transform.position, Quaternion.identity);
+            e.getLaid = true;
+        }
+    }
+
+    bool EggTimer()
+    {
+        if (eggtimer < maxEggTimer)
+        {
+            eggtimer += Time.deltaTime;
+            return true;
+        }
+        else
+        {
+            eggMash--;
+            return false;
+        }
+    }
+    bool MashTimer()
+    {
+        if (eggMash > 0)
+        {
+            if (mashTime < maxMashTime)
+            {
+                mashTime += Time.deltaTime;
+                return true;
+            }
+            else
+            {
+                mashTime = 0;
+                eggMash--;
+                return false;
+            }
+        }
+        return true;
     }
 }
