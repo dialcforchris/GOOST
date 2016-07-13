@@ -29,13 +29,14 @@ public class PlayerManager : MonoBehaviour
         }
        
 	}
-    void Update()
+    void Start()
     {
         foreach (Player p in players)
         {
             p.gameObject.SetActive(true);
         }
     }
+   
 
     public Player GetPlayer(int _playerIndex)
     {
