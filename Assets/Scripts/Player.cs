@@ -43,6 +43,8 @@ public class Player : MonoBehaviour
             body.AddForce(new Vector2(0, 50));
         }
         LayAnEgg();
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+            platformManager.instance.NoCollisionsPlease(GetComponent<Collider2D>());
 	}
 
     void Movement()
