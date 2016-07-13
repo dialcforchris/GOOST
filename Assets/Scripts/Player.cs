@@ -21,6 +21,13 @@ public class Player : MonoBehaviour
     float maxMashTime = 0.2f;
     [SerializeField] Egg egg;
 
+    private int _eggLives = 3;
+    public int eggLives
+    {
+        get { return _eggLives; }
+        set { _eggLives = value; }
+    }
+
     void Start () 
     {
         platformManager.instance.NoCollisionsPlease(GetComponent<Collider2D>());
@@ -29,7 +36,6 @@ public class Player : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
-        Debug.Log(eggMash);
         MashTimer();
         Movement();
         if (Input.GetButtonDown("Fire1"))
