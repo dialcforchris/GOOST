@@ -49,6 +49,8 @@ public class Player : MonoBehaviour
             body.AddForce(new Vector2(0, 50));
         }
         LayAnEgg();
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+            platformManager.instance.NoCollisionsPlease(GetComponent<Collider2D>());
 	}
 
     #region movement
@@ -58,9 +60,9 @@ public class Player : MonoBehaviour
         body.AddForce(new Vector2(Input.GetAxis("Horizontal") * (speed), 0));
 
         if (Input.GetAxis("Horizontal") < 0)
-            transform.localScale = Vector3.one;
-        if (Input.GetAxis("Horizontal") > 0)
             transform.localScale = new Vector3(-1, 1, 1);
+        if (Input.GetAxis("Horizontal") > 0)
+            transform.localScale = Vector3.one;
 
         if (body.velocity.x == 0f && body.velocity.y == 0f)
             anim.Play("idle");
@@ -68,16 +70,16 @@ public class Player : MonoBehaviour
         {
             anim.Play("walk");
         }
-        else if (body.velocity.y == 0f)
+        else if (body.velocity.y < 0.025f)
         {
-            sr.flipX = true;
+            //sr.flipX = true;
         }
         else
         {
             if (body.velocity.x > 0)
-                transform.localScale = new Vector3(-1, 1, 1);
-            if (body.velocity.x < 0)
                 transform.localScale = Vector3.one;
+            if (body.velocity.x < 0)
+                transform.localScale = new Vector3(-1, 1, 1);
 
             anim.Play("fly");
         }
