@@ -7,7 +7,7 @@ public class Player : Actor
     private float speed;
     [SerializeField]
     private Egg egg;
-    private int _playerId = 0;
+    private int _playerId = 3;
     private int score = 0;
     private int _eggLives = 3;
     private int eggMash = 0;
@@ -31,6 +31,7 @@ public class Player : Actor
     void Start () 
     {
         platformManager.instance.NoCollisionsPlease(GetComponent<Collider2D>());
+        Debug.Log(playerId);
 	}
 	
 	// Update is called once per frame
@@ -38,7 +39,7 @@ public class Player : Actor
     {
         MashTimer();
         Movement();
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fly"+playerId.ToString()))
         {
             body.AddForce(new Vector2(0, 50));
         }
@@ -51,11 +52,11 @@ public class Player : Actor
     void Movement()
     {
         VelocityCheck();
-        body.AddForce(new Vector2(Input.GetAxis("Horizontal") * (speed), 0));
+        body.AddForce(new Vector2(Input.GetAxis("Horizontal"+playerId) * (speed), 0));
 
-        if (Input.GetAxis("Horizontal") < 0)
+        if (Input.GetAxis("Horizontal"+playerId) < 0)
             transform.localScale = new Vector3(-1, 1, 1);
-        if (Input.GetAxis("Horizontal") > 0)
+        if (Input.GetAxis("Horizontal"+playerId) > 0)
             transform.localScale = Vector3.one;
 
         if (body.velocity.x == 0f && body.velocity.y == 0f)
@@ -92,7 +93,7 @@ public class Player : Actor
     #region egg stuff
     void LayAnEgg()
     {
-        if (Input.GetButtonDown("Fire2")&&EggTimer())
+        if (Input.GetButtonDown("Interact"+playerId.ToString())&&EggTimer())
         {
             sp.color = Color.red;
             EggTimer();

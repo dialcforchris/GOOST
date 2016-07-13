@@ -8,7 +8,8 @@ public class PlayerManager : MonoBehaviour
     {
         get{return playerManager;}
     }
-    Player[] players;
+    [SerializeField]
+  private Player[] players;
 
 	// Use this for initialization
 	void Awake () 
@@ -20,6 +21,11 @@ public class PlayerManager : MonoBehaviour
         else 
         {
             playerManager = this;
+        }
+
+        for (int i=0;i<players.Length;i++)
+        {
+            players[i].playerId = i;
         }
 	}
 
