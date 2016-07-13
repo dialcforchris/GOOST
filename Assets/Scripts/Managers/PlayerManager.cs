@@ -27,8 +27,15 @@ public class PlayerManager : MonoBehaviour
         {
             players[i].playerId = i;
         }
+       
 	}
-
+    void Update()
+    {
+        foreach (Player p in players)
+        {
+            p.gameObject.SetActive(true);
+        }
+    }
 
     public Player GetPlayer(int _playerIndex)
     {

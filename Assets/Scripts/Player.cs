@@ -27,10 +27,14 @@ public class Player : Actor
         get { return _eggLives; }
         set { _eggLives = value; }
     }
-
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        platformManager.instance.NoCollisionsPlease(legs.legsCollider);
+    }
     void Start () 
     {
-        platformManager.instance.NoCollisionsPlease(GetComponent<Collider2D>());
+      //  platformManager.instance.NoCollisionsPlease(legs);
         Debug.Log(playerId);
 	}
 	
@@ -44,8 +48,8 @@ public class Player : Actor
             body.AddForce(new Vector2(0, 50));
         }
         LayAnEgg();
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-            platformManager.instance.NoCollisionsPlease(GetComponent<Collider2D>());
+        if (Input.GetAxis("Vertical"+playerId.ToString())<0)
+            platformManager.instance.NoCollisionsPlease(legs.legsCollider);
 	}
 
     #region movement
@@ -59,25 +63,10 @@ public class Player : Actor
         if (Input.GetAxis("Horizontal"+playerId) > 0)
             transform.localScale = Vector3.one;
 
-        if (body.velocity.x == 0f && body.velocity.y == 0f)
-            anim.Play("idle");
-        else if (body.velocity.x > 0 && body.velocity.y == 0f)
-        {
-            anim.Play("walk");
-        }
-        else if (body.velocity.y < 0.025f)
-        {
-            //sr.flipX = true;
-        }
-        else
-        {
-            if (body.velocity.x > 0)
+        if (body.velocity.x > 0)
                 transform.localScale = Vector3.one;
-            if (body.velocity.x < 0)
+        if (body.velocity.x < 0)
                 transform.localScale = new Vector3(-1, 1, 1);
-
-            anim.Play("fly");
-        }
     }
   
 
@@ -95,15 +84,11 @@ public class Player : Actor
     {
         if (Input.GetButtonDown("Interact"+playerId.ToString())&&EggTimer())
         {
-            sp.color = Color.red;
             EggTimer();
             eggMash++;
             mashTime = 0;
         }
-        else
-        {
-            sp.color = Color.white;
-        }
+      
         if (eggMash >= maxEggMash)
         {
             eggMash = 0;
