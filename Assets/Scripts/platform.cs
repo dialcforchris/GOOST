@@ -11,7 +11,10 @@ public class platform : MonoBehaviour
         Legs _legs = _col.gameObject.GetComponent<Legs>();
         if (_legs)
         {
-            Physics2D.IgnoreCollision(_col, col, false);
+            if (_legs.tag == "Player")
+            {
+                Physics2D.IgnoreCollision(_col, col, false);
+            }
         }
 
     }
@@ -21,8 +24,10 @@ public class platform : MonoBehaviour
         Legs _legs = _col.gameObject.GetComponent<Legs>();
         if (_legs)
         {
-            Physics2D.IgnoreCollision(_col, col, true);
+            if (_legs.tag == "Player")
+            {
+                Physics2D.IgnoreCollision(_col, col, true);
+            }
         }
-
     }
 }

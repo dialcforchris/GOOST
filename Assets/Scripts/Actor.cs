@@ -48,7 +48,7 @@ public class Actor : MonoBehaviour
         }
     }
 
-    public void ApplyKnockback(Vector2 _direction, float _power)
+    public virtual void ApplyKnockback(Vector2 _direction, float _power)
     {
         body.velocity = new Vector2(0.0f, body.velocity.y);
         body.AddForce(_direction.normalized * _power);
