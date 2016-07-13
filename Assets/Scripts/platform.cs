@@ -12,16 +12,19 @@ public class platform : MonoBehaviour {
         {
             Player1 = true;
             playerGuy = col;
+            Physics2D.IgnoreCollision(col, thing, false);
         }
-        Physics2D.IgnoreCollision(col, thing, false);
+        
     }
 
     void OnTriggerExit2D(Collider2D col)
     {
         if (col.tag == "Player")
+        {
             Player1 = false;
-        
-        Physics2D.IgnoreCollision(col, thing,true);
+            Physics2D.IgnoreCollision(col, thing, true);
+        }
+
     }
 
 
