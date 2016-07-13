@@ -4,7 +4,7 @@ using System.Collections;
 public class PhysicsForcer : MonoBehaviour
 {
 
-    bool once;
+   public bool once;
     void Update()
     {
         if (gameObject.activeInHierarchy && !once)
