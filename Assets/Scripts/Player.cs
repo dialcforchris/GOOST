@@ -36,9 +36,9 @@ public class Player : MonoBehaviour
         body.AddForce(new Vector2(Input.GetAxis("Horizontal") * (speed), 0));
 
         if (Input.GetAxis("Horizontal") < 0)
-            sr.flipX = true;
+            transform.localScale = Vector3.one;
         if (Input.GetAxis("Horizontal") > 0)
-            sr.flipX = false;
+            transform.localScale = new Vector3(-1, 1, 1);
 
         if (body.velocity.x == 0f && body.velocity.y == 0f)
             anim.Play("idle");
@@ -53,9 +53,9 @@ public class Player : MonoBehaviour
         else
         {
             if (body.velocity.x > 0)
-                sr.flipX = false;
+                transform.localScale = new Vector3(-1, 1, 1);
             if (body.velocity.x < 0)
-                sr.flipX = true;
+                transform.localScale = Vector3.one;
 
             anim.Play("fly");
         }
