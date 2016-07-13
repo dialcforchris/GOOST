@@ -12,26 +12,21 @@ public enum EnemyBehavior
 
 public class Enemy : Actor
 {
-    private void Start()
-    {
-        platformManager.instance.NoCollisionsPlease(col);
-    }
-
     public void Spawn()
     {
-        anim.Play("fly");
+        //anim.Play("fly");
     }
 
     private void FixedUpdate()
     {
-        
+        //if(Input.GetKeyDown(KeyCode.J))
+        //{
+        //    anim.Play("goose_neck_up_extend");
+        //}
     }
 
     private void Kill()
     {
-        anim.Stop();
+        //anim.Stop();
     }
-
-    
-
 }
