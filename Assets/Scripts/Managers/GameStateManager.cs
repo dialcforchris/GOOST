@@ -43,7 +43,12 @@ public class GameStateManager : MonoBehaviour
         states[(int)currentState].Update();
     }
 
-	public void ChangeState(GameStates _state)
+    public void unPause()
+    {
+        ChangeState(previousState);
+    }
+
+    public void ChangeState(GameStates _state)
     {
         previousState = currentState;
         states[(int)currentState].OnStateDeactivate();
