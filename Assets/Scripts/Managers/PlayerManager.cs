@@ -10,6 +10,8 @@ public class PlayerManager : MonoBehaviour
     }
     [SerializeField]
   private Player[] players;
+    [SerializeField]
+    private Nest[] nests;
 
 	// Use this for initialization
 	void Awake () 
@@ -26,6 +28,8 @@ public class PlayerManager : MonoBehaviour
         for (int i=0;i<players.Length;i++)
         {
             players[i].playerId = i;
+            nests[i].gameObject.SetActive(true);
+            nests[i].owningPlayer = i;
         }
        
 	}
