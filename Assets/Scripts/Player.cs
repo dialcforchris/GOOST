@@ -5,23 +5,29 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private float speed;
-   // float jump;
     [SerializeField]
     private Rigidbody2D body;
     [SerializeField]
     private SpriteRenderer sr;
     [SerializeField]
     private Animator anim;
-    public GameObject eggTrans;
+    [SerializeField]
+    private Egg egg;
+    private int _playerId = 0;
+    private int score = 0;
+    private int _eggLives = 3;
+    private int eggMash = 0;
+    private int maxEggMash = 20;
     float eggtimer = 0;
     float maxEggTimer = 1.5f;
-    int eggMash = 0;
-    int maxEggMash = 20;
     float mashTime = 0;
     float maxMashTime = 0.2f;
-    [SerializeField] Egg egg;
-
-    private int _eggLives = 3;
+    public GameObject eggTrans;
+    public int playerId
+    {
+        get { return _playerId; }
+        set { _playerId = value; }
+    }
     public int eggLives
     {
         get { return _eggLives; }
@@ -47,6 +53,7 @@ public class Player : MonoBehaviour
             platformManager.instance.NoCollisionsPlease(GetComponent<Collider2D>());
 	}
 
+    #region movement
     void Movement()
     {
         VelocityCheck();
@@ -77,6 +84,7 @@ public class Player : MonoBehaviour
             anim.Play("fly");
         }
     }
+  
 
     void VelocityCheck()
     {
@@ -85,6 +93,9 @@ public class Player : MonoBehaviour
             body.velocity *= 0.9f;
         }
     }
+    #endregion
+
+    #region egg stuff
     void LayAnEgg()
     {
         if (Input.GetButtonDown("Fire2")&&EggTimer())
@@ -138,4 +149,16 @@ public class Player : MonoBehaviour
         }
         return true;
     }
+    #endregion
+
+    #region score
+    public void ChangeScore(int _change)
+    {
+        score += _change;
+    }
+    public int GetScore()
+    {
+        return score;
+    }
+    #endregion 
 }
