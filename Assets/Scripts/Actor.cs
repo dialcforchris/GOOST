@@ -11,6 +11,7 @@ public class Actor : MonoBehaviour
     
 
     [SerializeField] protected Lance lance = null;
+    [SerializeField] protected Legs legs = null;
 
     [SerializeField] protected ActorSegment[] segments = null;
 
@@ -27,8 +28,10 @@ public class Actor : MonoBehaviour
                 Physics2D.IgnoreCollision(segments[i].segmentCollider, segments[j].segmentCollider);
             }
             Physics2D.IgnoreCollision(segments[i].segmentCollider, lance.lanceCollider);
+            Physics2D.IgnoreCollision(segments[i].segmentCollider, legs.legsCollider);
         }
         Physics2D.IgnoreCollision(col, lance.lanceCollider);
+        Physics2D.IgnoreCollision(col, legs.legsCollider);
     }
 
     protected bool Extend()

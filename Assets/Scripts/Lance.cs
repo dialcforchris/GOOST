@@ -4,7 +4,7 @@ using System.Collections;
 public class Lance : MonoBehaviour
 {
     [SerializeField] private Actor actor = null;
-    public Actor actorCollider { get { return actor; } }
+    public Actor lanceActor { get { return actor; } }
     [SerializeField] private Collider2D col = null;
     public Collider2D lanceCollider { get { return col; } }
 
