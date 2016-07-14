@@ -3,7 +3,7 @@ using System.Collections;
 
 public class platform : MonoBehaviour
 {
-    [SerializeField] private Collider2D col;
+    [SerializeField] private Collider2D col = null;
     public Collider2D platformCollider { get { return col; } }
 
     void OnTriggerEnter2D(Collider2D _col)

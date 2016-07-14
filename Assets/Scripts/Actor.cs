@@ -133,7 +133,7 @@ public class Actor : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D _col)
+    protected virtual void OnCollisionEnter2D(Collision2D _col)
     {
         if (_col.collider.tag == "Enemy")
         {

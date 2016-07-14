@@ -7,6 +7,7 @@ public enum EnemyBehaviour
     AGGRESSIVE, //Progressively get more aggressive
     HUNTER, //Search and kill the player
     HIGH_FLYER, //Stay at the top of the screen
+    CAPTIVE_EGG,
     COUNT
 }
 
@@ -26,6 +27,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public static int numActive = 0;
 
     private EnemyBehaviour behaviour = EnemyBehaviour.RANDOM;
+    private EnemyBehaviour currentBehaviour;
 
     public Vector3 worldTarget;
     public Vector3 viewTarget;
@@ -46,6 +48,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         ++numActive;
         //anim.Play("fly");
         behaviour = _behaviour;
+        currentBehaviour = behaviour;
         FindTarget();
         gameObject.SetActive(true);
     }
@@ -69,11 +72,19 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
     public void FindTarget()
     {
-        switch(behaviour)
+        switch(currentBehaviour)
         {
             case EnemyBehaviour.RANDOM:
-                viewTarget = new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.2f, 0.8f), 10);
-                UpdateWorldFromView(); 
+                viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
+                UpdateWorldFromView();
+                break;
+            case EnemyBehaviour.HIGH_FLYER:
+                viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.85f, 0.95f), 10);
+                UpdateWorldFromView();
+                break;
+            case EnemyBehaviour.CAPTIVE_EGG:
+                viewTarget = Camera.main.WorldToViewportPoint(EggJail.instance.dropoff.position);
+                UpdateWorldFromView();
                 break;
         }
     }
@@ -98,6 +109,11 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
         if (Vector3.SqrMagnitude(worldTarget - transform.position) < targetThreshold)
         {
+            if (currentBehaviour == EnemyBehaviour.CAPTIVE_EGG)
+            {
+                currentBehaviour = behaviour;
+                //Drop off egg in jail here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            }
             FindTarget();
         }
     }
@@ -114,5 +130,17 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         //anim.Stop();
         poolData.ReturnPool(this);
         --numActive;
+    }
+
+    protected override void OnCollisionEnter2D(Collision2D _col)
+    {
+        base.OnCollisionEnter2D(_col);
+        if (_col.collider.tag == "Egg")
+        {
+            //Remove egg from nest or pick up point or whatever !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //Add egg to magpie !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            currentBehaviour = EnemyBehaviour.CAPTIVE_EGG;
+            FindTarget();
+        }
     }
 }
