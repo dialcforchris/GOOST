@@ -4,6 +4,7 @@ using System.Collections;
 public interface ISegmentable<T> where T : Actor
 { 
     T rigBase { get; }
+    string segmentName { get; }
 }
 
 public class Actor : MonoBehaviour
@@ -19,7 +20,15 @@ public class Actor : MonoBehaviour
 
     [SerializeField] protected ActorSegment[] segments = null;
 
+    protected Vector3 worldMaxY;
+    [SerializeField] protected float viewportMaxY = 1.01f;
+
     private bool extending = false;
+
+    protected virtual void Start()
+    {
+        worldMaxY = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, viewportMaxY));
+    }
 
     protected virtual void OnEnable()
     {
@@ -63,5 +72,13 @@ public class Actor : MonoBehaviour
     {
         lance.ActorDefeated();
         legs.ActorDefeated();
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        if (transform.position.y > worldMaxY.y)
+        {
+            body.velocity = new Vector2(body.velocity.x, -0.5f);
+        }
     }
 }

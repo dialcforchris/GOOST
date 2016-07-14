@@ -9,6 +9,7 @@ public class ActorSegment : MonoBehaviour, ISegmentable<Actor>
 
     #region ISegmentable
     public Actor rigBase { get { return actor; } }
+    public string segmentName { get { return "Segment"; } }
     #endregion
 
 
@@ -17,13 +18,5 @@ public class ActorSegment : MonoBehaviour, ISegmentable<Actor>
         platformManager.instance.NoCollisionsPlease(col);
     }
 
-    public void ApplyKnockback(Vector2 _direction, float _power)
-    {
-        actor.ApplyKnockback(_direction, _power);
-    }
 
-    public virtual void Defeat()
-    {
-        actor.Defeat();
-    }
 }

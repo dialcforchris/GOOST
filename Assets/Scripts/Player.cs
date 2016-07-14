@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : Actor, ISegmentable<Player>
+public class Player : Actor, ISegmentable<Actor>
 {
     [SerializeField]
     private float speed;
@@ -19,7 +19,8 @@ public class Player : Actor, ISegmentable<Player>
     public GameObject eggTrans;
 
     #region ISegmentable
-    public Player rigBase { get { return this; } }
+    public Actor rigBase { get { return this; } }
+    public string segmentName { get { return "Player"; } }
     #endregion
 
     public int playerId
@@ -36,17 +37,19 @@ public class Player : Actor, ISegmentable<Player>
     {
         base.OnEnable();
     }
-    void Start () 
+    protected override void Start () 
     {
       //  platformManager.instance.NoCollisionsPlease(legs);
         Debug.Log(playerId);
+        base.Start();
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	protected override void FixedUpdate () 
     {
         MashTimer();
         Movement();
+        base.FixedUpdate();
         if (Input.GetButtonDown("Fly"+playerId.ToString()))
         {
             body.AddForce(new Vector2(0, 50));

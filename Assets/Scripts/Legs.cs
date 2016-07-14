@@ -14,7 +14,10 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
 
     #region ISegmentable
     public Actor rigBase { get { return actor; } }
+    public string segmentName { get { return "Legs"; } }
     #endregion
+
+    [SerializeField] private float knockPower = 50.0f;
 
     protected virtual void OnEnable()
     {
@@ -39,37 +42,33 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
             {
                 if (_s == _col.gameObject.tag)
                 {
-                    while (true)
+                    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+                    if (rigSegment != null)
                     {
-                        Lance _lance = _col.gameObject.GetComponent<Lance>();
-                        if (_lance)
+                        if (rigSegment.segmentName == "Lance")
                         {
-                            _lance.lanceActor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.8f), 10.0f);
+                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.8f), knockPower);
                             Debug.Log(actor.tag + " legs clashs " + _col.gameObject.tag + " lance");
                             break;
                         }
-                        Actor _actor = _col.gameObject.GetComponent<Actor>();
-                        if (_actor)
+                        else if (rigSegment.segmentName == _s)
                         {
-                            _actor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.8f), 10.0f);
-                            _actor.Defeat();
+                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.8f), knockPower);
+                            rigSegment.rigBase.Defeat();
                             Debug.Log(actor.tag + " legs defeats " + _col.gameObject.tag + " body");
                             break;
                         }
-                        ActorSegment _actorSegment = _col.gameObject.GetComponent<ActorSegment>();
-                        if (_actorSegment)
+                        else if (rigSegment.segmentName == "Segment")
                         {
-                            _actorSegment.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.8f), 10.0f);
-                            _actorSegment.Defeat();
+                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.8f), knockPower);
+                            rigSegment.rigBase.Defeat();
                             Debug.Log(actor.tag + " legs defeats " + _col.gameObject.tag + " segment");
                             break;
                         }
-                        break;
                     }
                     break;
                 }
             }
         }
-        
     }
 }

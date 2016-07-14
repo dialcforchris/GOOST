@@ -25,7 +25,7 @@ public class ScreenWrap : MonoBehaviour
             transform.position = new Vector2(screenToWorldMin.x, transform.position.y);
             Wrapped();
         }
-        if (transform.position.x < screenToWorldMin.x)
+        else if (transform.position.x < screenToWorldMin.x)
         {
             transform.position = new Vector2(screenToWorldMax.x, transform.position.y);
             Wrapped();

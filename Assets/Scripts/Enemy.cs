@@ -10,14 +10,15 @@ public enum EnemyBehaviour
     COUNT
 }
 
-public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Enemy>
+public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 {
     #region IPoolable
     public PoolData<Enemy> poolData { get; set; }
     #endregion
 
     #region ISegmentable
-    public Enemy rigBase { get { return this; } }
+    public Actor rigBase { get { return this; } }
+    public string segmentName { get { return "Enemy"; } }
     #endregion
 
     [SerializeField] private ScreenWrap screenWrap = null;
@@ -33,9 +34,10 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Enemy>
     [SerializeField] private float maxSpeed = 5.0f;
     [SerializeField] private float targetThreshold = 0.5f;
 
-    private void Start()
+    protected override void Start()
     {
         screenWrap.AddScreenWrapCall(UpdateWorldFromView);
+        base.Start();
     }
 
     public void Spawn(EnemyBehaviour _behaviour)
@@ -47,7 +49,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Enemy>
         gameObject.SetActive(true);
     }
 
-    private void FixedUpdate()
+    protected override void FixedUpdate()
     {
         //if(Input.GetKeyDown(KeyCode.J))
         //{
@@ -60,7 +62,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Enemy>
         //        break;
         //}
 
-        //MovementToTarget();
+        MovementToTarget();
+        base.FixedUpdate();
     }
 
     private void FindTarget()

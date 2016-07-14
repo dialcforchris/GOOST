@@ -14,7 +14,10 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
 
     #region ISegmentable
     public Actor rigBase { get { return actor; } }
+    public string segmentName { get { return "Lance"; } }
     #endregion
+
+    [SerializeField] private float knockPower = 50.0f;
 
     protected virtual void OnEnable()
     {
@@ -39,39 +42,35 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
             {
                 if(_s == _col.gameObject.tag)
                 {
-                    while (true)
+                    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+                    if (rigSegment != null)
                     {
-                        Lance _lance = _col.gameObject.GetComponent<Lance>();
-                        if (_lance)
+                        if (rigSegment.segmentName == "Lance")
                         {
-                            _lance.actor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), 10.0f);
+                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), knockPower);
                             Debug.Log(actor.tag + " lance clashs " + _col.gameObject.tag + " lance");
                             break;
                         }
-                        //Legs _legs = _col.gameObject.GetComponent<Legs>();
-                        //if (_legs)
-                        //{
-                        //    _legs.legsActor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), 10.0f);
-                        //    Debug.Log(actor.tag + " lance clashs " + _col.gameObject.tag + " lance");
-                        //    break;
-                        //}
-                        //Actor _actor = _col.gameObject.GetComponent<Actor>();
-                        //if (_actor)
-                        //{
-                        //    _actor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), 10.0f);
-                        //    _actor.Defeat();
-                        //    Debug.Log(actor.tag + " lance defeats " + _col.gameObject.tag + " body");
-                        //    break;
-                        //}
-                        //ActorSegment _actorSegment = _col.gameObject.GetComponent<ActorSegment>();
-                        //if (_actorSegment)
-                        //{
-                        //    _actorSegment.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), 10.0f);
-                        //    _actorSegment.Defeat();
-                        //    Debug.Log(actor.tag + " lance defeats " + _col.gameObject.tag + " segment");
-                        //    break;
-                        //}
-                        break;
+                        else if (rigSegment.segmentName == "Legs")
+                        {
+                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), knockPower);
+                            Debug.Log(actor.tag + " lance clashs " + _col.gameObject.tag + " lance");
+                            break;
+                        }
+                        else if (rigSegment.segmentName == _s)
+                        {
+                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), knockPower);
+                            rigSegment.rigBase.Defeat();
+                            Debug.Log(actor.tag + " lance defeats " + _col.gameObject.tag + " body");
+                            break;
+                        }
+                        else if (rigSegment.segmentName == "Segment")
+                        {
+                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), knockPower);
+                            rigSegment.rigBase.Defeat();
+                            Debug.Log(actor.tag + " lance defeats " + _col.gameObject.tag + " segment");
+                            break;
+                        }
                     }
                     break;
                 }
