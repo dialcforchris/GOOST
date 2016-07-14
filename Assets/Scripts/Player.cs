@@ -8,7 +8,7 @@ public class Player : Actor, ISegmentable<Player>
     [SerializeField]
     private Egg egg;
     private int _playerId = 3;
-    private int score = 0;
+    private int score = 1000;
     private int _eggLives = 3;
     private int eggMash = 0;
     private int maxEggMash = 20;
@@ -36,11 +36,7 @@ public class Player : Actor, ISegmentable<Player>
     {
         base.OnEnable();
     }
-    void Start () 
-    {
-      //  platformManager.instance.NoCollisionsPlease(legs);
-        Debug.Log(playerId);
-	}
+  
 	
 	// Update is called once per frame
 	void Update () 

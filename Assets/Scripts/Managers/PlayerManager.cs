@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class PlayerManager : MonoBehaviour
   private Player[] players;
     [SerializeField]
     private Nest[] nests;
+    [SerializeField]
+    private Text[] scores;
+    //set this properly when we have a spash screen menu
+    private int amountOfPlayers = 1;
 
 	// Use this for initialization
 	void Awake () 
@@ -24,13 +29,11 @@ public class PlayerManager : MonoBehaviour
         {
             playerManager = this;
         }
-
-      
-       
 	}
+
     void Start()
     {
-
+      
         for (int i = 0; i < Input.GetJoystickNames().Length;i++ )
         {
             if (i<2)
@@ -39,30 +42,37 @@ public class PlayerManager : MonoBehaviour
                 players[i].playerId = i;
                 nests[i].gameObject.SetActive(true);
                 nests[i].owningPlayer = i;
+                scores[i].gameObject.SetActive(true);
             }
             else
             {
                 break;
             }
         }
-        //    foreach (Player p in players)
-        //    {
-        //        p.gameObject.SetActive(true);
-        //    }
-        //for (int i = 0; i < players.Length; i++)
-        //{
-        //    players[i].playerId = i;
-        //    nests[i].gameObject.SetActive(true);
-        //    nests[i].owningPlayer = i;
-        //}
     }
    
-
+    void Update()
+    {
+        UpdateScores();
+    }
     public Player GetPlayer(int _playerIndex)
     {
         if (_playerIndex < players.Length)
             return players[_playerIndex];
         else
             return null;
+    }
+
+    public int NumberOfPlayers()
+    {
+        return amountOfPlayers;
+    }
+
+    void UpdateScores()
+    {
+        for (int i = 0; i < players.Length;i++ )
+        {
+            scores[i].text = players[i].GetScore().ToString();
+        }
     }
 }

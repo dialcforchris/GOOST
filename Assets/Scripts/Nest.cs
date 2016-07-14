@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Nest : MonoBehaviour
 {
+
+    [SerializeField]
+    private GameObject[] anEggs;
     private int _owningPlayer = 0;
     public int owningPlayer
     {
@@ -12,17 +15,11 @@ public class Nest : MonoBehaviour
 
     int eggs = 0;
 
-	// Use this for initialization
-	void Start () 
+	void Update()
     {
-	    
-	}
-	
-	// Update is called once per frame
-	void Update () 
-    {
-	
-	}
+        PlayerManager.instance.GetPlayer(owningPlayer).eggLives = eggs;
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
