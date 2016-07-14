@@ -9,12 +9,13 @@ public class PlayerManager : MonoBehaviour
     {
         get{return playerManager;}
     }
-    [SerializeField]
-  private Player[] players;
-    [SerializeField]
-    private Nest[] nests;
-    [SerializeField]
-    private Text[] scores;
+    [SerializeField] private Player[] players = null;
+    [SerializeField] private Nest[] nests = null;
+    [SerializeField] private Text[] scores = null;
+
+    [SerializeField] private float respawnLength = 1.0f;
+    private bool[] playerRespawn = null;
+    private float[] respawnTime = null;
 
 
     //set this properly when we have a splash screen menu
@@ -30,6 +31,14 @@ public class PlayerManager : MonoBehaviour
         else 
         {
             playerManager = this;
+            respawnTime = new float[amountOfPlayers];
+            playerRespawn = new bool[amountOfPlayers];
+            for(int i = 0; i < amountOfPlayers; ++i)
+            {
+                respawnTime[i] = 0.0f;
+                playerRespawn[i] = false;
+
+            }
         }
 	}
 
@@ -55,6 +64,18 @@ public class PlayerManager : MonoBehaviour
    
     void Update()
     {
+        for(int i = 0; i < playerRespawn.Length; ++i)
+        {
+            if (playerRespawn[i])
+            {
+                respawnTime[i] += Time.deltaTime;
+                if(respawnTime[i] >= respawnLength)
+                {
+                    playerRespawn[i] = false;
+                    players[i].Respawn();
+                }
+            }
+        }
         UpdateScores();
     }
     public Player GetPlayer(int _playerIndex)
@@ -76,5 +97,11 @@ public class PlayerManager : MonoBehaviour
         {
             scores[i].text = players[i].GetScore().ToString();
         }
+    }
+
+    public void RespawnPlayer(int _index)
+    {
+        playerRespawn[_index] = true;
+        respawnTime[_index] = 0.0f;
     }
 }

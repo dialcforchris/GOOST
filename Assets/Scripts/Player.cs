@@ -18,6 +18,8 @@ public class Player : Actor, ISegmentable<Actor>
     float maxMashTime = 0.15f;
     public GameObject eggTrans;
 
+    private bool isDead = false;
+
     #region ISegmentable
     public Actor rigBase { get { return this; } }
     public string segmentName { get { return "Player"; } }
@@ -47,16 +49,29 @@ public class Player : Actor, ISegmentable<Actor>
 	// Update is called once per frame
 	protected override void FixedUpdate () 
     {
-        MashTimer();
-        Movement();
-        base.FixedUpdate();
-        if (Input.GetButtonDown("Fly"+playerId.ToString()))
+        if (!isDead)
         {
-            body.AddForce(new Vector2(0, 50));
+            MashTimer();
+            Movement();
+            base.FixedUpdate();
+
+            if(Input.GetKeyDown(KeyCode.P))
+            {
+                Peck();
+            }
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                TogglePeckLocation();
+            }
+
+            if (Input.GetButtonDown("Fly" + playerId.ToString()))
+            {
+                body.AddForce(new Vector2(0, 50));
+            }
+            LayAnEgg();
+            if (Input.GetAxis("Vertical" + playerId.ToString()) < 0)
+                platformManager.instance.NoCollisionsPlease(legs.legsCollider);
         }
-        LayAnEgg();
-        if (Input.GetAxis("Vertical"+playerId.ToString())<0)
-            platformManager.instance.NoCollisionsPlease(legs.legsCollider);
 	}
 
     #region movement
@@ -155,9 +170,17 @@ public class Player : Actor, ISegmentable<Actor>
 
     public override void Defeat()
     {
+        isDead = true;
         base.Defeat();
-        transform.position = Vector3.zero;
-        lance.ActorSpawned();
-        legs.ActorSpawned();
+        PlayerManager.instance.RespawnPlayer(playerId);
     }
+
+    public override void Respawn()
+    {
+        isDead = false;
+        base.Respawn();
+        transform.position = Vector3.zero;
+    }
+
+
 }

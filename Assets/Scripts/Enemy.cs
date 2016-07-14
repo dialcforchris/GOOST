@@ -42,6 +42,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
     public void Spawn(EnemyBehaviour _behaviour)
     {
+        Respawn();
         ++numActive;
         //anim.Play("fly");
         behaviour = _behaviour;
@@ -66,7 +67,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         base.FixedUpdate();
     }
 
-    private void FindTarget()
+    public void FindTarget()
     {
         switch(behaviour)
         {
@@ -113,6 +114,5 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         //anim.Stop();
         poolData.ReturnPool(this);
         --numActive;
-        gameObject.SetActive(false);
     }
 }

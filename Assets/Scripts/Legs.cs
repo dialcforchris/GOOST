@@ -27,11 +27,13 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
     public void ActorSpawned()
     {
         legsActive = true;
+        col.enabled = true;
     }
 
     public void ActorDefeated()
     {
         legsActive = false;
+        col.enabled = false;
     }
 
     private void OnCollisionEnter2D(Collision2D _col)
@@ -67,6 +69,15 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
                         }
                     }
                     break;
+                }
+            }
+
+            if (_col.collider.tag == "Enemy")
+            {
+                ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+                if (rigSegment != null)
+                {
+                    ((Enemy)rigSegment.rigBase).FindTarget();
                 }
             }
         }

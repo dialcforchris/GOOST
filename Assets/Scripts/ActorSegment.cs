@@ -13,10 +13,34 @@ public class ActorSegment : MonoBehaviour, ISegmentable<Actor>
     #endregion
 
 
-    private void Start()
+    private void OnEnable()
     {
         platformManager.instance.NoCollisionsPlease(col);
     }
 
+    public void ActorSpawned()
+    {
+        col.enabled = true;
+    }
 
-}
+    public void ActorDefeated()
+    {
+        col.enabled = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D _col)
+    {
+        if (_col.collider.tag == "Enemy")
+        {
+            ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
+            {
+                ((Enemy)rigSegment.rigBase).FindTarget();
+            }
+        }
+    }
+
+
+
+
+    }

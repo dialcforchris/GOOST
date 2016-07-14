@@ -9,7 +9,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private Enemy enemyPrefab = null;
     private ObjectPool<Enemy> objectPool = null;
 
-    [SerializeField] private Vector3[] spawnTransforms = null;
+    private Vector3[] spawnTransforms = null;
 
     private int numWave = 2;
     [SerializeField] private float spawnRate = 2.0f;

@@ -13,7 +13,8 @@ public class Actor : MonoBehaviour
     [SerializeField] protected Collider2D col = null;
     public Collider2D actorCollider { get { return col; } }
     [SerializeField] protected Rigidbody2D body = null;
-    
+
+    private bool peckUp = true;
 
     [SerializeField] protected Lance lance = null;
     [SerializeField] protected Legs legs = null;
@@ -70,8 +71,33 @@ public class Actor : MonoBehaviour
 
     public virtual void Defeat()
     {
+        col.enabled = false;
         lance.ActorDefeated();
         legs.ActorDefeated();
+        foreach(ActorSegment _seg in segments)
+        {
+            _seg.ActorDefeated();
+        }
+        StartCoroutine(DeathAnimation());
+    }
+
+    protected virtual IEnumerator DeathAnimation()
+    {
+        yield return new WaitForSeconds(0.5f);
+        anim.Stop();
+        gameObject.SetActive(false);
+    }
+
+    public virtual void Respawn()
+    {
+        col.enabled = true;
+        lance.ActorSpawned();
+        legs.ActorSpawned();
+        foreach (ActorSegment _seg in segments)
+        {
+            _seg.ActorSpawned();
+        }
+        gameObject.SetActive(true);
     }
 
     protected virtual void FixedUpdate()
@@ -79,6 +105,43 @@ public class Actor : MonoBehaviour
         if (transform.position.y > worldMaxY.y)
         {
             body.velocity = new Vector2(body.velocity.x, -0.5f);
+        }
+    }
+
+    protected void Peck()
+    {
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("goose_neck_up_idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("goose_neck_down_idle"))
+        {
+            if(peckUp)
+            {
+                anim.Play("goose_neck_up_extend");
+            }
+            else
+            {
+                anim.Play("goose_neck_down_extend");
+            }
+        }
+    }
+
+    protected void TogglePeckLocation()
+    {
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("goose_neck_up_idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("goose_neck_down_idle"))
+        {
+            anim.SetBool("mirror", peckUp ? false : true);
+            peckUp = !peckUp;
+            anim.Play("goose_neck_up_to_down");
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D _col)
+    {
+        if (_col.collider.tag == "Enemy")
+        {
+            ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
+            {
+                ((Enemy)rigSegment.rigBase).FindTarget();
+            }
         }
     }
 }

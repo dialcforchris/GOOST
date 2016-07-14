@@ -27,11 +27,13 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
     public void ActorSpawned()
     {
         lanceActive = true;
+        col.enabled = true;
     }
 
     public void ActorDefeated()
     {
         lanceActive = false;
+        col.enabled = false;
     }
 
     private void OnCollisionEnter2D(Collision2D _col)
@@ -73,6 +75,15 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
                         }
                     }
                     break;
+                }
+            }
+
+            if (_col.collider.tag == "Enemy")
+            {
+                ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+                if (rigSegment != null)
+                {
+                    ((Enemy)rigSegment.rigBase).FindTarget();
                 }
             }
         }
