@@ -1,41 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-    public class ScreenWrap : MonoBehaviour
-    {
-
+public class ScreenWrap : MonoBehaviour
+{
+    public delegate void ScreenWrapped();
+    private ScreenWrapped screenWrapped = null;
        
-        Vector2 position;
-        Vector2 screenToWorldMax;
-        Vector2 screenToWorldMin;
+    private Vector2 screenToWorldMax;
+    private Vector2 screenToWorldMin;
 
     [SerializeField] private float wrapMin = -0.01f;
     [SerializeField] private float wrapMax = 1.01f;
-        // Use this for initialization
-        void Start()
-        {
-           
-            screenToWorldMax = Camera.main.ViewportToWorldPoint(new Vector2(1.01f, 1.01f));
-            screenToWorldMin = Camera.main.ViewportToWorldPoint(new Vector2(-0.01f, -0.01f));
-        }
 
-        // Update is called once per frame
-        void Update()
-        {
-            position = gameObject.transform.position;
+    private void Start()
+    { 
+        screenToWorldMax = Camera.main.ViewportToWorldPoint(new Vector2(wrapMax, wrapMax));
+        screenToWorldMin = Camera.main.ViewportToWorldPoint(new Vector2(wrapMin, wrapMin));
+    }
 
-            if (position.x > screenToWorldMax.x)
-            {
-               transform.position = new Vector2(screenToWorldMin.x, position.y);
-            }
-            if (position.x < screenToWorldMin.x)
-            {
-               transform.position = new Vector2(screenToWorldMax.x, position.y);
-            }
-        }
-
-        void Wrap(Vector2 newPos)
+    private void Update()
+    {
+        if (transform.position.x > screenToWorldMax.x)
         {
-            gameObject.transform.position = newPos;
+            transform.position = new Vector2(screenToWorldMin.x, transform.position.y);
+            Wrapped();
         }
+        if (transform.position.x < screenToWorldMin.x)
+        {
+            transform.position = new Vector2(screenToWorldMax.x, transform.position.y);
+            Wrapped();
+        }
+    }
+
+    private void Wrapped()
+    {
+        if(screenWrapped != null)
+        {
+            screenWrapped();
+        }
+    }
+
+    public void AddScreenWrapCall(ScreenWrapped _wrap)
+    {
+        screenWrapped += _wrap;
+    }
 }

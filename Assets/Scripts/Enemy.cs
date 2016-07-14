@@ -10,20 +10,33 @@ public enum EnemyBehaviour
     COUNT
 }
 
-public class Enemy : Actor, IPoolable<Enemy>
+public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Enemy>
 {
     #region IPoolable
     public PoolData<Enemy> poolData { get; set; }
     #endregion
 
+    #region ISegmentable
+    public Enemy rigBase { get { return this; } }
+    #endregion
+
+    [SerializeField] private ScreenWrap screenWrap = null;
+
     public static int numActive = 0;
 
     private EnemyBehaviour behaviour = EnemyBehaviour.RANDOM;
 
-    public Vector3 target;
+    public Vector3 worldTarget;
+    public Vector3 viewTarget;
+
     private float speed = 1.0f;
     [SerializeField] private float maxSpeed = 5.0f;
     [SerializeField] private float targetThreshold = 0.5f;
+
+    private void Start()
+    {
+        screenWrap.AddScreenWrapCall(UpdateWorldFromView);
+    }
 
     public void Spawn(EnemyBehaviour _behaviour)
     {
@@ -40,9 +53,14 @@ public class Enemy : Actor, IPoolable<Enemy>
         //{
         //    anim.Play("goose_neck_up_extend");
         //}
+        //switch (behaviour)
+        //{
+        //    case EnemyBehaviour.RANDOM:
+        //        target = Camera.main.ViewportToWorldPoint(new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.2f, 0.8f), 10));
+        //        break;
+        //}
 
-
-        MovementToTarget();
+        //MovementToTarget();
     }
 
     private void FindTarget()
@@ -50,20 +68,31 @@ public class Enemy : Actor, IPoolable<Enemy>
         switch(behaviour)
         {
             case EnemyBehaviour.RANDOM:
-                target = Camera.main.ViewportToWorldPoint(new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.2f, 0.8f), 10));
+                viewTarget = new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.2f, 0.8f), 10);
+                UpdateWorldFromView(); 
                 break;
+        }
+    }
+
+    private void UpdateWorldFromView()
+    {
+        worldTarget = Camera.main.ViewportToWorldPoint(viewTarget);
+        Vector3 _wrapTarget = Camera.main.ViewportToWorldPoint(new Vector3(viewTarget.x + (Camera.main.WorldToViewportPoint(transform.position).x > 0.5f ? 1 : -1), viewTarget.y, viewTarget.z));
+        if(Vector3.SqrMagnitude(worldTarget - transform.position) > Vector3.SqrMagnitude(_wrapTarget - transform.position))
+        {
+            worldTarget = _wrapTarget;
         }
     }
 
     private void MovementToTarget()
     {
-        body.AddForce(((target - transform.position).normalized) * speed);
+        body.AddForce(((worldTarget - transform.position).normalized) * speed);
         body.velocity = new Vector2(Mathf.Min(maxSpeed, body.velocity.x), Mathf.Min(maxSpeed, body.velocity.y));
 
         if (body.velocity.x > 0) transform.localScale = Vector3.one;
         if (body.velocity.x < 0) transform.localScale = new Vector3(-1, 1, 1);
 
-        if (Vector3.SqrMagnitude(target - transform.position) < targetThreshold)
+        if (Vector3.SqrMagnitude(worldTarget - transform.position) < targetThreshold)
         {
             FindTarget();
         }

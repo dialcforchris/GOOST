@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Lance : MonoBehaviour
+public class Lance : MonoBehaviour, ISegmentable<Actor>
 {
     [SerializeField] private Actor actor = null;
     public Actor lanceActor { get { return actor; } }
@@ -11,6 +11,10 @@ public class Lance : MonoBehaviour
     public bool lanceActive = true;
 
     [SerializeField] private string[] affectTags = null;
+
+    #region ISegmentable
+    public Actor rigBase { get { return actor; } }
+    #endregion
 
     protected virtual void OnEnable()
     {
@@ -37,27 +41,36 @@ public class Lance : MonoBehaviour
                 {
                     while (true)
                     {
-                        Actor _actor = _col.gameObject.GetComponent<Actor>();
-                        if (_actor)
-                        {
-                            _actor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), 5.0f);
-                            _actor.Defeat();
-                            break;
-                        }
-                        ActorSegment _actorSegment = _col.gameObject.GetComponent<ActorSegment>();
-                        if (_actorSegment)
-                        {
-                            _actorSegment.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), 5.0f);
-                            _actorSegment.Defeat();
-                            break;
-                        }
                         Lance _lance = _col.gameObject.GetComponent<Lance>();
                         if (_lance)
                         {
-                            _lance.actor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), 3.0f);
-                            actor.ApplyKnockback(new Vector2(transform.position.x - _col.transform.position.x, 0.0f), 3.0f);
+                            _lance.actor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), 10.0f);
+                            Debug.Log(actor.tag + " lance clashs " + _col.gameObject.tag + " lance");
                             break;
                         }
+                        //Legs _legs = _col.gameObject.GetComponent<Legs>();
+                        //if (_legs)
+                        //{
+                        //    _legs.legsActor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), 10.0f);
+                        //    Debug.Log(actor.tag + " lance clashs " + _col.gameObject.tag + " lance");
+                        //    break;
+                        //}
+                        //Actor _actor = _col.gameObject.GetComponent<Actor>();
+                        //if (_actor)
+                        //{
+                        //    _actor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), 10.0f);
+                        //    _actor.Defeat();
+                        //    Debug.Log(actor.tag + " lance defeats " + _col.gameObject.tag + " body");
+                        //    break;
+                        //}
+                        //ActorSegment _actorSegment = _col.gameObject.GetComponent<ActorSegment>();
+                        //if (_actorSegment)
+                        //{
+                        //    _actorSegment.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), 10.0f);
+                        //    _actorSegment.Defeat();
+                        //    Debug.Log(actor.tag + " lance defeats " + _col.gameObject.tag + " segment");
+                        //    break;
+                        //}
                         break;
                     }
                     break;

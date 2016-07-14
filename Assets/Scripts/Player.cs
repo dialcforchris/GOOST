@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : Actor
+public class Player : Actor, ISegmentable<Player>
 {
     [SerializeField]
     private float speed;
@@ -17,6 +17,11 @@ public class Player : Actor
     float mashTime = 0;
     float maxMashTime = 0.2f;
     public GameObject eggTrans;
+
+    #region ISegmentable
+    public Player rigBase { get { return this; } }
+    #endregion
+
     public int playerId
     {
         get { return _playerId; }
@@ -30,7 +35,6 @@ public class Player : Actor
     protected override void OnEnable()
     {
         base.OnEnable();
-        platformManager.instance.NoCollisionsPlease(legs.legsCollider);
     }
     void Start () 
     {
@@ -141,4 +145,12 @@ public class Player : Actor
         return score;
     }
     #endregion 
+
+    public override void Defeat()
+    {
+        base.Defeat();
+        transform.position = Vector3.zero;
+        lance.ActorSpawned();
+        legs.ActorSpawned();
+    }
 }

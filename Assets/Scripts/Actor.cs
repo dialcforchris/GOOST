@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public interface ISegmentable<T> where T : Actor
+{ 
+    T rigBase { get; }
+}
+
 public class Actor : MonoBehaviour
 {
     [SerializeField] protected Animator anim = null;
@@ -57,5 +62,6 @@ public class Actor : MonoBehaviour
     public virtual void Defeat()
     {
         lance.ActorDefeated();
+        legs.ActorDefeated();
     }
 }
