@@ -15,7 +15,9 @@ public class PlayerManager : MonoBehaviour
     private Nest[] nests;
     [SerializeField]
     private Text[] scores;
-    //set this properly when we have a spash screen menu
+
+
+    //set this properly when we have a splash screen menu
     private int amountOfPlayers = 1;
 
 	// Use this for initialization

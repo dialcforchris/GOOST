@@ -13,11 +13,12 @@ public class Nest : MonoBehaviour
         set { _owningPlayer = value; }
     }
 
-    int eggs = 0;
+    int eggs = 3;
 
 	void Update()
     {
         PlayerManager.instance.GetPlayer(owningPlayer).eggLives = eggs;
+        UpdateEggs();
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -39,6 +40,20 @@ public class Nest : MonoBehaviour
         {
             eggs--;
             col.gameObject.GetComponent<Egg>().inNest = false;
+        }
+    }
+    void UpdateEggs()
+    {
+        for (int i=0;i<anEggs.Length;i++)
+        {
+            if (i <= eggs)
+            {
+                anEggs[i].SetActive(true);
+            }
+            else
+            {
+                anEggs[i].SetActive(false);
+            }
         }
     }
 

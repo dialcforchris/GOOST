@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 public class EggJail : MonoBehaviour
 {
     public int cost = 100;
     public int inflation = 50;
-    int numberOfEggs = 16;
+    int numberOfEggs = 3;
     public GameObject Egg;
+    [SerializeField]
+    private Text price;
+    [SerializeField]
+    private Text remaining;
 
     void Update()
     {
@@ -17,6 +21,17 @@ public class EggJail : MonoBehaviour
         bool eggsThen = false;
         eggsThen = numberOfEggs>0?  true : false;
         Egg.SetActive(eggsThen);
+        price.supportRichText = true;
+
+        price.text = "EGG RETURN SERVICE" + "\n"+ "<color=#c0c0c0ff>" + cost + " SILVER</color>";// +"\n" + "TO GET YOUR EGGS UNHARMED";
+        if (numberOfEggs > 0)
+        {
+            remaining.text = "ONLY " + numberOfEggs + " REMAINING!";
+        }
+        else
+        {
+            remaining.text = "SOLD OUT!";
+        }
     }
 
     void OnTriggerEnter2D(Collider2D _col)
@@ -24,6 +39,7 @@ public class EggJail : MonoBehaviour
         if (_col.gameObject.tag == "Player"&&_col.gameObject.GetComponent<Player>())
         {
             Player p = _col.gameObject.GetComponent<Player>();
+              
             if (numberOfEggs>0)
             {
                 if (p.GetScore() > cost)
