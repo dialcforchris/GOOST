@@ -21,7 +21,7 @@ public class Egg : MonoBehaviour
     private int _owningPlayer = 0;
     public int owningPlayer
     {
-        get { return owningPlayer; }
+        get { return _owningPlayer; }
         set { _owningPlayer = value; }
     }
    
@@ -51,16 +51,6 @@ public class Egg : MonoBehaviour
         }
 	}
     
-    //void OnColliderEnter2D(Collision2D col)
-    //{
-    //    if (col.gameObject.tag == "Player")
-    //    {
-    //        transform.SetParent(col.gameObject.GetComponent<Player>().eggTrans.transform);
-           
-    //        transform.position = col.gameObject.GetComponent<Player>().eggTrans.transform.position;
-    //    }
-    //}
-   
     void Hatch()
     {
         if (!inNest&&transform.parent ==null)
@@ -100,20 +90,20 @@ public class Egg : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Player")
-        {
-            if (col.gameObject.GetComponent<Player>().playerId != _owningPlayer)
-            {
-                transform.SetParent(col.transform);
-            }
-            else
-            {
-                if (transform.parent)
-                {
-                    transform.SetParent(null);
-                }
-            }
-        }
+        //if (col.gameObject.tag == "Player")
+        //{
+        //    if (col.gameObject.GetComponent<Player>().playerId != _owningPlayer)
+        //    {
+        //        transform.SetParent(col.transform);
+        //    }
+        //    else
+        //    {
+        //        if (transform.parent)
+        //        {
+        //            transform.SetParent(null);
+        //        }
+        //    }
+        //}
     }
 
     void OnCollisionEnter2D(Collision2D col)

@@ -3,26 +3,24 @@ using System.Collections;
 
 public class Nest : MonoBehaviour
 {
+
+    [SerializeField]
+    private GameObject[] anEggs;
     private int _owningPlayer = 0;
     public int owningPlayer
     {
-        get { return owningPlayer; }
+        get { return _owningPlayer; }
         set { _owningPlayer = value; }
     }
 
-    int eggs = 0;
+    int eggs = 3;
 
-	// Use this for initialization
-	void Start () 
+	void Update()
     {
-	    
-	}
-	
-	// Update is called once per frame
-	void Update () 
-    {
-	
-	}
+        PlayerManager.instance.GetPlayer(owningPlayer).eggLives = eggs;
+        UpdateEggs();
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
@@ -41,8 +39,21 @@ public class Nest : MonoBehaviour
         if (col.gameObject.tag == "Egg")
         {
             eggs--;
-            Debug.Log("somethinng that is an egg left");
             col.gameObject.GetComponent<Egg>().inNest = false;
+        }
+    }
+    void UpdateEggs()
+    {
+        for (int i=0;i<anEggs.Length;i++)
+        {
+            if (i <= eggs)
+            {
+                anEggs[i].SetActive(true);
+            }
+            else
+            {
+                anEggs[i].SetActive(false);
+            }
         }
     }
 
