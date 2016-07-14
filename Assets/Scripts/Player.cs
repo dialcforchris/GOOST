@@ -10,12 +10,12 @@ public class Player : Actor, ISegmentable<Actor>
     private int _playerId = 3;
     private int score = 0;
     private int _eggLives = 3;
-    private int eggMash = 0;
+    public int eggMash = 0;
     private int maxEggMash = 20;
     float eggtimer = 0;
     float maxEggTimer = 1.5f;
     float mashTime = 0;
-    float maxMashTime = 0.2f;
+    float maxMashTime = 0.15f;
     public GameObject eggTrans;
 
     #region ISegmentable
@@ -89,7 +89,7 @@ public class Player : Actor, ISegmentable<Actor>
     #region egg stuff
     void LayAnEgg()
     {
-        if (Input.GetButtonDown("Interact"+playerId.ToString())&&EggTimer())
+        if (Input.GetButtonDown("Interact"+playerId.ToString()))//&&EggTimer())
         {
             EggTimer();
             eggMash++;
@@ -114,7 +114,7 @@ public class Player : Actor, ISegmentable<Actor>
         }
         else
         {
-            eggMash--;
+           // eggMash--;
             return false;
         }
     }
@@ -133,6 +133,10 @@ public class Player : Actor, ISegmentable<Actor>
                 eggMash--;
                 return false;
             }
+        }
+        else
+        {
+            eggtimer = 0;
         }
         return true;
     }
