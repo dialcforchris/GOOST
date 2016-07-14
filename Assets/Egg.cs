@@ -21,7 +21,7 @@ public class Egg : MonoBehaviour
     private int _owningPlayer = 0;
     public int owningPlayer
     {
-        get { return owningPlayer; }
+        get { return _owningPlayer; }
         set { _owningPlayer = value; }
     }
    

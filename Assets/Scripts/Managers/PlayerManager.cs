@@ -25,20 +25,36 @@ public class PlayerManager : MonoBehaviour
             playerManager = this;
         }
 
-        for (int i=0;i<players.Length;i++)
-        {
-            players[i].playerId = i;
-            nests[i].gameObject.SetActive(true);
-            nests[i].owningPlayer = i;
-        }
+      
        
 	}
     void Start()
     {
-        foreach (Player p in players)
+
+        for (int i = 0; i < Input.GetJoystickNames().Length;i++ )
         {
-            p.gameObject.SetActive(true);
+            if (i<2)
+            {
+                players[i].gameObject.SetActive(true);
+                players[i].playerId = i;
+                nests[i].gameObject.SetActive(true);
+                nests[i].owningPlayer = i;
+            }
+            else
+            {
+                break;
+            }
         }
+        //    foreach (Player p in players)
+        //    {
+        //        p.gameObject.SetActive(true);
+        //    }
+        //for (int i = 0; i < players.Length; i++)
+        //{
+        //    players[i].playerId = i;
+        //    nests[i].gameObject.SetActive(true);
+        //    nests[i].owningPlayer = i;
+        //}
     }
    
 

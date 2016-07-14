@@ -6,7 +6,7 @@ public class Nest : MonoBehaviour
     private int _owningPlayer = 0;
     public int owningPlayer
     {
-        get { return owningPlayer; }
+        get { return _owningPlayer; }
         set { _owningPlayer = value; }
     }
 
@@ -41,7 +41,6 @@ public class Nest : MonoBehaviour
         if (col.gameObject.tag == "Egg")
         {
             eggs--;
-            Debug.Log("somethinng that is an egg left");
             col.gameObject.GetComponent<Egg>().inNest = false;
         }
     }
