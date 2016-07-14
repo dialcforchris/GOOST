@@ -13,12 +13,14 @@ public class Nest : MonoBehaviour
     int eggs = 0;
 
 	// Use this for initialization
-	void Start () {
-	
+	void Start () 
+    {
+	    
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+    {
 	
 	}
     void OnTriggerEnter2D(Collider2D col)
@@ -29,8 +31,9 @@ public class Nest : MonoBehaviour
         }
         if (col.gameObject.tag == "Egg")
         {
-            col.gameObject.GetComponent<Egg>().inNest = true;
-            eggs++;
+            Egg e = col.gameObject.GetComponent<Egg>();
+            e.inNest = true;
+            e.owningPlayer = owningPlayer;
         }
     }
     void OnTriggerExit2D(Collider2D col)
@@ -38,6 +41,7 @@ public class Nest : MonoBehaviour
         if (col.gameObject.tag == "Egg")
         {
             eggs--;
+            Debug.Log("somethinng that is an egg left");
             col.gameObject.GetComponent<Egg>().inNest = false;
         }
     }

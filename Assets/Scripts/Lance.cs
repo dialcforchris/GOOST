@@ -4,13 +4,15 @@ using System.Collections;
 public class Lance : MonoBehaviour
 {
     [SerializeField] private Actor actor = null;
-    public Actor actorCollider { get { return actor; } }
+    public Actor lanceActor { get { return actor; } }
     [SerializeField] private Collider2D col = null;
     public Collider2D lanceCollider { get { return col; } }
 
     public bool lanceActive = true;
 
-    private void Start()
+    [SerializeField] private string[] affectTags = null;
+
+    protected virtual void OnEnable()
     {
         platformManager.instance.NoCollisionsPlease(col);
     }
@@ -29,30 +31,37 @@ public class Lance : MonoBehaviour
     {
         if (lanceActive)
         {
-            while (true)
+            foreach(string _s in affectTags)
             {
-                Actor _actor = _col.gameObject.GetComponent<Actor>();
-                if (_actor)
+                if(_s == _col.gameObject.tag)
                 {
-                    _actor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), 5.0f);
-                    _actor.Defeat();
+                    while (true)
+                    {
+                        Actor _actor = _col.gameObject.GetComponent<Actor>();
+                        if (_actor)
+                        {
+                            _actor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), 5.0f);
+                            _actor.Defeat();
+                            break;
+                        }
+                        ActorSegment _actorSegment = _col.gameObject.GetComponent<ActorSegment>();
+                        if (_actorSegment)
+                        {
+                            _actorSegment.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), 5.0f);
+                            _actorSegment.Defeat();
+                            break;
+                        }
+                        Lance _lance = _col.gameObject.GetComponent<Lance>();
+                        if (_lance)
+                        {
+                            _lance.actor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), 3.0f);
+                            actor.ApplyKnockback(new Vector2(transform.position.x - _col.transform.position.x, 0.0f), 3.0f);
+                            break;
+                        }
+                        break;
+                    }
                     break;
                 }
-                ActorSegment _actorSegment = _col.gameObject.GetComponent<ActorSegment>();
-                if (_actorSegment)
-                {
-                    _actorSegment.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), 5.0f);
-                    _actorSegment.Defeat();
-                    break;
-                }
-                Lance _lance = _col.gameObject.GetComponent<Lance>();
-                if (_lance)
-                {
-                    _lance.actor.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), 3.0f);
-                    actor.ApplyKnockback(new Vector2(transform.position.x - _col.transform.position.x, 0.0f), 3.0f);
-                    break;
-                }
-                break;
             }
         }
     }

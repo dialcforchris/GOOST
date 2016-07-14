@@ -9,9 +9,13 @@ public class Egg : MonoBehaviour
     [SerializeField]
     private GameObject brokenEgg;
     [SerializeField]
+    private Collider2D col;
+    [SerializeField]
+    private Rigidbody2D body;
+    [SerializeField]
     private GameObject magpie;
     [SerializeField]
-    Animator ani;
+    private Animator ani;
     float hatchTime = 0;
     float maxHatchTime = 6;
     private int _owningPlayer = 0;
@@ -27,7 +31,6 @@ public class Egg : MonoBehaviour
 	    if (getLaid)
         {
             ani.Play("Laid");
-            //do a thing
         }
 	}
 	
@@ -38,26 +41,26 @@ public class Egg : MonoBehaviour
         {
             getLaid = false;
         }
-     
+        InNest();
         Hatch();
+        if (transform.parent)
+        {
+            body.gravityScale = 0;
+            body.mass = 0;
+            transform.position = transform.parent.position;
+        }
 	}
     
-    void OnColliderEnter2D(Collision2D col)
-    {
-        if (col.gameObject.tag == "Player")
-        {
-            transform.SetParent(col.gameObject.GetComponent<Player>().eggTrans.transform);
+    //void OnColliderEnter2D(Collision2D col)
+    //{
+    //    if (col.gameObject.tag == "Player")
+    //    {
+    //        transform.SetParent(col.gameObject.GetComponent<Player>().eggTrans.transform);
            
-            transform.position = col.gameObject.GetComponent<Player>().eggTrans.transform.position;
-        }
-    }
-    void OnTriggerStay2D(Collider2D col)
-    {
-        if (col.gameObject.tag == "Nest")
-        {
-            inNest = true;
-        }
-    }
+    //        transform.position = col.gameObject.GetComponent<Player>().eggTrans.transform.position;
+    //    }
+    //}
+   
     void Hatch()
     {
         if (!inNest&&transform.parent ==null)
@@ -76,6 +79,51 @@ public class Egg : MonoBehaviour
         else
         {
             hatchTime = 0;
+        }
+    }
+
+    void InNest()
+    {
+        if (inNest)
+        {
+            col.isTrigger = true;
+            body.gravityScale = 0;
+            body.constraints = RigidbodyConstraints2D.FreezePositionY;
+        }
+        else
+        {
+            col.isTrigger = false;
+            body.gravityScale = 1;
+            body.constraints = RigidbodyConstraints2D.None;
+            _owningPlayer = 3;
+        }
+    }
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            if (col.gameObject.GetComponent<Player>().playerId != _owningPlayer)
+            {
+                transform.SetParent(col.transform);
+            }
+            else
+            {
+                if (transform.parent)
+                {
+                    transform.SetParent(null);
+                }
+            }
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            if (col.gameObject.GetComponent<Player>().playerId != _owningPlayer)
+            {
+                transform.SetParent(col.gameObject.GetComponent<Player>().eggTrans.transform);
+            }
         }
     }
 }

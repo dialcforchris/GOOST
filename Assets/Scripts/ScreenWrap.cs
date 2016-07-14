@@ -8,6 +8,9 @@ using System.Collections;
         Vector2 position;
         Vector2 screenToWorldMax;
         Vector2 screenToWorldMin;
+
+    [SerializeField] private float wrapMin = -0.01f;
+    [SerializeField] private float wrapMax = 1.01f;
         // Use this for initialization
         void Start()
         {
