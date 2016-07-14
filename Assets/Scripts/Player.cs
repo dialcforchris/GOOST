@@ -55,11 +55,11 @@ public class Player : Actor, ISegmentable<Actor>
             Movement();
             base.FixedUpdate();
 
-            if(Input.GetKeyDown(KeyCode.P))
+            if(Input.GetButtonDown("Peck"+playerId.ToString())||Input.GetKeyDown(KeyCode.P))
             {
                 Peck();
             }
-            if (Input.GetKeyDown(KeyCode.L))
+            if (Input.GetButtonDown("BeakHeight"+playerId.ToString())||Input.GetKeyDown(KeyCode.L))
             {
                 TogglePeckLocation();
             }
