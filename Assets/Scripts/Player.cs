@@ -67,6 +67,7 @@ public class Player : Actor, ISegmentable<Actor>
             if (Input.GetButtonDown("Fly" + playerId.ToString()))
             {
                 body.AddForce(new Vector2(0, 50));
+                StatTracker.instance.stats.totalFlaps++;
             }
             LayAnEgg();
             if (Input.GetAxis("Vertical" + playerId.ToString()) < 0)
