@@ -3,6 +3,7 @@
 public enum GameStates
 {
     STATE_GAMEPLAY = 0,
+    STATE_MENU,
     STATE_PAUSE,
     STATE_GAMEOVER,
     STATE_SPLASH,
@@ -30,6 +31,7 @@ public class GameStateManager : MonoBehaviour
         {
             singleton = this;
             states[(int)GameStates.STATE_GAMEPLAY] = new GameplayState();
+            states[(int)GameStates.STATE_MENU] = new MenuState();
             states[(int)GameStates.STATE_PAUSE] = new PauseState();
             states[(int)GameStates.STATE_GAMEOVER] = new GameOverState();
             states[(int)GameStates.STATE_SPLASH] = new SplashScreenState();
