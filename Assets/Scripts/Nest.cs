@@ -100,4 +100,9 @@ public class Nest : MonoBehaviour
         return anEggs[Random.Range(0, activeEggs)];
     }
 
+    public void EggStolen()
+    {
+
+    }
+
 }

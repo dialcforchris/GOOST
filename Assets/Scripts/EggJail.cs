@@ -66,4 +66,9 @@ public class EggJail : MonoBehaviour
     {
         numberOfEggs += _difference;
     }
+
+    public void EggCaptured()
+    {
+
+    }
 }

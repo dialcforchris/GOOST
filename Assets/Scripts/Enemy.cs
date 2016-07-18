@@ -22,6 +22,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public string segmentName { get { return "Enemy"; } }
     #endregion
 
+    [SerializeField] private SpriteRenderer eggSpriteRenderer = null;
+
     [SerializeField] private ScreenWrap screenWrap = null;
 
     public static int numActive = 0;
@@ -125,7 +127,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
             if (currentBehaviour == EnemyBehaviour.CAPTIVE_EGG)
             {
                 currentBehaviour = behaviour;
-                //Drop off egg in jail here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                eggSpriteRenderer.gameObject.SetActive(false);
+                EggJail.instance.EggCaptured();
             }
             FindTarget();
         }
@@ -145,15 +148,14 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         --numActive;
     }
 
-    protected override void OnCollisionEnter2D(Collision2D _col)
+    private void OnTriggerEnter2D(Collider2D _col)
     {
-        base.OnCollisionEnter2D(_col);
         if (currentBehaviour != EnemyBehaviour.CAPTIVE_EGG)
         {
-            if (_col.collider.tag == "Nest")
+            if (_col.tag == "Nest")
             {
-                //Remove egg from nest or pick up point or whatever !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //Add egg to magpie !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                _col.GetComponent<Nest>().EggStolen();
+                eggSpriteRenderer.gameObject.SetActive(true);
                 currentBehaviour = EnemyBehaviour.CAPTIVE_EGG;
                 FindTarget();
             }
