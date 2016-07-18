@@ -36,7 +36,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             getLaid = false;
         }
         Hatch();
-        DisablePhysics(inNest);
+      //  DisablePhysics(inNest);
 	}
     
     void Hatch()
@@ -81,13 +81,13 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Player")
-        {
-            if (col.gameObject.GetComponent<Player>().playerId != _owningPlayer)
-            {
-                transform.SetParent(col.gameObject.GetComponent<Player>().eggTrans.transform);
-            }
-        }
+        //if (col.gameObject.tag == "Player")
+        //{
+        //    if (col.gameObject.GetComponent<Player>().playerId != _owningPlayer)
+        //    {
+        //        transform.SetParent(col.gameObject.GetComponent<Player>().eggTrans.transform);
+        //    }
+        //}
     }
 
     public void OnPooled()
