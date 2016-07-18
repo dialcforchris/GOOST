@@ -57,6 +57,7 @@ public class EggJail : MonoBehaviour
                 {
                     NumberOfEggs(-1);
                     p.ChangeScore(-cost);
+                    p.carryingEgg = true;
                     cost += inflation;
                 }
             }

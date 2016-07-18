@@ -72,7 +72,6 @@ public class Nest : MonoBehaviour
                 e.owningPlayer = owningPlayer;
                 anEggs.Add(e);
                 e.transform.position = eggTrans[activeEggs].position;
-              
                 e.DisablePhysics(true);
             }
         }
@@ -92,10 +91,10 @@ public class Nest : MonoBehaviour
             }
             if (col.gameObject.tag == "Egg")
             {
-                if (activeEggs<=maxEggs)
+                if (activeEggs>0)
                 {
-                    col.gameObject.GetComponent<Egg>().inNest = false;
-                    col.gameObject.GetComponent<Egg>().DisablePhysics(false);
+                    col.gameObject.GetComponent<Egg>().inNest = true;
+                    col.gameObject.GetComponent<Egg>().DisablePhysics(true);
                 }
                 activeEggs--;
             }

@@ -36,7 +36,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             getLaid = false;
         }
         Hatch();
-	}
+	}//
     
     void Hatch()
     {
@@ -48,8 +48,8 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             }
             else
             {
-                Instantiate(brokenEgg,new Vector2(transform.position.x,transform.position.y +1),transform.rotation);
-                Destroy(gameObject);
+              //  Instantiate(brokenEgg,new Vector2(transform.position.x,transform.position.y +1),transform.rotation);
+               // Destroy(gameObject);
                 //spawn a magpie
             }
         }
@@ -80,13 +80,19 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        //if (col.gameObject.tag == "Player")
-        //{
-        //    if (col.gameObject.GetComponent<Player>().playerId != _owningPlayer)
-        //    {
-        //        transform.SetParent(col.gameObject.GetComponent<Player>().eggTrans.transform);
-        //    }
-        //}
+        if (col.gameObject.tag == "Player")
+        {
+            ISegmentable<Actor> rigSegment = col.gameObject.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
+            {
+                Player p = (Player)rigSegment.rigBase;
+                if (!p.inNest)
+                {
+                    p.carryingEgg = true;
+                    ReturnPool();
+                }
+            }
+        }
     }
 
     public void OnPooled()
