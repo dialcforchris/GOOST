@@ -21,6 +21,9 @@ public class Player : Actor, ISegmentable<Actor>
     
     private bool isDead = false;
 
+    private bool applyForce = false;
+    [SerializeField] float upwardForce = 25.0f;
+
     #region ISegmentable
     public Actor rigBase { get { return this; } }
     public string segmentName { get { return "Player"; } }
@@ -47,7 +50,7 @@ public class Player : Actor, ISegmentable<Actor>
 	}
 	
 	// Update is called once per frame
-	protected override void FixedUpdate () 
+	protected void Update () 
     {
         if (!isDead)
         {
@@ -66,7 +69,7 @@ public class Player : Actor, ISegmentable<Actor>
 
             if (Input.GetButtonDown("Fly" + playerId.ToString()))
             {
-                body.AddForce(new Vector2(0, 50));
+                applyForce = true;
             }
             LayAnEgg();
             if (Input.GetAxis("Vertical" + playerId.ToString()) < 0)
@@ -77,6 +80,16 @@ public class Player : Actor, ISegmentable<Actor>
     #region movement
     void Movement()
     {
+        if (applyForce)
+        {
+            if (body.velocity.y < 0)
+            {
+                body.velocity = new Vector2(body.velocity.x, 0.0f);
+            }
+            body.AddForce(new Vector2(0, upwardForce));
+            applyForce = false;
+        }
+
         VelocityCheck();
         body.AddForce(new Vector2(Input.GetAxis("Horizontal"+playerId) * (speed), 0));
 

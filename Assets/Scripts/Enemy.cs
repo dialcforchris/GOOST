@@ -50,6 +50,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public void Spawn(EnemyBehaviour _behaviour)
     {
         Respawn();
+        eggSpriteRenderer.gameObject.SetActive(false);
         aggression = 0.0f;
         ++numActive;
         //anim.Play("fly");
@@ -144,8 +145,10 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     {
         base.Defeat();
         //anim.Stop();
-        poolData.ReturnPool(this);
+        SilverCoin _coin = CoinPool.instance.PoolCoin();
+        _coin.transform.position = transform.position;
         --numActive;
+        poolData.ReturnPool(this);
     }
 
     private void OnTriggerEnter2D(Collider2D _col)
@@ -154,10 +157,14 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         {
             if (_col.tag == "Nest")
             {
-                _col.GetComponent<Nest>().EggStolen();
-                eggSpriteRenderer.gameObject.SetActive(true);
-                currentBehaviour = EnemyBehaviour.CAPTIVE_EGG;
-                FindTarget();
+                Nest _nest = _col.GetComponent<Nest>();
+                if (_nest.numEggs > 0)
+                {
+                    _nest.EggStolen();
+                    eggSpriteRenderer.gameObject.SetActive(true);
+                    currentBehaviour = EnemyBehaviour.CAPTIVE_EGG;
+                    FindTarget();
+                }
             }
         }
     }
