@@ -186,9 +186,13 @@ public class Player : Actor, ISegmentable<Actor>
         {
             isDead = true;
             base.Defeat();
+            Egg e = EggPool.instance.PoolEgg();
+            e.OnPooled();
+            e.transform.position = transform.position;
             PlayerManager.instance.RespawnPlayer(playerId);
             _eggLives--;
             PlayerManager.instance.StealEgg(playerId);
+           
         }
     }
 

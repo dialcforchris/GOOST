@@ -48,8 +48,8 @@ public class Nest : MonoBehaviour
                     p.inNest = true;
                     if (p.carryingEgg)
                     {
-                        AddEgg();
                         p.carryingEgg = false;
+                        AddEgg();
                     }
                 }
                 else
@@ -67,11 +67,11 @@ public class Nest : MonoBehaviour
             Egg e = col.gameObject.GetComponent<Egg>();
             if (activeEggs < maxEggs)
             {
+                e.transform.position = eggTrans[activeEggs-1].position;
                 activeEggs++;
                 e.inNest = true;
                 e.owningPlayer = owningPlayer;
                 anEggs.Add(e);
-                e.transform.position = eggTrans[activeEggs].position;
                 e.DisablePhysics(true);
             }
         }

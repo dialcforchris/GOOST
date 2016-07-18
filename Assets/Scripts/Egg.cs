@@ -35,7 +35,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         {
             getLaid = false;
         }
-        Hatch();
+     //   Hatch();
 	}//
     
     void Hatch()
@@ -59,25 +59,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         }
     }
 
-   
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        //if (col.gameObject.tag == "Player")
-        //{
-        //    if (col.gameObject.GetComponent<Player>().playerId != _owningPlayer)
-        //    {
-        //        transform.SetParent(col.transform);
-        //    }
-        //    else
-        //    {
-        //        if (transform.parent)
-        //        {
-        //            transform.SetParent(null);
-        //        }
-        //    }
-        //}
-    }
-
+ 
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.tag == "Player")
@@ -86,7 +68,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             if (rigSegment != null)
             {
                 Player p = (Player)rigSegment.rigBase;
-                if (!p.inNest)
+                if (!p.inNest&&!p.carryingEgg)
                 {
                     p.carryingEgg = true;
                     ReturnPool();

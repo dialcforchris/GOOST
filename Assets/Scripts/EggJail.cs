@@ -47,18 +47,24 @@ public class EggJail : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D _col)
     {
-        if (_col.gameObject.tag == "Player"&&_col.gameObject.GetComponent<Player>())
+        if (_col.gameObject.tag == "Player")
         {
-            Player p = _col.gameObject.GetComponent<Player>();
-              
-            if (numberOfEggs>0)
+            ISegmentable<Actor> rigSegment = _col.gameObject.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
             {
-                if (p.GetScore() > cost)
+                Player p = (Player)rigSegment.rigBase;
                 {
-                    NumberOfEggs(-1);
-                    p.ChangeScore(-cost);
-                    p.carryingEgg = true;
-                    cost += inflation;
+
+                    if (numberOfEggs > 0)
+                    {
+                        if (p.GetScore() > cost)
+                        {
+                            NumberOfEggs(-1);
+                            p.ChangeScore(-cost);
+                            p.carryingEgg = true;
+                            cost += inflation;
+                        }
+                    }
                 }
             }
         }
