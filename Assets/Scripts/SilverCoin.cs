@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SilverCoin : MonoBehaviour {
+public class SilverCoin : MonoBehaviour, IPoolable<SilverCoin>
+{
+    #region IPoolable
+    public PoolData<SilverCoin> poolData { get; set; }
+    #endregion
 
     [SerializeField]
     Rigidbody2D rig;
@@ -78,5 +82,15 @@ public class SilverCoin : MonoBehaviour {
         gameObject.SetActive(false);
         transform.localScale = Vector3.one;
         collected = false;
+    }
+    public void OnPooled()
+    {
+       gameObject.SetActive(true);
+    }
+
+    public void ReturnPool()
+    {
+        poolData.ReturnPool(this);
+        gameObject.SetActive(false);
     }
 }
