@@ -23,6 +23,7 @@ public class CoinSuction : MonoBehaviour
         if (_col.tag == "Player")
         {
             float _speedMultiplier = Vector3.SqrMagnitude(_col.transform.position - transform.position);
+            body.velocity = Vector2.zero;
             body.AddForce((_col.transform.position - transform.position).normalized * _speedMultiplier * suctionSpeed);
             platformManager.instance.NoCollisionsPlease(physicsCol);
             body.mass = 0.0f;
