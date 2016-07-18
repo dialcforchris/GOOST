@@ -188,6 +188,7 @@ public class Player : Actor, ISegmentable<Actor>
             base.Defeat();
             PlayerManager.instance.RespawnPlayer(playerId);
             _eggLives--;
+            PlayerManager.instance.StealEgg(playerId);
         }
     }
 

@@ -36,7 +36,6 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             getLaid = false;
         }
         Hatch();
-      //  DisablePhysics(inNest);
 	}
     
     void Hatch()
