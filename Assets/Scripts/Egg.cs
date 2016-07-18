@@ -35,7 +35,6 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         {
             getLaid = false;
         }
-        InNest();
         Hatch();
         if (transform.parent)
         {
@@ -66,25 +65,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         }
     }
 
-    void InNest()
-    {
-        if (inNest)
-        {
-            col.isTrigger = true;
-            body.gravityScale = 0;
-            body.constraints = RigidbodyConstraints2D.FreezePosition; 
-            body.mass = 0;
-
-        }
-        else
-        {
-            col.isTrigger = false;
-            body.gravityScale = 1;
-            body.constraints = RigidbodyConstraints2D.None;
-            body.mass = 0.2f;
-            _owningPlayer = 3;
-        }
-    }
+   
     void OnTriggerEnter2D(Collider2D col)
     {
         //if (col.gameObject.tag == "Player")
@@ -120,6 +101,11 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         {
             ani.Play("Laid");
         }
+        col.isTrigger = false;
+        body.gravityScale = 1;
+        body.constraints = RigidbodyConstraints2D.None;
+        body.mass = 0.2f;
+        _owningPlayer = 3;
         gameObject.SetActive(true);
     }
 
@@ -128,5 +114,23 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         poolData.ReturnPool(this);
         gameObject.SetActive(false);
     }
+   public void DisablePhysics(bool _disable)
+    {
+        if (_disable)
+        {
+            col.isTrigger = true;
+            body.gravityScale = 0;
+            body.constraints = RigidbodyConstraints2D.FreezePosition;
+            body.mass = 0;
 
+        }
+        else
+        {
+            col.isTrigger = false;
+            body.gravityScale = 1;
+            body.constraints = RigidbodyConstraints2D.None;
+            body.mass = 0.2f;
+            _owningPlayer = 3;
+        }
+    }
 }

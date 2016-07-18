@@ -3,9 +3,10 @@ using System.Collections;
 
 public class Nest : MonoBehaviour
 {
-
     [SerializeField]
-    private GameObject[] anEggs;
+    private Transform[] eggTrans;
+    private Egg[] anEggs;
+    private int activeEggs = 0;
     private int _owningPlayer = 0;
     public int owningPlayer
     {
@@ -13,11 +14,22 @@ public class Nest : MonoBehaviour
         set { _owningPlayer = value; }
     }
 
-    int eggs = 3;
+    void Start()
+    {
+        anEggs = new Egg[eggTrans.Length];
+        for (int i = 0; i < eggTrans.Length;i++ )
+        {
+            Egg e = EggPool.instance.PoolEgg();
+            e.transform.position = eggTrans[i].position;
+            anEggs[i] = e;
+            activeEggs++;
+        }
+    }
+
 
 	void Update()
     {
-        PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = eggs;
+        PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = activeEggs;
         UpdateEggs();
     }
 
@@ -25,6 +37,11 @@ public class Nest : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
+            Player p = col.gameObject.GetComponent<Player>();
+            if (owningPlayer == p.playerId)
+            {
+                p.inNest = true;
+            }
             //let player lay egg
         }
         if (col.gameObject.tag == "Egg")
@@ -38,7 +55,7 @@ public class Nest : MonoBehaviour
     {
         if (col.gameObject.tag == "Egg")
         {
-            eggs--;
+            activeEggs--;
             col.gameObject.GetComponent<Egg>().inNest = false;
         }
     }
@@ -46,20 +63,21 @@ public class Nest : MonoBehaviour
     {
         for (int i=0;i<anEggs.Length;i++)
         {
-            if (i <= eggs)
+            if (i <= activeEggs)
             {
-                anEggs[i].SetActive(true);
+                anEggs[i].gameObject.SetActive(true);
             }
             else
             {
-                anEggs[i].SetActive(false);
+                anEggs[i].gameObject.SetActive(false);
             }
         }
     }
 
-    public GameObject GetResawnEgg()
+    public Egg GetResawnEgg()
     {
-        return anEggs[Random.Range(0, anEggs.Length)];
+       
+        return anEggs[Random.Range(0, activeEggs)];
     }
 
 }
