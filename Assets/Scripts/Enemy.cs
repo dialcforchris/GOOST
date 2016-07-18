@@ -22,6 +22,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public string segmentName { get { return "Enemy"; } }
     #endregion
 
+    [SerializeField] private SpriteRenderer eggSpriteRenderer = null;
+
     [SerializeField] private ScreenWrap screenWrap = null;
 
     public static int numActive = 0;
@@ -36,6 +38,9 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     [SerializeField] private float maxSpeed = 5.0f;
     [SerializeField] private float targetThreshold = 0.5f;
 
+    private float aggression = 0.0f;
+    [SerializeField] private float aggressionSpeed = 0.5f;
+
     protected override void Start()
     {
         screenWrap.AddScreenWrapCall(UpdateWorldFromView);
@@ -45,6 +50,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public void Spawn(EnemyBehaviour _behaviour)
     {
         Respawn();
+        aggression = 0.0f;
         ++numActive;
         //anim.Play("fly");
         behaviour = _behaviour;
@@ -55,17 +61,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
     protected override void FixedUpdate()
     {
-        //if(Input.GetKeyDown(KeyCode.J))
-        //{
-        //    anim.Play("goose_neck_up_extend");
-        //}
-        //switch (behaviour)
-        //{
-        //    case EnemyBehaviour.RANDOM:
-        //        target = Camera.main.ViewportToWorldPoint(new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.2f, 0.8f), 10));
-        //        break;
-        //}
-
+        aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
         MovementToTarget();
         base.FixedUpdate();
     }
@@ -76,17 +72,36 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         {
             case EnemyBehaviour.RANDOM:
                 viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
-                UpdateWorldFromView();
+                break;
+            case EnemyBehaviour.AGGRESSIVE:
+                if (aggression > Random.Range(0.0f, 1.0f))
+                {
+                    viewTarget = Camera.main.WorldToViewportPoint(PlayerManager.instance.GetClosestPlayer(transform.position).transform.position);
+                }
+                else
+                {
+                    viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
+                }
+                break;
+            case EnemyBehaviour.HUNTER:
+                Nest _nest = PlayerManager.instance.GetLargestNest();
+                if (_nest)
+                {
+                    viewTarget = Camera.main.WorldToViewportPoint(_nest.transform.position);
+                }
+                else
+                {
+                    viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
+                }
                 break;
             case EnemyBehaviour.HIGH_FLYER:
                 viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.85f, 0.95f), 10);
-                UpdateWorldFromView();
                 break;
             case EnemyBehaviour.CAPTIVE_EGG:
                 viewTarget = Camera.main.WorldToViewportPoint(EggJail.instance.dropoff.position);
-                UpdateWorldFromView();
                 break;
         }
+        UpdateWorldFromView();
     }
 
     private void UpdateWorldFromView()
@@ -112,7 +127,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
             if (currentBehaviour == EnemyBehaviour.CAPTIVE_EGG)
             {
                 currentBehaviour = behaviour;
-                //Drop off egg in jail here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                eggSpriteRenderer.gameObject.SetActive(false);
+                EggJail.instance.EggCaptured();
             }
             FindTarget();
         }
@@ -132,15 +148,17 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         --numActive;
     }
 
-    protected override void OnCollisionEnter2D(Collision2D _col)
+    private void OnTriggerEnter2D(Collider2D _col)
     {
-        base.OnCollisionEnter2D(_col);
-        if (_col.collider.tag == "Egg")
+        if (currentBehaviour != EnemyBehaviour.CAPTIVE_EGG)
         {
-            //Remove egg from nest or pick up point or whatever !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //Add egg to magpie !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            currentBehaviour = EnemyBehaviour.CAPTIVE_EGG;
-            FindTarget();
+            if (_col.tag == "Nest")
+            {
+                _col.GetComponent<Nest>().EggStolen();
+                eggSpriteRenderer.gameObject.SetActive(true);
+                currentBehaviour = EnemyBehaviour.CAPTIVE_EGG;
+                FindTarget();
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ public class Player : Actor, ISegmentable<Actor>
     float mashTime = 0;
     float maxMashTime = 0.15f;
     public GameObject eggTrans;
+    public bool inNest = false;
     
     private bool isDead = false;
 
@@ -42,7 +43,6 @@ public class Player : Actor, ISegmentable<Actor>
     protected override void Start () 
     {
       //  platformManager.instance.NoCollisionsPlease(legs);
-        Debug.Log(playerId);
         base.Start();
 	}
 	
@@ -104,9 +104,8 @@ public class Player : Actor, ISegmentable<Actor>
     #region egg stuff
     void LayAnEgg()
     {
-        if (Input.GetButtonDown("Interact"+playerId.ToString()))
+        if (Input.GetButtonDown("Interact"+playerId.ToString())&&inNest)
         {
-          //  EggTimer();
             eggMash++;
             mashTime = 0;
         }
@@ -115,8 +114,13 @@ public class Player : Actor, ISegmentable<Actor>
         {
             eggMash = 0;
             eggtimer = 0;
-            Egg e = (Egg)Instantiate(egg, this.transform.position, Quaternion.identity);
-            e.getLaid = true;
+            Egg e = EggPool.instance.PoolEgg();
+            //Egg e = (Egg)Instantiate(egg, this.transform.position, Quaternion.identity);
+            e.DisablePhysics(true);
+          //  e.getLaid = true;
+            
+            
+            //get nest ref and set trans to that
         }
     }
 
@@ -178,7 +182,7 @@ public class Player : Actor, ISegmentable<Actor>
     {
         isDead = false;
         base.Respawn();
-        GameObject egg = PlayerManager.instance.GetNest(playerId).GetResawnEgg();
+        Egg egg = PlayerManager.instance.GetNest(playerId).GetRespawnEgg();
         transform.position = egg.transform.position;
     }
   

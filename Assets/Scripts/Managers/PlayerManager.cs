@@ -51,6 +51,7 @@ public class PlayerManager : MonoBehaviour
                 players[i].gameObject.SetActive(true);
                 players[i].playerId = i;
                 nests[i].gameObject.SetActive(true);
+                nests[i].enabled = true;
                 nests[i].owningPlayer = i;
                 scores[i].gameObject.SetActive(true);
             }
@@ -107,5 +108,56 @@ public class PlayerManager : MonoBehaviour
     public Nest GetNest(int _index)
     {
         return nests[_index];
+    }
+
+    public Player GetClosestPlayer(Vector3 _pos)
+    {
+        float _distance = Vector3.SqrMagnitude(players[0].transform.position - _pos);
+        if(players.Length == 2)
+        {
+            if(Vector3.SqrMagnitude(players[1].transform.position - _pos) < _distance)
+            {
+                return players[1];
+            }
+        }
+        return players[0];
+    }
+
+    public Nest GetLargestNest()
+    {
+        int _amount = nests[0].numEggs;
+        if (players.Length == 2)
+        {
+            if(_amount == nests[1].numEggs)
+            {
+                if(_amount == 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return nests[Random.Range(0, 2)];
+                }
+            }
+            else if(_amount < nests[1].numEggs)
+            {
+                return nests[1];
+            }
+            else
+            {
+                return nests[0];
+            }
+        }
+        else
+        {
+            if (_amount == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return nests[0];
+            }
+        }
     }
 }

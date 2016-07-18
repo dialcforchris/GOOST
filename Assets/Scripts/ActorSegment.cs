@@ -3,8 +3,10 @@ using System.Collections;
 
 public class ActorSegment : MonoBehaviour, ISegmentable<Actor>
 {
-    [SerializeField] private Actor actor = null;
-    [SerializeField] private Collider2D col = null;
+    [SerializeField]
+    private Actor actor = null;
+    [SerializeField]
+    private Collider2D col = null;
     public Collider2D segmentCollider { get { return col; } }
 
     #region ISegmentable
@@ -39,8 +41,4 @@ public class ActorSegment : MonoBehaviour, ISegmentable<Actor>
             }
         }
     }
-
-
-
-
-    }
+}

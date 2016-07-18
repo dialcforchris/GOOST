@@ -3,9 +3,11 @@ using System.Collections;
 
 public class Nest : MonoBehaviour
 {
-
     [SerializeField]
-    private GameObject[] anEggs;
+    private Transform[] eggTrans;
+    private Egg[] anEggs;
+    private int activeEggs = 0;
+    public int numEggs { get { return activeEggs; } }
     private int _owningPlayer = 0;
     public int owningPlayer
     {
@@ -13,53 +15,95 @@ public class Nest : MonoBehaviour
         set { _owningPlayer = value; }
     }
 
-    int eggs = 3;
+    void Start()
+    {
+        anEggs = new Egg[eggTrans.Length];
+        for (int i = 0; i < eggTrans.Length;i++ )
+        {
+            Egg e = EggPool.instance.PoolEgg();
+            e.transform.position = eggTrans[i].position;
+            anEggs[i] = e;
+            activeEggs++;
+        }
+    }
+
 
 	void Update()
     {
-        PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = eggs;
-        UpdateEggs();
+        PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = activeEggs;
+      //  UpdateEggs();
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
         {
-            //let player lay egg
+           
+            ISegmentable<Actor> rigSegment = col.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
+            {
+                Player p = (Player)rigSegment.rigBase;
+                if (_owningPlayer == p.playerId)
+                {
+                    p.inNest = true;
+                }
+            }
         }
         if (col.gameObject.tag == "Egg")
         {
             Egg e = col.gameObject.GetComponent<Egg>();
             e.inNest = true;
             e.owningPlayer = owningPlayer;
+            
         }
     }
     void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Egg")
+        if (col.gameObject.tag == "Player")
         {
-            eggs--;
-            col.gameObject.GetComponent<Egg>().inNest = false;
+            ISegmentable<Actor> rigSegment = col.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
+            {
+                Player p = (Player)rigSegment.rigBase;
+                if (_owningPlayer == p.playerId)
+                {
+                    p.inNest = false;
+                }
+            }
+            if (col.gameObject.tag == "Egg")
+            {
+                activeEggs--;
+                col.gameObject.GetComponent<Egg>().inNest = false;
+            }
         }
     }
     void UpdateEggs()
     {
         for (int i=0;i<anEggs.Length;i++)
         {
-            if (i <= eggs)
+            if (i <= activeEggs)
             {
-                anEggs[i].SetActive(true);
+                anEggs[i].gameObject.SetActive(true);
             }
             else
             {
-                anEggs[i].SetActive(false);
+                anEggs[i].gameObject.SetActive(false);
             }
         }
     }
 
-    public GameObject GetResawnEgg()
+    public Egg GetRespawnEgg()
     {
-        return anEggs[Random.Range(0, anEggs.Length)];
+        return anEggs[Random.Range(0, activeEggs)];
+    }
+
+    public void EggStolen()
+    {
+        if (activeEggs > 0)
+        {
+            anEggs[activeEggs - 1].ReturnPool();
+            activeEggs--;
+        }
     }
 
 }
