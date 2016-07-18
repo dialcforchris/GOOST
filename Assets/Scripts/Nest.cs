@@ -7,6 +7,7 @@ public class Nest : MonoBehaviour
     private Transform[] eggTrans;
     private Egg[] anEggs;
     private int activeEggs = 0;
+    public int numEggs { get { return activeEggs; } }
     private int _owningPlayer = 0;
     public int owningPlayer
     {

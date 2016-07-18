@@ -122,4 +122,42 @@ public class PlayerManager : MonoBehaviour
         }
         return players[0];
     }
+
+    public Nest GetLargestNest()
+    {
+        int _amount = nests[0].numEggs;
+        if (players.Length == 2)
+        {
+            if(_amount == nests[1].numEggs)
+            {
+                if(_amount == 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return nests[Random.Range(0, 2)];
+                }
+            }
+            else if(_amount < nests[1].numEggs)
+            {
+                return nests[1];
+            }
+            else
+            {
+                return nests[0];
+            }
+        }
+        else
+        {
+            if (_amount == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return nests[0];
+            }
+        }
+    }
 }

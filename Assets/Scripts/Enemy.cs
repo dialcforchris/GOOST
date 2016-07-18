@@ -82,7 +82,15 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                 }
                 break;
             case EnemyBehaviour.HUNTER:
-                viewTarget = Camera.main.WorldToViewportPoint(PlayerManager.instance.GetClosestPlayer(transform.position).transform.position);
+                Nest _nest = PlayerManager.instance.GetLargestNest();
+                if (_nest)
+                {
+                    viewTarget = Camera.main.WorldToViewportPoint(_nest.transform.position);
+                }
+                else
+                {
+                    viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
+                }
                 break;
             case EnemyBehaviour.HIGH_FLYER:
                 viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.85f, 0.95f), 10);
@@ -140,12 +148,15 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     protected override void OnCollisionEnter2D(Collision2D _col)
     {
         base.OnCollisionEnter2D(_col);
-        if (_col.collider.tag == "Egg")
+        if (currentBehaviour != EnemyBehaviour.CAPTIVE_EGG)
         {
-            //Remove egg from nest or pick up point or whatever !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //Add egg to magpie !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            currentBehaviour = EnemyBehaviour.CAPTIVE_EGG;
-            FindTarget();
+            if (_col.collider.tag == "Nest")
+            {
+                //Remove egg from nest or pick up point or whatever !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //Add egg to magpie !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                currentBehaviour = EnemyBehaviour.CAPTIVE_EGG;
+                FindTarget();
+            }
         }
     }
 }
