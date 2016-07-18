@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameOverState : GameState
+public class SplashScreenState : GameState
 {
     public override void OnStateActivate()
     {
-        SoundManager.instance.music.volume = 0;
     }
 
     public override void OnStateDeactivate()

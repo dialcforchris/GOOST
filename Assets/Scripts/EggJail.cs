@@ -69,6 +69,7 @@ public class EggJail : MonoBehaviour
 
     public void EggCaptured()
     {
-
+        NumberOfEggs(1);
+        inflation += numberOfEggs * 15;
     }
 }
