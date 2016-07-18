@@ -19,7 +19,7 @@ public class PlayerManager : MonoBehaviour
 
 
     //set this properly when we have a splash screen menu
-    private int amountOfPlayers = 1;
+    private int amountOfPlayers = 2;
 
 	// Use this for initialization
 	void Awake () 
@@ -43,6 +43,7 @@ public class PlayerManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log(Input.GetJoystickNames().Length);
       
         for (int i = 0; i < Input.GetJoystickNames().Length;i++ )
         {
@@ -110,6 +111,7 @@ public class PlayerManager : MonoBehaviour
         return nests[_index];
     }
 
+
     public Player GetClosestPlayer(Vector3 _pos)
     {
         float _distance = Vector3.SqrMagnitude(players[0].transform.position - _pos);
@@ -123,6 +125,11 @@ public class PlayerManager : MonoBehaviour
         return players[0];
     }
 
+    public void StealEgg(int _playerId)
+    {
+        Nest n = GetNest(_playerId);
+        n.EggStolen();
+    }
     public Nest GetLargestNest()
     {
         int _amount = nests[0].numEggs;

@@ -20,8 +20,16 @@ public class platformManager : MonoBehaviour {
             Physics2D.IgnoreCollision(col, p.platformCollider);
         }
     }
+    public void CollisionsPlease(Collider2D col)
+    {
+        foreach (platform p in allPlatforms)
+        {
+            Physics2D.IgnoreCollision(col, p.platformCollider, false);
+        }
+    }
 
-	void Update ()
+
+    void Update ()
     {
 	
 	}

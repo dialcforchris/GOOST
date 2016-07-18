@@ -35,9 +35,8 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         {
             getLaid = false;
         }
-        Hatch();
-        DisablePhysics(inNest);
-	}
+     //   Hatch();
+	}//
     
     void Hatch()
     {
@@ -49,8 +48,8 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             }
             else
             {
-                Instantiate(brokenEgg,new Vector2(transform.position.x,transform.position.y +1),transform.rotation);
-                Destroy(gameObject);
+              //  Instantiate(brokenEgg,new Vector2(transform.position.x,transform.position.y +1),transform.rotation);
+               // Destroy(gameObject);
                 //spawn a magpie
             }
         }
@@ -60,32 +59,20 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         }
     }
 
-   
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        //if (col.gameObject.tag == "Player")
-        //{
-        //    if (col.gameObject.GetComponent<Player>().playerId != _owningPlayer)
-        //    {
-        //        transform.SetParent(col.transform);
-        //    }
-        //    else
-        //    {
-        //        if (transform.parent)
-        //        {
-        //            transform.SetParent(null);
-        //        }
-        //    }
-        //}
-    }
-
+ 
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.tag == "Player")
         {
-            if (col.gameObject.GetComponent<Player>().playerId != _owningPlayer)
+            ISegmentable<Actor> rigSegment = col.gameObject.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
             {
-                transform.SetParent(col.gameObject.GetComponent<Player>().eggTrans.transform);
+                Player p = (Player)rigSegment.rigBase;
+                if (!p.inNest&&!p.carryingEgg)
+                {
+                    p.carryingEgg = true;
+                    ReturnPool();
+                }
             }
         }
     }

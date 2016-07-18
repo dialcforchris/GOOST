@@ -64,7 +64,7 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
                         {
                             rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.8f), knockPower);
                             rigSegment.rigBase.Defeat();
-                            Debug.Log(actor.tag + " legs defeats " + _col.gameObject.tag + " segment");
+    //                        Debug.Log(actor.tag + " legs defeats " + _col.gameObject.tag + " segment");
                             break;
                         }
                     }
