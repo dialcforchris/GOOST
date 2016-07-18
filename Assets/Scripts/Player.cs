@@ -194,10 +194,13 @@ public class Player : Actor, ISegmentable<Actor>
 
     public override void Respawn()
     {
-        isDead = false;
-        base.Respawn();
-        Egg egg = PlayerManager.instance.GetNest(playerId).GetRespawnEgg();
-        transform.position = egg.transform.position;
+        if (_eggLives > 0)
+        {
+            isDead = false;
+            base.Respawn();
+            Egg egg = PlayerManager.instance.GetNest(playerId).GetRespawnEgg();
+            transform.position = egg.transform.position;
+        }
     }
   
 
