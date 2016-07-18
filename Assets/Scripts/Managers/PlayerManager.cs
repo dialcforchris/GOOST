@@ -37,7 +37,6 @@ public class PlayerManager : MonoBehaviour
             {
                 respawnTime[i] = 0.0f;
                 playerRespawn[i] = false;
-
             }
         }
 	}
@@ -103,5 +102,10 @@ public class PlayerManager : MonoBehaviour
     {
         playerRespawn[_index] = true;
         respawnTime[_index] = 0.0f;
+    }
+
+    public Nest GetNest(int _index)
+    {
+        return nests[_index];
     }
 }

@@ -17,7 +17,7 @@ public class Nest : MonoBehaviour
 
 	void Update()
     {
-        PlayerManager.instance.GetPlayer(owningPlayer).eggLives = eggs;
+        PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = eggs;
         UpdateEggs();
     }
 
@@ -55,6 +55,11 @@ public class Nest : MonoBehaviour
                 anEggs[i].SetActive(false);
             }
         }
+    }
+
+    public GameObject GetResawnEgg()
+    {
+        return anEggs[Random.Range(0, anEggs.Length)];
     }
 
 }

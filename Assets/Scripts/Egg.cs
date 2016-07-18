@@ -72,13 +72,16 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         {
             col.isTrigger = true;
             body.gravityScale = 0;
-            body.constraints = RigidbodyConstraints2D.FreezePositionY;
+            body.constraints = RigidbodyConstraints2D.FreezePosition; 
+            body.mass = 0;
+
         }
         else
         {
             col.isTrigger = false;
             body.gravityScale = 1;
             body.constraints = RigidbodyConstraints2D.None;
+            body.mass = 0.2f;
             _owningPlayer = 3;
         }
     }
