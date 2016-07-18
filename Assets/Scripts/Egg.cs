@@ -36,12 +36,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             getLaid = false;
         }
         Hatch();
-        if (transform.parent)
-        {
-            body.gravityScale = 0;
-            body.mass = 0;
-            transform.position = transform.parent.position;
-        }
+        DisablePhysics(inNest);
 	}
     
     void Hatch()

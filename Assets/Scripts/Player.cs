@@ -43,7 +43,6 @@ public class Player : Actor, ISegmentable<Actor>
     protected override void Start () 
     {
       //  platformManager.instance.NoCollisionsPlease(legs);
-        Debug.Log(playerId);
         base.Start();
 	}
 	
@@ -183,7 +182,7 @@ public class Player : Actor, ISegmentable<Actor>
     {
         isDead = false;
         base.Respawn();
-        Egg egg = PlayerManager.instance.GetNest(playerId).GetResawnEgg();
+        Egg egg = PlayerManager.instance.GetNest(playerId).GetRespawnEgg();
         transform.position = egg.transform.position;
     }
   

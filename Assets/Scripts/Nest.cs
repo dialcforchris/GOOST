@@ -37,26 +37,46 @@ public class Nest : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            Player p = col.gameObject.GetComponent<Player>();
-            if (owningPlayer == p.playerId)
+           
+            ISegmentable<Actor> rigSegment = col.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
             {
-                p.inNest = true;
+                Player p = (Player)rigSegment.rigBase;
+
+                //   Player p = col.gameObject.GetComponent<Player>();
+                Debug.Log("playr id " + p.playerId + " nest id " + owningPlayer);
+                if (_owningPlayer == p.playerId)
+                {
+                    p.inNest = true;
+                }
             }
-            //let player lay egg
         }
         if (col.gameObject.tag == "Egg")
         {
             Egg e = col.gameObject.GetComponent<Egg>();
             e.inNest = true;
             e.owningPlayer = owningPlayer;
+            
         }
     }
     void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Egg")
+        if (col.gameObject.tag == "Player")
         {
-            activeEggs--;
-            col.gameObject.GetComponent<Egg>().inNest = false;
+            ISegmentable<Actor> rigSegment = col.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
+            {
+                Player p = (Player)rigSegment.rigBase;
+                if (_owningPlayer == p.playerId)
+                {
+                    p.inNest = false;
+                }
+            }
+            if (col.gameObject.tag == "Egg")
+            {
+                activeEggs--;
+                col.gameObject.GetComponent<Egg>().inNest = false;
+            }
         }
     }
     void UpdateEggs()
@@ -74,9 +94,8 @@ public class Nest : MonoBehaviour
         }
     }
 
-    public Egg GetResawnEgg()
+    public Egg GetRespawnEgg()
     {
-       
         return anEggs[Random.Range(0, activeEggs)];
     }
 

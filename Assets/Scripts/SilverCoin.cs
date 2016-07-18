@@ -40,6 +40,12 @@ public class SilverCoin : MonoBehaviour {
     {
         if (col.tag == "Player" && !collected)
         {
+           ISegmentable < Actor > rigSegment = col.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
+            {
+                Player p = (Player)rigSegment.rigBase;
+                p.ChangeScore(score);
+            }
             target = col.transform;
             collected = true;
             StartCoroutine(collectCoin());
@@ -62,11 +68,11 @@ public class SilverCoin : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
 
-        //Apply score addition or w/e to player.
-        if (target.GetComponent<Player>())
-            target.GetComponent<Player>().ChangeScore(score);
-        else
-            Debug.Log("Player component not found");
+        ////Apply score addition or w/e to player.
+        //if (target.GetComponent<Player>())
+        //    target.GetComponent<Player>().ChangeScore(score);
+        //else
+        //    Debug.Log("Player component not found");
 
         //should probably do something with object pooling now.
         gameObject.SetActive(false);
