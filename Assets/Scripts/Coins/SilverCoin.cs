@@ -33,8 +33,16 @@ public class SilverCoin : MonoBehaviour, IPoolable<SilverCoin>
 
             yield return new WaitForEndOfFrame();
         }
-        Physics2D.IgnoreLayerCollision(8, 9, false);
+        Physics2D.IgnoreLayerCollision(8, 10, false);
         suction.Enable();
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        if (transform.position.y > 1.01f)
+        {
+            body.velocity = new Vector2(body.velocity.x, -0.5f);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D _col)
@@ -79,12 +87,16 @@ public class SilverCoin : MonoBehaviour, IPoolable<SilverCoin>
     public void OnPooled()
     {
         gameObject.SetActive(true);
+        body.mass = 1.0f;
+        body.drag = 1.0f;
+        body.gravityScale = 1.0f;
         pickupTime = 0.0f;
         StartCoroutine(expandCoin());
         Random.seed = System.DateTime.Now.Millisecond;
         body.AddForce(new Vector2(Random.Range(minSpawnX, maxSpawnX) * (Random.Range(0,2) == 0 ? 1 : -1), Random.Range(minSpawnY, maxSpawnY)), ForceMode2D.Impulse);
         col.enabled = true;
-        Physics2D.IgnoreLayerCollision(8, 9, true);
+        Physics2D.IgnoreLayerCollision(8, 10, true);
+        Physics2D.IgnoreLayerCollision(9, 10, true);
         suction.Disable();
     }
 

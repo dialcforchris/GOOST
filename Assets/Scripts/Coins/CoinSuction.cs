@@ -25,6 +25,9 @@ public class CoinSuction : MonoBehaviour
             float _speedMultiplier = Vector3.SqrMagnitude(_col.transform.position - transform.position);
             body.AddForce((_col.transform.position - transform.position).normalized * _speedMultiplier * suctionSpeed);
             platformManager.instance.NoCollisionsPlease(physicsCol);
+            body.mass = 0.0f;
+            body.drag = 0.0f;
+            body.gravityScale = 0.0f;
         }
     }
 
@@ -34,6 +37,9 @@ public class CoinSuction : MonoBehaviour
         {
             physicsCol.enabled = true;
             platformManager.instance.CollisionsPlease(physicsCol);
+            body.mass = 1.0f;
+            body.drag = 1.0f;
+            body.gravityScale = 1.0f;
         }
     }
 }
