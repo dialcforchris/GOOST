@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Egg : MonoBehaviour 
+public class Egg : MonoBehaviour, IPoolable<Egg>
 {
+    #region IPoolable
+    public PoolData<Egg> poolData { get; set; }
+    #endregion
 
     public bool getLaid = false;
     public bool inNest = false;
@@ -24,15 +27,6 @@ public class Egg : MonoBehaviour
         get { return _owningPlayer; }
         set { _owningPlayer = value; }
     }
-   
-	// Use this for initialization
-	void Start () 
-    {
-	    if (getLaid)
-        {
-            ani.Play("Laid");
-        }
-	}
 	
 	// Update is called once per frame
 	void Update ()
@@ -78,13 +72,16 @@ public class Egg : MonoBehaviour
         {
             col.isTrigger = true;
             body.gravityScale = 0;
-            body.constraints = RigidbodyConstraints2D.FreezePositionY;
+            body.constraints = RigidbodyConstraints2D.FreezePosition; 
+            body.mass = 0;
+
         }
         else
         {
             col.isTrigger = false;
             body.gravityScale = 1;
             body.constraints = RigidbodyConstraints2D.None;
+            body.mass = 0.2f;
             _owningPlayer = 3;
         }
     }
@@ -116,4 +113,20 @@ public class Egg : MonoBehaviour
             }
         }
     }
+
+    public void OnPooled()
+    {
+        if (getLaid)
+        {
+            ani.Play("Laid");
+        }
+        gameObject.SetActive(true);
+    }
+
+    public void ReturnPool()
+    {
+        poolData.ReturnPool(this);
+        gameObject.SetActive(false);
+    }
+
 }

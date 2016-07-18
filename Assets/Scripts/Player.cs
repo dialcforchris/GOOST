@@ -17,7 +17,7 @@ public class Player : Actor, ISegmentable<Actor>
     float mashTime = 0;
     float maxMashTime = 0.15f;
     public GameObject eggTrans;
-
+    
     private bool isDead = false;
 
     #region ISegmentable
@@ -178,8 +178,9 @@ public class Player : Actor, ISegmentable<Actor>
     {
         isDead = false;
         base.Respawn();
-        transform.position = Vector3.zero;
+        GameObject egg = PlayerManager.instance.GetNest(playerId).GetResawnEgg();
+        transform.position = egg.transform.position;
     }
-
+  
 
 }

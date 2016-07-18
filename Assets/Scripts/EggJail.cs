@@ -34,7 +34,7 @@ public class EggJail : MonoBehaviour
         Egg.SetActive(eggsThen);
         price.supportRichText = true;
 
-        price.text = "EGG RETURN SERVICE" + "\n"+ "<color=#c0c0c0ff>" + cost + " SILVER</color>";// +"\n" + "TO GET YOUR EGGS UNHARMED";
+        price.text = "EGG RETURN SERVICE" + "\n"+ "<color=#c0c0c0ff>" + cost + " SILVER</color>";
         if (numberOfEggs > 0)
         {
             remaining.text = "ONLY " + numberOfEggs + " REMAINING!";
@@ -57,12 +57,8 @@ public class EggJail : MonoBehaviour
                 {
                     NumberOfEggs(-1);
                     p.ChangeScore(-cost);
+                    cost += inflation;
                 }
-                else
-                {
-                    p.ChangeScore(-p.GetScore());
-                }
-                cost += inflation;
             }
         }
     }
