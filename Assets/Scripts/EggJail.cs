@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 public class EggJail : MonoBehaviour
 {
+    private static EggJail eggJail = null;
+    public static EggJail instance { get { return eggJail; } }
+
     public int cost = 100;
     public int inflation = 50;
     int numberOfEggs = 3;
@@ -11,6 +14,14 @@ public class EggJail : MonoBehaviour
     private Text price;
     [SerializeField]
     private Text remaining;
+
+    [SerializeField] private Transform eggDropoff = null;
+    public Transform dropoff { get { return eggDropoff; } }
+
+    private void Awake()
+    {
+        eggJail = this;
+    }
 
     void Update()
     {

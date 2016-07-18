@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
+public struct Wave
+{
+    public EnemyBehaviour[] enemySpawnOrder;
+    public float[] enemySpawnOrderRate; 
+}
+
 public class EnemyManager : MonoBehaviour
 {
     private static EnemyManager enemyManager = null;
@@ -11,9 +18,14 @@ public class EnemyManager : MonoBehaviour
 
     private Vector3[] spawnTransforms = null;
 
-    private int numWave = 2;
-    [SerializeField] private float spawnRate = 2.0f;
     private float spawnTime = 0;
+
+    [SerializeField] private Wave[] waves = null;
+    private int currentWave = 0;
+    private int spawnIndex = 0;
+
+    [SerializeField] private float nextWaveLength = 3.0f;
+    private float nextWaveTime = 0.0f;
 
 
     private void Awake()
@@ -35,18 +47,37 @@ public class EnemyManager : MonoBehaviour
 
     private void Update()
     {
-        spawnTime += Time.deltaTime;
-        if(spawnTime >= spawnRate)
+       
+        if (spawnIndex < waves[currentWave].enemySpawnOrder.Length)
         {
-            if (numWave != 0)
+            spawnTime += Time.deltaTime;
+            if (spawnTime >= waves[currentWave].enemySpawnOrderRate[spawnIndex])
             {
-                --numWave;
                 spawnTime = 0;
                 Enemy _e = objectPool.GetPooledObject();
                 _e.transform.position = SpawnPoint();
-                _e.Spawn(EnemyBehaviour.RANDOM);
+                _e.Spawn(waves[currentWave].enemySpawnOrder[spawnIndex]);
+                ++spawnIndex;
             }
         }
+        else
+        {
+            if (Enemy.numActive == 0)
+            {
+                nextWaveTime += Time.deltaTime;
+                if(nextWaveTime >= nextWaveLength)
+                {
+                    nextWaveTime = 0.0f;
+                    ++currentWave;
+                    spawnIndex = 0;
+                    if (currentWave == waves.Length)
+                    {
+                        --currentWave;
+                    }
+                }
+            }
+        }
+        
     }
 
     private Vector3 SpawnPoint()
