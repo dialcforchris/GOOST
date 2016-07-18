@@ -31,7 +31,7 @@ public class Nest : MonoBehaviour
 	void Update()
     {
         PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = activeEggs;
-        UpdateEggs();
+      //  UpdateEggs();
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -43,9 +43,6 @@ public class Nest : MonoBehaviour
             if (rigSegment != null)
             {
                 Player p = (Player)rigSegment.rigBase;
-
-                //   Player p = col.gameObject.GetComponent<Player>();
-                Debug.Log("playr id " + p.playerId + " nest id " + owningPlayer);
                 if (_owningPlayer == p.playerId)
                 {
                     p.inNest = true;
@@ -102,7 +99,11 @@ public class Nest : MonoBehaviour
 
     public void EggStolen()
     {
-
+        if (activeEggs > 0)
+        {
+            anEggs[activeEggs - 1].ReturnPool();
+            activeEggs--;
+        }
     }
 
 }
