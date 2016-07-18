@@ -109,4 +109,17 @@ public class PlayerManager : MonoBehaviour
     {
         return nests[_index];
     }
+
+    public Player GetClosestPlayer(Vector3 _pos)
+    {
+        float _distance = Vector3.SqrMagnitude(players[0].transform.position - _pos);
+        if(players.Length == 2)
+        {
+            if(Vector3.SqrMagnitude(players[1].transform.position - _pos) < _distance)
+            {
+                return players[1];
+            }
+        }
+        return players[0];
+    }
 }

@@ -36,6 +36,9 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     [SerializeField] private float maxSpeed = 5.0f;
     [SerializeField] private float targetThreshold = 0.5f;
 
+    private float aggression = 0.0f;
+    [SerializeField] private float aggressionSpeed = 0.5f;
+
     protected override void Start()
     {
         screenWrap.AddScreenWrapCall(UpdateWorldFromView);
@@ -45,6 +48,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public void Spawn(EnemyBehaviour _behaviour)
     {
         Respawn();
+        aggression = 0.0f;
         ++numActive;
         //anim.Play("fly");
         behaviour = _behaviour;
@@ -55,17 +59,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
     protected override void FixedUpdate()
     {
-        //if(Input.GetKeyDown(KeyCode.J))
-        //{
-        //    anim.Play("goose_neck_up_extend");
-        //}
-        //switch (behaviour)
-        //{
-        //    case EnemyBehaviour.RANDOM:
-        //        target = Camera.main.ViewportToWorldPoint(new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.2f, 0.8f), 10));
-        //        break;
-        //}
-
+        aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
         MovementToTarget();
         base.FixedUpdate();
     }
@@ -76,17 +70,28 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         {
             case EnemyBehaviour.RANDOM:
                 viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
-                UpdateWorldFromView();
+                break;
+            case EnemyBehaviour.AGGRESSIVE:
+                if (aggression > Random.Range(0.0f, 1.0f))
+                {
+                    viewTarget = Camera.main.WorldToViewportPoint(PlayerManager.instance.GetClosestPlayer(transform.position).transform.position);
+                }
+                else
+                {
+                    viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
+                }
+                break;
+            case EnemyBehaviour.HUNTER:
+                viewTarget = Camera.main.WorldToViewportPoint(PlayerManager.instance.GetClosestPlayer(transform.position).transform.position);
                 break;
             case EnemyBehaviour.HIGH_FLYER:
                 viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.85f, 0.95f), 10);
-                UpdateWorldFromView();
                 break;
             case EnemyBehaviour.CAPTIVE_EGG:
                 viewTarget = Camera.main.WorldToViewportPoint(EggJail.instance.dropoff.position);
-                UpdateWorldFromView();
                 break;
         }
+        UpdateWorldFromView();
     }
 
     private void UpdateWorldFromView()
