@@ -10,9 +10,13 @@ public class CollectablePool : MonoBehaviour
     [SerializeField]
     private Collectables collectablesPrefab = null;
 
-    private void Awake()
+    void Awake()
     {
         collectablePool = this;
+
+    }
+    private void Start()
+    {
         objectPool = new ObjectPool<Collectables>(collectablesPrefab, 10, transform);
     }
 
