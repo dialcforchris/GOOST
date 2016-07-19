@@ -67,8 +67,8 @@ public class Nest : MonoBehaviour
             Egg e = col.gameObject.GetComponent<Egg>();
             if (activeEggs < maxEggs)
             {
-                e.transform.position = eggTrans[activeEggs-1].position;
                 activeEggs++;
+                e.transform.position = eggTrans[activeEggs-1].position;
                 e.inNest = true;
                 e.owningPlayer = owningPlayer;
                 anEggs.Add(e);
@@ -91,10 +91,10 @@ public class Nest : MonoBehaviour
             }
             if (col.gameObject.tag == "Egg")
             {
-                if (activeEggs>0&&activeEggs<maxEggs)
+               // if (activeEggs>0&&activeEggs<maxEggs)
                 {
-                    col.gameObject.GetComponent<Egg>().inNest = true;
-                    col.gameObject.GetComponent<Egg>().DisablePhysics(true);
+                    col.gameObject.GetComponent<Egg>().inNest =false;
+                    col.gameObject.GetComponent<Egg>().DisablePhysics(false);
                 }
                 activeEggs--;
             }

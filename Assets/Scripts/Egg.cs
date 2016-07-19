@@ -68,7 +68,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             if (rigSegment != null)
             {
                 Player p = (Player)rigSegment.rigBase;
-                if (!p.inNest&&!p.carryingEgg)
+                if (!p.inNest&&!inNest&&!p.carryingEgg)
                 {
                     p.carryingEgg = true;
                     ReturnPool();
