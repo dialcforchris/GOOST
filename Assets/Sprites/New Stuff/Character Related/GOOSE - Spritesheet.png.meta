@@ -1,17 +1,28 @@
 fileFormatVersion: 2
 guid: 8be1abfb63d9b834cbf5764951ec63e5
-timeCreated: 1468928777
+timeCreated: 1468939226
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
-    21300000: GOOSE - Spritesheet_0
-    21300002: GOOSE - Spritesheet_1
-    21300004: GOOSE - Spritesheet_2
+    21300000: goose_head
+    21300002: goose_neck
+    21300004: goose_neck2
     21300006: GOOSE - Spritesheet_3
     21300008: GOOSE - Spritesheet_4
-    21300010: GOOSE - Spritesheet_5
-    21300012: GOOSE - Spritesheet_6
-    21300014: GOOSE - Spritesheet_7
+    21300010: goose_body_d
+    21300012: goose_body_a
+    21300014: goose_body_b
+    21300016: goose_body_c
+    21300018: goose_body_d
+    21300020: GOOSE - Spritesheet_10
+    21300022: goose_wing_a
+    21300024: goose_wing_b
+    21300026: goose_wing_c
+    21300028: goose_wing_d
+    21300030: goose_leg
+    21300032: goose_foot
+    21300034: goose_body_e
+    21300036: goose_wing_e
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -58,125 +69,273 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: GOOSE - Spritesheet_0
+    - name: goose_head
       rect:
         serializedVersion: 2
         x: 0
-        y: 54
+        y: 96
         width: 11
         height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.1666666, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: GOOSE - Spritesheet_1
+    - name: goose_neck
       rect:
         serializedVersion: 2
         x: 12
-        y: 48
+        y: 90
         width: 5
         height: 14
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: GOOSE - Spritesheet_2
+    - name: goose_neck2
       rect:
         serializedVersion: 2
         x: 18
-        y: 47
-        width: 15
+        y: 89
+        width: 7
         height: 15
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.431739, y: 0.101809695}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: GOOSE - Spritesheet_3
+    - name: goose_body_a
       rect:
         serializedVersion: 2
-        x: 40
-        y: 43
-        width: 40
-        height: 19
+        x: 6
+        y: 45
+        width: 35
+        height: 39
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-    - name: GOOSE - Spritesheet_4
+      outline:
+      - - {x: -10.5, y: 19.5}
+        - {x: -17.5, y: -4.5}
+        - {x: -17.5, y: -16.5}
+        - {x: -13.5, y: -19.5}
+        - {x: 13.5, y: -19.5}
+        - {x: 17.5, y: -18.5}
+        - {x: 17.5, y: 2.5}
+        - {x: 0.5, y: 19.5}
+    - name: goose_body_b
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 45
+        width: 35
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -7.5, y: 11.5}
+        - {x: -9.5, y: 9.5}
+        - {x: -8.5, y: 6.5}
+        - {x: -17.5, y: -7.5}
+        - {x: -17.5, y: -17.5}
+        - {x: -15.5, y: -19.5}
+        - {x: 11.5, y: -19.5}
+        - {x: 17.5, y: -17.5}
+        - {x: 17.5, y: 1.5}
+        - {x: 5.5, y: 11.5}
+    - name: goose_body_c
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 45
+        width: 35
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -1.5, y: 3.5}
+        - {x: -13.5, y: 2.5}
+        - {x: -17.5, y: 1.5}
+        - {x: -17.5, y: -3.5}
+        - {x: -9.5, y: -4.5}
+        - {x: -16.5, y: -6.5}
+        - {x: -17.5, y: -7.5}
+        - {x: -17.5, y: -16.5}
+        - {x: -15.5, y: -19.5}
+        - {x: 11.5, y: -19.5}
+        - {x: 17.5, y: -16.5}
+        - {x: 17.5, y: 3.5}
+    - name: goose_body_d
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 45
+        width: 35
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9.5, y: -3.5}
+        - {x: -17.5, y: -8.5}
+        - {x: -17.5, y: -18.5}
+        - {x: -15.5, y: -19.5}
+        - {x: -5.5, y: -19.5}
+        - {x: -3.5, y: -13.5}
+        - {x: -3.5, y: -4.5}
+        - {x: -4.5, y: -3.5}
+      - - {x: 10.5, y: 3.5}
+        - {x: 5.5, y: 3.5}
+        - {x: -1.5, y: 0.5}
+        - {x: -1.5, y: -19.5}
+        - {x: 13.5, y: -19.5}
+        - {x: 17.5, y: -18.5}
+        - {x: 17.5, y: 0.5}
+        - {x: 15.5, y: 1.5}
+    - name: goose_wing_a
       rect:
         serializedVersion: 2
         x: 1
-        y: 0
-        width: 40
-        height: 42
+        y: 2
+        width: 35
+        height: 39
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -11, y: 21}
-        - {x: -18, y: 19}
-        - {x: -18, y: -18}
-        - {x: 20, y: -18}
-        - {x: 20, y: 2}
-        - {x: 3, y: 21}
-    - name: GOOSE - Spritesheet_5
+      - - {x: -15.5, y: 19.5}
+        - {x: -15.5, y: 8.5}
+        - {x: -12.5, y: -5.5}
+        - {x: -0.5, y: -8.5}
+        - {x: 17.5, y: -8.5}
+        - {x: 17.5, y: -0.5}
+        - {x: -1.5, y: 19.5}
+    - name: goose_wing_b
       rect:
         serializedVersion: 2
         x: 42
-        y: 0
-        width: 40
-        height: 40
+        y: 2
+        width: 35
+        height: 39
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -14, y: 14}
-        - {x: -17, y: 10}
-        - {x: -17, y: -14}
-        - {x: -16, y: -17}
-        - {x: 13, y: -17}
-        - {x: 20, y: -14}
-        - {x: 20, y: 4}
-        - {x: 9, y: 14}
-    - name: GOOSE - Spritesheet_6
+      - - {x: 1.5, y: 13.5}
+        - {x: -10.5, y: 13.5}
+        - {x: -13.5, y: 9.5}
+        - {x: -13.5, y: 5.5}
+        - {x: -0.5, y: -7.5}
+        - {x: 4.5, y: -8.5}
+        - {x: 17.5, y: -8.5}
+        - {x: 17.5, y: 1.5}
+        - {x: 7.5, y: 12.5}
+    - name: goose_wing_c
       rect:
         serializedVersion: 2
         x: 83
-        y: 0
-        width: 40
-        height: 42
+        y: 2
+        width: 35
+        height: 39
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 1, y: 5}
-        - {x: -16, y: 4}
-        - {x: -20, y: 0}
-        - {x: -20, y: -6}
-        - {x: -13, y: -18}
-        - {x: 13, y: -18}
-        - {x: 20, y: -15}
-        - {x: 20, y: 1}
-        - {x: 15, y: 5}
-    - name: GOOSE - Spritesheet_7
+      - - {x: 13.5, y: 3.5}
+        - {x: -17.5, y: 3.5}
+        - {x: -17.5, y: -6.5}
+        - {x: -1.5, y: -9.5}
+        - {x: 16.5, y: -9.5}
+        - {x: 17.5, y: -8.5}
+        - {x: 17.5, y: -0.5}
+        - {x: 16.5, y: 1.5}
+    - name: goose_wing_d
       rect:
         serializedVersion: 2
         x: 124
-        y: 0
-        width: 40
-        height: 40
+        y: 2
+        width: 35
+        height: 39
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 7, y: 6}
-        - {x: -15, y: -3}
-        - {x: -17, y: -7}
-        - {x: -17, y: -12}
-        - {x: -11, y: -20}
-        - {x: 18, y: -20}
-        - {x: 20, y: -16}
-        - {x: 20, y: 6}
+      - - {x: 11.5, y: 3.5}
+        - {x: 0.5, y: 3.5}
+        - {x: -3.5, y: -0.5}
+        - {x: -6.5, y: -12.5}
+        - {x: -6.5, y: -19.5}
+        - {x: 3.5, y: -19.5}
+        - {x: 16.5, y: -11.5}
+        - {x: 17.5, y: -10.5}
+        - {x: 17.5, y: 0.5}
+    - name: goose_leg
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 96
+        width: 2
+        height: 7
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: goose_foot
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 92
+        width: 6
+        height: 2
+      alignment: 9
+      pivot: {x: 0.166666, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: goose_body_e
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 45
+        width: 35
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -12.5, y: -19.5}
+        - {x: -0.5, y: -19.5}
+        - {x: -0.5, y: -13.5}
+        - {x: -1.5, y: -11.5}
+        - {x: -12.5, y: -9.5}
+        - {x: -17.5, y: -9.5}
+        - {x: -17.5, y: -15.5}
+      - - {x: 1.5, y: 3.5}
+        - {x: 0.5, y: 2.5}
+        - {x: 0.5, y: -10.5}
+        - {x: 2.5, y: -18.5}
+        - {x: 12.5, y: -18.5}
+        - {x: 17.5, y: -15.5}
+        - {x: 17.5, y: 3.5}
+    - name: goose_wing_e
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 2
+        width: 35
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 2.5, y: 3.5}
+        - {x: -13.5, y: -6.5}
+        - {x: -13.5, y: -8.5}
+        - {x: -12.5, y: -10.5}
+        - {x: -5.5, y: -16.5}
+        - {x: 12.5, y: -16.5}
+        - {x: 17.5, y: -13.5}
+        - {x: 17.5, y: -0.5}
+        - {x: 11.5, y: 3.5}
     outline: []
   spritePackingTag: 
   userData: 
