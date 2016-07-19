@@ -43,7 +43,7 @@ public class PlayerManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(Input.GetJoystickNames().Length);
+        //Debug.Log(Input.GetJoystickNames().Length);
       
         for (int i = 0; i < Input.GetJoystickNames().Length;i++ )
         {

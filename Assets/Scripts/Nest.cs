@@ -7,9 +7,8 @@ public class Nest : MonoBehaviour
     [SerializeField]
     private Transform[] eggTrans;
     private List<Egg> anEggs = new List<Egg>();
-    private int activeEggs = 0;
     private int maxEggs = 3;
-    public int numEggs { get { return activeEggs; } }
+    public int numEggs { get { return anEggs.Count; } }
     private int _owningPlayer = 0;
     public int owningPlayer
     {
@@ -25,14 +24,13 @@ public class Nest : MonoBehaviour
             e.transform.position = eggTrans[i].position;
             anEggs.Add(e);
             e.DisablePhysics(true);
-            activeEggs++;
         }
     }
 
 
 	void Update()
     {
-        PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = activeEggs;
+        PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = numEggs;
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -65,10 +63,9 @@ public class Nest : MonoBehaviour
         if (col.gameObject.tag == "Egg")
         {
             Egg e = col.gameObject.GetComponent<Egg>();
-            if (activeEggs < maxEggs)
+            if (numEggs < maxEggs)
             {
-                e.transform.position = eggTrans[activeEggs-1].position;
-                activeEggs++;
+                e.transform.position = eggTrans[numEggs-1].position;
                 e.inNest = true;
                 e.owningPlayer = owningPlayer;
                 anEggs.Add(e);
@@ -91,12 +88,11 @@ public class Nest : MonoBehaviour
             }
             if (col.gameObject.tag == "Egg")
             {
-                if (activeEggs>0)
+                if (numEggs>0)
                 {
                     col.gameObject.GetComponent<Egg>().inNest = true;
                     col.gameObject.GetComponent<Egg>().DisablePhysics(true);
                 }
-                activeEggs--;
             }
         }
     }
@@ -117,22 +113,27 @@ public class Nest : MonoBehaviour
 
     public Egg GetRespawnEgg()
     {
-        return anEggs[activeEggs-1];
+        if(anEggs.Count == 0)
+        {
+            return null;
+        }
+        Egg _egg = anEggs[numEggs - 1];
+        anEggs.RemoveAt(anEggs.Count - 1);
+        _egg.ReturnPool();
+        return _egg;
     }
 
     public void EggStolen()
     {
-        if (activeEggs > 0)
+        if (numEggs > 0)
         {
-            anEggs[activeEggs-1].ReturnPool();
-            activeEggs--;
+            anEggs[numEggs-1].ReturnPool();
         }
     }
     public void AddEgg()
     {
-        if (activeEggs < maxEggs)
+        if (numEggs < maxEggs)
         {
-            activeEggs++;
             anEggs.Add(EggPool.instance.PoolEgg());
         }
         else
