@@ -6,10 +6,16 @@ using System.Collections;
 public class MainMenu : MonoBehaviour {
 
     [Header("Main menu")]
-    public Text[] menuElements;
-    public Image[] cursor;
+    public Text[] mainMenuElements;
+    public Image[] mainMenuCursor;
+
     public GameObject[] menuScreens;
-    int menuIndex;
+
+    [Header("Options menu")]
+    public Text[] optionsElements;
+    public Image[] optionsCursor;
+
+    int mainMenuIndex,optionsIndex;
     bool transitioning;
 
     menuState currentState;
@@ -73,37 +79,32 @@ public class MainMenu : MonoBehaviour {
     {
         if (!transitioning)
         {
-            if (currentState == menuState.mainMenu)
+            switch (currentState)
             {
-                mainMenu();
-            }
-            else if (currentState == menuState.leaderboardsMenu)
-            {
-                if (Input.GetAxis("Fire1") > 0)
-                {
-                    switchMenus(0);
-                }
-            }
-            else if (currentState == menuState.statsScreen)
-            {
-                if (Input.GetAxis("Fire1") > 0)
-                {
-                    switchMenus(0);
-                }
-            }
-            else if (currentState == menuState.optionsMenu)
-            {
-                if (Input.GetAxis("Fire1") > 0)
-                {
-                    switchMenus(0);
-                }
+                case menuState.mainMenu:
+                    mainMenu();
+                    break;
+                case menuState.leaderboardsMenu:
+                    if (Input.GetAxis("Fire1") > 0)
+                    {
+                        switchMenus(0);
+                    }
+                    break;
+                case menuState.statsScreen:
+                    if (Input.GetAxis("Fire1") > 0)
+                    {
+                        switchMenus(0);
+                    }
+                    break;
+                case menuState.optionsMenu:
+                    optionsMenu();
+                    break;
             }
         }
     }
 
-    void mainMenu()
+    void changeSelection(Image[] cursors,Text[] menuElements,ref int menuIndex)
     {
-        #region Move up/down
         if (Input.GetAxis("Vertical") < 0 && !scrolling)
         {
             scrolling = true;
@@ -113,8 +114,8 @@ public class MainMenu : MonoBehaviour {
                 menuIndex = 0;
 
             //move cursor
-            cursor[0].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition + new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 100, 32);
-            cursor[1].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition - new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 100, -32);
+            cursors[0].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition + new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 100, 32);
+            cursors[1].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition - new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 100, -32);
             Invoke("allowMove", 0.25f);
 
         }
@@ -127,8 +128,8 @@ public class MainMenu : MonoBehaviour {
                 menuIndex = menuElements.Length - 1;
 
             //move cursor
-            cursor[0].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition + new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 100, 32);
-            cursor[1].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition - new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 100, -32);
+            cursors[0].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition + new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 100, 32);
+            cursors[1].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition - new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 100, -32);
             Invoke("allowMove", 0.25f);
 
         }
@@ -137,11 +138,15 @@ public class MainMenu : MonoBehaviour {
             CancelInvoke("allowMove");
             scrolling = false;
         }
-        #endregion
+    }
+
+    void mainMenu()
+    {
+        changeSelection(mainMenuCursor, mainMenuElements, ref mainMenuIndex);
 
         if (Input.GetAxis("Fire1") > 0)
         {
-            switch(menuIndex)
+            switch(mainMenuIndex)
             {
                 case 0:
                     Camera.main.GetComponent<CameraController>().switchViews(false);
@@ -168,7 +173,33 @@ public class MainMenu : MonoBehaviour {
                     break;
             }
         }
+    }
 
+    void optionsMenu()
+    {
+        changeSelection(optionsCursor, optionsElements, ref optionsIndex);
+
+        if (Input.GetAxis("Fire1") > 0)
+        {
+            switch (optionsIndex)
+            {
+                case 0:
+                    //do a thing
+                    break;
+                case 1:
+                    //do a thing
+                    break;
+                case 2:
+                    //do a thing
+                    break;
+                case 3:
+                    //do a thing
+                    break;
+                case 4:
+                    switchMenus(0);
+                    break;
+            }
+        }
     }
 
     void allowMove()
@@ -176,30 +207,4 @@ public class MainMenu : MonoBehaviour {
         scrolling = false;
     }
 
-}
-
-[CustomEditor(typeof(MainMenu))]
-public class tempUIMenuMover : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-        MainMenu scriptToControl = (MainMenu)target;
-        if (GUILayout.Button("main menu"))
-        {
-            scriptToControl.switchMenus(0);
-        }
-        if (GUILayout.Button("options"))
-        {
-            scriptToControl.switchMenus(1);
-        }
-        if (GUILayout.Button("leaderboards"))
-        {
-            scriptToControl.switchMenus(2);
-        }
-        if (GUILayout.Button("stats"))
-        {
-            scriptToControl.switchMenus(3);
-        }
-    }
 }

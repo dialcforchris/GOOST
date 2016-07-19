@@ -1,19 +1,21 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
 guid: 8be1abfb63d9b834cbf5764951ec63e5
-timeCreated: 1468840537
+timeCreated: 1468928777
 licenseType: Pro
-=======
-guid: db7649ee2dd985240aadc55518a84536
-timeCreated: 1468840918
-licenseType: Free
->>>>>>> origin/master
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: GOOSE - Spritesheet_0
+    21300002: GOOSE - Spritesheet_1
+    21300004: GOOSE - Spritesheet_2
+    21300006: GOOSE - Spritesheet_3
+    21300008: GOOSE - Spritesheet_4
+    21300010: GOOSE - Spritesheet_5
+    21300012: GOOSE - Spritesheet_6
+    21300014: GOOSE - Spritesheet_7
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -35,8 +37,8 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: -1
-    aniso: -1
+    filterMode: 0
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -44,18 +46,137 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: GOOSE - Spritesheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 54
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: GOOSE - Spritesheet_1
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 48
+        width: 5
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: GOOSE - Spritesheet_2
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 47
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: GOOSE - Spritesheet_3
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 43
+        width: 40
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: GOOSE - Spritesheet_4
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 0
+        width: 40
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -11, y: 21}
+        - {x: -18, y: 19}
+        - {x: -18, y: -18}
+        - {x: 20, y: -18}
+        - {x: 20, y: 2}
+        - {x: 3, y: 21}
+    - name: GOOSE - Spritesheet_5
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 0
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 14}
+        - {x: -17, y: 10}
+        - {x: -17, y: -14}
+        - {x: -16, y: -17}
+        - {x: 13, y: -17}
+        - {x: 20, y: -14}
+        - {x: 20, y: 4}
+        - {x: 9, y: 14}
+    - name: GOOSE - Spritesheet_6
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 0
+        width: 40
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 1, y: 5}
+        - {x: -16, y: 4}
+        - {x: -20, y: 0}
+        - {x: -20, y: -6}
+        - {x: -13, y: -18}
+        - {x: 13, y: -18}
+        - {x: 20, y: -15}
+        - {x: 20, y: 1}
+        - {x: 15, y: 5}
+    - name: GOOSE - Spritesheet_7
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 0
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 7, y: 6}
+        - {x: -15, y: -3}
+        - {x: -17, y: -7}
+        - {x: -17, y: -12}
+        - {x: -11, y: -20}
+        - {x: 18, y: -20}
+        - {x: 20, y: -16}
+        - {x: 20, y: 6}
     outline: []
   spritePackingTag: 
   userData: 
