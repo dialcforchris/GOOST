@@ -147,6 +147,9 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         //anim.Stop();
         if(currentBehaviour == EnemyBehaviour.CAPTIVE_EGG)
         {
+            Egg e = EggPool.instance.PoolEgg();
+            e.OnPooled();
+            e.transform.position = transform.position;
 
         }
         SilverCoin _coin = CoinPool.instance.PoolCoin();
