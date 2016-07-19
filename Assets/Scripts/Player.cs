@@ -91,10 +91,6 @@ public class Player : Actor, ISegmentable<Actor>
                 body.AddForce(new Vector2(0, 50));
                 StatTracker.instance.stats.totalFlaps++;
             }
-           // if (Input.GetAxis("Vertical" + playerId.ToString()) < 0)
-            //
-                ///platformManager.instance.NoCollisionsPlease(legs.legsCollider);
-
             Invinciblity(invincible);
         }
 	}
@@ -141,10 +137,6 @@ public class Player : Actor, ISegmentable<Actor>
             eggtimer = 0;
             Egg e = EggPool.instance.PoolEgg();
             e.DisablePhysics(true);
-          //  e.getLaid = true;
-            
-            
-            //get nest ref and set trans to that
         }
     }
 
@@ -206,8 +198,6 @@ public class Player : Actor, ISegmentable<Actor>
                     Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
                     c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
                 }
-
-                //knock player back.....then invincible for X seconds
                 _collectable = 0;
                 invincible = true;
             }
@@ -230,17 +220,6 @@ public class Player : Actor, ISegmentable<Actor>
             transform.position = Vector2.zero;
             invincible = true;
         }
-        //Egg egg = PlayerManager.instance.GetNest(playerId).GetRespawnEgg();
-        //if(egg)
-        //{
-        //    isDead = false;
-        //    base.Respawn();
-        //    transform.position = egg.transform.position;
-        //}
-        //else
-        //{
-        //    //Player is out of lives
-        //}    
     }
   
     void Invinciblity(bool _on)
