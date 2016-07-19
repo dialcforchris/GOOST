@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ScreenWrap : MonoBehaviour
 {
-    public delegate void ScreenWrapped();
+    public delegate void ScreenWrapped(bool _wrap);
     private ScreenWrapped screenWrapped = null;
        
     private Vector2 screenToWorldMax;
@@ -36,7 +36,7 @@ public class ScreenWrap : MonoBehaviour
     {
         if(screenWrapped != null)
         {
-            screenWrapped();
+            screenWrapped(true);
         }
     }
 

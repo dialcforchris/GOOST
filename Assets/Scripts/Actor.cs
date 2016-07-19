@@ -33,8 +33,6 @@ public class Actor : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        platformManager.instance.NoCollisionsPlease(col);
-
         //Ignore collisions with child objects
         for (int i = 0; i < segments.Length; ++i)
         {
@@ -135,13 +133,23 @@ public class Actor : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D _col)
     {
-        if (_col.collider.tag == "Enemy")
-        {
-            ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-            if (rigSegment != null)
-            {
-                ((Enemy)rigSegment.rigBase).FindTarget();
-            }
-        }
+        //if (_col.collider.tag == "Enemy")
+        //{
+        //    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+        //    if (rigSegment != null)
+        //    {
+        //        ((Enemy)rigSegment.rigBase).FindTarget();
+        //    }
+        //}
+    }
+
+    public virtual void LandedOnPlatform()
+    {
+        //anim walk
+    }
+
+    public virtual void TakeOffFromPlatform()
+    {
+        //anim fly
     }
 }

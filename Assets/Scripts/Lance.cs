@@ -19,7 +19,7 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
 
     [SerializeField] private float knockPower = 50.0f;
 
-    protected virtual void OnEnable()
+    private void OnEnable()
     {
         platformManager.instance.NoCollisionsPlease(col);
     }
@@ -55,7 +55,7 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
                         }
                         else if (rigSegment.segmentName == "Legs")
                         {
-                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), knockPower);
+                            rigSegment.rigBase.ApplyKnockback(_col.collider.transform.position - transform.position, knockPower);
                             Debug.Log(actor.tag + " lance clashs " + _col.gameObject.tag + " lance");
                             break;
                         }
@@ -66,26 +66,19 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
                             Debug.Log(actor.tag + " lance defeats " + _col.gameObject.tag + " body");
                             break;
                         }
-                        else if (rigSegment.segmentName == "Segment")
-                        {
-                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), knockPower);
-                            rigSegment.rigBase.Defeat();
-                            Debug.Log(actor.tag + " lance defeats " + _col.gameObject.tag + " segment");
-                            break;
-                        }
                     }
                     break;
                 }
             }
 
-            if (_col.collider.tag == "Enemy")
-            {
-                ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-                if (rigSegment != null)
-                {
-                    ((Enemy)rigSegment.rigBase).FindTarget();
-                }
-            }
+            //if (_col.collider.tag == "Enemy")
+            //{
+            //    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+            //    if (rigSegment != null)
+            //    {
+            //        ((Enemy)rigSegment.rigBase).FindTarget();
+            //    }
+            //}
         }
     }
 }

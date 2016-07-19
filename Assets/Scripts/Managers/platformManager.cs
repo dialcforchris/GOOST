@@ -6,7 +6,7 @@ public class platformManager : MonoBehaviour {
     private static platformManager PlatformManager = null;
     public static platformManager instance {get{return PlatformManager;}}
 
-    [SerializeField] private platform[] allPlatforms = null;
+    [SerializeField] private Collider2D[] allPlatforms = null;
 
 	void Awake ()
     {
@@ -15,22 +15,16 @@ public class platformManager : MonoBehaviour {
 	
     public void NoCollisionsPlease(Collider2D col)
     {
-        foreach(platform p in allPlatforms)
+        foreach(Collider2D p in allPlatforms)
         {
-            Physics2D.IgnoreCollision(col, p.platformCollider);
+            Physics2D.IgnoreCollision(col, p);
         }
     }
     public void CollisionsPlease(Collider2D col)
     {
-        foreach (platform p in allPlatforms)
+        foreach (Collider2D p in allPlatforms)
         {
-            Physics2D.IgnoreCollision(col, p.platformCollider, false);
+            Physics2D.IgnoreCollision(col, p, false);
         }
     }
-
-
-    void Update ()
-    {
-	
-	}
 }

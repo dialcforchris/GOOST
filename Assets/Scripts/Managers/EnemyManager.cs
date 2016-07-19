@@ -31,11 +31,11 @@ public class EnemyManager : MonoBehaviour
     private void Awake()
     {
         enemyManager = this;
-        objectPool = new ObjectPool<Enemy>(enemyPrefab, 10, transform);
     }
 
     private void Start()
     {
+        objectPool = new ObjectPool<Enemy>(enemyPrefab, 10, transform);
         spawnTransforms = new Vector3[6];
         spawnTransforms[0] = Camera.main.ViewportToWorldPoint(new Vector3(-0.1f, 0.1f, 10.0f));
         spawnTransforms[1] = Camera.main.ViewportToWorldPoint(new Vector3(-0.1f, 0.9f, 10.0f));
