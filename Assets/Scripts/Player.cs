@@ -18,6 +18,7 @@ public class Player : Actor, ISegmentable<Actor>
     float maxMashTime = 0.15f;
     public GameObject eggTrans;
     public bool inNest = false;
+    public bool carryingEgg = false;
     
     private bool isDead = false;
 
