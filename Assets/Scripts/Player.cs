@@ -5,8 +5,13 @@ public class Player : Actor, ISegmentable<Actor>
 {
     [SerializeField]
     private float speed;
+    
     [SerializeField]
-    private Egg egg;
+    private PlayerType _playerType;
+    public PlayerType playerType
+    {
+        get { return _playerType; }
+    }
     private int _playerId = 3;
     private int score = 0;
     private int _eggLives = 3;
@@ -19,7 +24,12 @@ public class Player : Actor, ISegmentable<Actor>
     public GameObject eggTrans;
     public bool inNest = false;
     public bool carryingEgg = false;
-    
+    private int _collectable = 0;
+    public int collectable
+    {
+        get { return _collectable; } 
+        set {_collectable = value;}
+    }
     private bool isDead = false;
 
     #region ISegmentable
@@ -70,7 +80,6 @@ public class Player : Actor, ISegmentable<Actor>
                 body.AddForce(new Vector2(0, 50));
                 StatTracker.instance.stats.totalFlaps++;
             }
-            LayAnEgg();
             if (Input.GetAxis("Vertical" + playerId.ToString()) < 0)
                 platformManager.instance.NoCollisionsPlease(legs.legsCollider);
         }
@@ -117,7 +126,6 @@ public class Player : Actor, ISegmentable<Actor>
             eggMash = 0;
             eggtimer = 0;
             Egg e = EggPool.instance.PoolEgg();
-            //Egg e = (Egg)Instantiate(egg, this.transform.position, Quaternion.identity);
             e.DisablePhysics(true);
           //  e.getLaid = true;
             
@@ -175,25 +183,49 @@ public class Player : Actor, ISegmentable<Actor>
 
     public override void Defeat()
     {
-        isDead = true;
-        base.Defeat();
-        PlayerManager.instance.RespawnPlayer(playerId);
+        if (collectable < 0)
+        {
+            for (int i = 0; i < collectable; i++)
+            {
+                Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                c.transform.position = transform.position;
+            }
+            //knock player back.....then invincible for X seconds
+            _collectable = 0;
+        }
+        else
+        {
+            isDead = true;
+            base.Defeat();
+            PlayerManager.instance.RespawnPlayer(playerId);
+        }
     }
 
     public override void Respawn()
     {
-        Egg egg = PlayerManager.instance.GetNest(playerId).GetRespawnEgg();
-        if(egg)
+        if (_eggLives>0)
         {
-            isDead = false;
             base.Respawn();
-            transform.position = egg.transform.position;
+            isDead = false;
+            _eggLives--;
         }
-        else
-        {
-            //Player is out of lives
-        }    
+        //Egg egg = PlayerManager.instance.GetNest(playerId).GetRespawnEgg();
+        //if(egg)
+        //{
+        //    isDead = false;
+        //    base.Respawn();
+        //    transform.position = egg.transform.position;
+        //}
+        //else
+        //{
+        //    //Player is out of lives
+        //}    
     }
   
 
 }
+public enum PlayerType
+{
+    BADGUY,
+    GOODGUY,
+};
