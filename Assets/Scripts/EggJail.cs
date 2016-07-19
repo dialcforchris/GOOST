@@ -9,7 +9,7 @@ public class EggJail : MonoBehaviour
     public int cost = 100;
     public int inflation = 50;
     int numberOfEggs = 3;
-    public GameObject Egg;
+    Egg egg;
     [SerializeField]
     private Text price;
     [SerializeField]
@@ -21,6 +21,9 @@ public class EggJail : MonoBehaviour
     private void Awake()
     {
         eggJail = this;
+        egg = EggPool.instance.PoolEgg();
+        egg.DisablePhysics(true);
+        egg.transform.position = transform.position;
     }
 
     void Update()
@@ -31,7 +34,10 @@ public class EggJail : MonoBehaviour
     {
         bool eggsThen = false;
         eggsThen = numberOfEggs>0?  true : false;
-        Egg.SetActive(eggsThen);
+        if (eggsThen)
+        {
+
+        }
         price.supportRichText = true;
 
         price.text = "EGG RETURN SERVICE" + "\n"+ "<color=#c0c0c0ff>" + cost + " SILVER</color>";
@@ -41,6 +47,7 @@ public class EggJail : MonoBehaviour
         }
         else
         {
+
             remaining.text = "SOLD OUT!";
         }
     }
