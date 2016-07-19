@@ -6,9 +6,17 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     private float speed;
     [SerializeField]
-    private Egg egg;
+    SpriteRenderer spRend;
+    [SerializeField]
+    private PlayerType _playerType;
+    public PlayerType playerType
+    {
+        get { return _playerType; }
+    }
     private int _playerId = 3;
     private int score = 0;
+
+    #region egg stuff [old shit]
     private int _eggLives = 3;
     public int eggMash = 0;
     private int maxEggMash = 17;
@@ -19,7 +27,19 @@ public class Player : Actor, ISegmentable<Actor>
     public GameObject eggTrans;
     public bool inNest = false;
     public bool carryingEgg = false;
-    
+    #endregion
+
+    float flashTime = 0;
+    bool flashBool = false;
+    float invicibleTimer = 0;
+    float maxInvin = 0.8f;
+    bool invincible = false;
+    private int _collectable = 10;
+    public int collectable
+    {
+        get { return _collectable; } 
+        set {_collectable = value;}
+    }
     private bool isDead = false;
 
     #region ISegmentable
@@ -43,7 +63,6 @@ public class Player : Actor, ISegmentable<Actor>
     }
     protected override void Start () 
     {
-      //  platformManager.instance.NoCollisionsPlease(legs);
         base.Start();
 	}
 	
@@ -52,6 +71,8 @@ public class Player : Actor, ISegmentable<Actor>
     {
         if (!isDead)
         {
+
+            Debug.Log(collectable);
             MashTimer();
             Movement();
             base.FixedUpdate();
@@ -70,9 +91,11 @@ public class Player : Actor, ISegmentable<Actor>
                 body.AddForce(new Vector2(0, 50));
                 StatTracker.instance.stats.totalFlaps++;
             }
-            LayAnEgg();
-            if (Input.GetAxis("Vertical" + playerId.ToString()) < 0)
-                platformManager.instance.NoCollisionsPlease(legs.legsCollider);
+           // if (Input.GetAxis("Vertical" + playerId.ToString()) < 0)
+            //
+                ///platformManager.instance.NoCollisionsPlease(legs.legsCollider);
+
+            Invinciblity(invincible);
         }
 	}
 
@@ -117,7 +140,6 @@ public class Player : Actor, ISegmentable<Actor>
             eggMash = 0;
             eggtimer = 0;
             Egg e = EggPool.instance.PoolEgg();
-            //Egg e = (Egg)Instantiate(egg, this.transform.position, Quaternion.identity);
             e.DisablePhysics(true);
           //  e.getLaid = true;
             
@@ -175,25 +197,85 @@ public class Player : Actor, ISegmentable<Actor>
 
     public override void Defeat()
     {
-        isDead = true;
-        base.Defeat();
-        PlayerManager.instance.RespawnPlayer(playerId);
+        if (!invincible)
+        {
+            if (collectable > 0)
+            {
+                for (int i = 0; i < collectable; i++)
+                {
+                    Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                    c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
+                }
+
+                //knock player back.....then invincible for X seconds
+                _collectable = 0;
+                invincible = true;
+            }
+            else
+            {
+                isDead = true;
+                base.Defeat();
+                PlayerManager.instance.RespawnPlayer(playerId);
+            }
+        }
     }
 
     public override void Respawn()
     {
-        Egg egg = PlayerManager.instance.GetNest(playerId).GetRespawnEgg();
-        if(egg)
+        if (_eggLives>0)
         {
-            isDead = false;
             base.Respawn();
-            transform.position = egg.transform.position;
+            isDead = false;
+            _eggLives--;
+            transform.position = Vector2.zero;
+            invincible = true;
+        }
+        //Egg egg = PlayerManager.instance.GetNest(playerId).GetRespawnEgg();
+        //if(egg)
+        //{
+        //    isDead = false;
+        //    base.Respawn();
+        //    transform.position = egg.transform.position;
+        //}
+        //else
+        //{
+        //    //Player is out of lives
+        //}    
+    }
+  
+    void Invinciblity(bool _on)
+    {
+        if (_on)
+        {
+            if (invicibleTimer<maxInvin)
+            {
+                invicibleTimer += Time.deltaTime;
+            }
+            else
+            {
+                invicibleTimer = 0;
+                invincible = false;
+            }
+            FlashSprite();
+        }
+    }
+    void FlashSprite()
+    {
+      
+        if (flashTime<0.1f)
+        {
+            flashTime += Time.deltaTime;
+            spRend.enabled = flashBool;
         }
         else
         {
-            //Player is out of lives
-        }    
+            flashBool = !flashBool;
+            flashTime = 0;
+        }
     }
-  
-
 }
+public enum PlayerType
+{
+    BADGUY,
+    GOODGUY,
+};
