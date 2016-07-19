@@ -19,8 +19,10 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     private Enemy magpie;
     [SerializeField]
     private Animator ani;
+    private GameObject bEgg;
     float hatchTime = 0;
     float maxHatchTime = 6;
+    public int score = 50;
     private int _owningPlayer = 0;
     public int owningPlayer
     {
@@ -46,12 +48,11 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             }
             else
             {
-                Instantiate(brokenEgg,new Vector2(transform.position.x,transform.position.y),transform.rotation);
-                Destroy(gameObject);
                 //spawn a magpie
                 Enemy e = EnemyManager.instance.EnemyPool();
                 e.transform.position = transform.position;
                 e.Spawn((EnemyBehaviour)Random.Range(0, 5));
+                ReturnPool();
             }
     }
 
@@ -64,11 +65,8 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             if (rigSegment != null)
             {
                 Player p = (Player)rigSegment.rigBase;
-                if (!p.inNest&&!inNest&&!p.carryingEgg)
-                {
-                    p.carryingEgg = true;
+                    p.ChangeScore(score);
                     ReturnPool();
-                }
             }
         }
     }
