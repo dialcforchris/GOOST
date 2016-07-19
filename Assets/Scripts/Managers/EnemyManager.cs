@@ -85,4 +85,11 @@ public class EnemyManager : MonoBehaviour
         int _spawnPoint = Random.Range(0, 3) * 2;
         return Vector3.Lerp(spawnTransforms[_spawnPoint], spawnTransforms[_spawnPoint + 1], Random.Range(0.0f, 1.0f));
     }
+
+    public Enemy EnemyPool()
+    {
+        Enemy _enemy = objectPool.GetPooledObject();
+     //   _enemy.OnPooled();
+        return _enemy;
+    }
 }

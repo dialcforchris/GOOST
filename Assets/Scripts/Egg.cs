@@ -16,7 +16,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     [SerializeField]
     private Rigidbody2D body;
     [SerializeField]
-    private GameObject magpie;
+    private Enemy magpie;
     [SerializeField]
     private Animator ani;
     float hatchTime = 0;
@@ -35,28 +35,24 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         {
             getLaid = false;
         }
-     //   Hatch();
-	}//
+        Hatch();
+	}
     
     void Hatch()
     {
-        if (!inNest&&transform.parent ==null)
-        {
             if (hatchTime<maxHatchTime)
             {
                 hatchTime += Time.deltaTime;
             }
             else
             {
-              //  Instantiate(brokenEgg,new Vector2(transform.position.x,transform.position.y +1),transform.rotation);
-               // Destroy(gameObject);
+                Instantiate(brokenEgg,new Vector2(transform.position.x,transform.position.y),transform.rotation);
+                Destroy(gameObject);
                 //spawn a magpie
+                Enemy e = EnemyManager.instance.EnemyPool();
+                e.transform.position = transform.position;
+                e.Spawn((EnemyBehaviour)Random.Range(0, 5));
             }
-        }
-        else
-        {
-            hatchTime = 0;
-        }
     }
 
  
