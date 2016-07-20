@@ -16,12 +16,14 @@ public class MainMenu : MonoBehaviour {
     public Image[] optionsCursor;
 
     int mainMenuIndex,optionsIndex;
+    [SerializeField]
     bool transitioning;
 
     menuState currentState;
     enum menuState
     {
         mainMenu,
+        readyUpScreen,
         optionsMenu,
         leaderboardsMenu,
         statsScreen,
@@ -68,7 +70,16 @@ public class MainMenu : MonoBehaviour {
                 case 3:
                     transitioning = true;
                     currentState = menuState.statsScreen;
+                    menuScreens[3].GetComponent<Canvas>().enabled = true;
+                    menuScreens[4].SetActive(false);
                     StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(90, 0, 0)));
+                    break;
+                case 4:
+                    transitioning = true;
+                    currentState = menuState.readyUpScreen;
+                    menuScreens[3].GetComponent<Canvas>().enabled = false;
+                    menuScreens[4].SetActive(true);
+                    StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(-90, 0, 0)));
                     break;
             }
         }
@@ -84,14 +95,20 @@ public class MainMenu : MonoBehaviour {
                 case menuState.mainMenu:
                     mainMenu();
                     break;
+                case menuState.readyUpScreen:
+                    if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
+                    {
+                        switchMenus(0);
+                    }
+                    break;
                 case menuState.leaderboardsMenu:
-                    if (Input.GetAxis("Fire1") > 0)
+                    if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
                     {
                         switchMenus(0);
                     }
                     break;
                 case menuState.statsScreen:
-                    if (Input.GetAxis("Fire1") > 0)
+                    if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
                     {
                         switchMenus(0);
                     }
@@ -144,12 +161,13 @@ public class MainMenu : MonoBehaviour {
     {
         changeSelection(mainMenuCursor, mainMenuElements, ref mainMenuIndex);
 
-        if (Input.GetAxis("Fire1") > 0)
+        if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
         {
             switch(mainMenuIndex)
             {
                 case 0:
-                    Camera.main.GetComponent<CameraController>().switchViews(false);
+                    switchMenus(4);
+                    //Camera.main.GetComponent<CameraController>().switchViews(false);
                     //Start game
                     break;
                 case 1:
@@ -179,7 +197,7 @@ public class MainMenu : MonoBehaviour {
     {
         changeSelection(optionsCursor, optionsElements, ref optionsIndex);
 
-        if (Input.GetAxis("Fire1") > 0)
+        if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
         {
             switch (optionsIndex)
             {

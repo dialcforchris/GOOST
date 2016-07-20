@@ -45,14 +45,10 @@ public class PlayerManager : MonoBehaviour
     {
         for (int i = 0; i < Input.GetJoystickNames().Length;i++ )
         {
-            Debug.Log(Input.GetJoystickNames().Length);
             if (i<2)
             {
                 players[i].gameObject.SetActive(true);
                 players[i].playerId = i;
-                //nests[i].gameObject.SetActive(true);
-                //nests[i].enabled = true;
-                //nests[i].owningPlayer = i;
                 scores[i].gameObject.SetActive(true);
             }
             else

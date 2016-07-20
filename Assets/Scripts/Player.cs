@@ -80,7 +80,6 @@ public class Player : Actor, ISegmentable<Actor>
     {
         if (!isDead)
         {
-
             //Debug.Log(collectable);
             MashTimer();
             Movement();
@@ -133,7 +132,6 @@ public class Player : Actor, ISegmentable<Actor>
                 transform.localScale = new Vector3(-1, 1, 1);
     }
   
-
     void VelocityCheck()
     {
         if (body.velocity.magnitude>10 )
@@ -317,9 +315,6 @@ public class Player : Actor, ISegmentable<Actor>
             return true;
         }
     }
-
-  
-
 }
 public enum PlayerType
 {

@@ -84,9 +84,9 @@ public class Actor : MonoBehaviour
 
     protected virtual IEnumerator DeathAnimation()
     {
-        yield return new WaitForSeconds(0.5f);
-        anim.Stop();
         FeatherManager.instance.HaveSomeFeathers(transform.position);
+        yield return new WaitForSeconds(0.01f);
+        anim.Stop();
         gameObject.SetActive(false);
     }
 
@@ -137,6 +137,22 @@ public class Actor : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D _col)
     {
+    }
+
+    protected virtual void OnCollisionStay2D(Collision2D _col)
+    {
+        
+        if (_col.collider.tag == "Platform")
+        {
+            if (_col.contacts[0].otherCollider == col)
+            {
+                if (_col.contacts[0].normal == Vector2.up)
+                {
+                    body.AddForce(new Vector2(_col.transform.position.x > transform.position.x ? -0.05f : 0.05f, 0.0f), ForceMode2D.Impulse);
+                }
+            }
+        }
+
         //if (_col.collider.tag == "Enemy")
         //{
         //    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
@@ -152,7 +168,10 @@ public class Actor : MonoBehaviour
         onPlatform = true;
         body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         anim.Play("newGoose_run");
-        skidMark.Emit(100);
+        if (body.velocity.x > 5||body.velocity.x<-5)
+        {
+            skidMark.Emit(2);
+        }
     }
 
     public virtual void TakeOffFromPlatform()
@@ -160,6 +179,7 @@ public class Actor : MonoBehaviour
         onPlatform = false;
         body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
         anim.Play("newGoose_flap");
+       
     }
 
     protected void DetermineAnimationState()
@@ -186,4 +206,5 @@ public class Actor : MonoBehaviour
             }
         }
     }
+
 }
