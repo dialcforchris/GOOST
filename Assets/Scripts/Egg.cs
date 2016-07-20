@@ -37,7 +37,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         {
             getLaid = false;
         }
-        Hatch();
+      
 	}
     
     void Hatch()

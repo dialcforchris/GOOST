@@ -98,15 +98,15 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                 }
                 break;
             case EnemyBehaviour.HUNTER:
-                Nest _nest = PlayerManager.instance.GetLargestNest();
-                if (_nest)
-                {
-                    viewTarget = Camera.main.WorldToViewportPoint(_nest.transform.position);
-                }
-                else
-                {
-                    viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
-                }
+              ////  Nest _nest = PlayerManager.instance.GetLargestNest();
+              ////  if (_nest)
+              //  {
+              ////      viewTarget = Camera.main.WorldToViewportPoint(_nest.transform.position);
+              //  }
+              //  else
+              //  {
+              //      viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
+              //  }
                 break;
             case EnemyBehaviour.HIGH_FLYER:
                 viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.85f, 0.95f), 10);

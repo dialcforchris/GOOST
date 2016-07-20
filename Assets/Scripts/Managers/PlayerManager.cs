@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
         get{return playerManager;}
     }
     [SerializeField] private Player[] players = null;
-    [SerializeField] private Nest[] nests = null;
+  // [SerializeField] private Nest[] nests = null;
     [SerializeField] private Text[] scores = null;
 
     [SerializeField] private float respawnLength = 1.0f;
@@ -43,17 +43,15 @@ public class PlayerManager : MonoBehaviour
 
     void Start()
     {
-        //Debug.Log(Input.GetJoystickNames().Length);
-      
         for (int i = 0; i < Input.GetJoystickNames().Length;i++ )
         {
             if (i<2)
             {
                 players[i].gameObject.SetActive(true);
                 players[i].playerId = i;
-                nests[i].gameObject.SetActive(true);
-                nests[i].enabled = true;
-                nests[i].owningPlayer = i;
+                //nests[i].gameObject.SetActive(true);
+                //nests[i].enabled = true;
+                //nests[i].owningPlayer = i;
                 scores[i].gameObject.SetActive(true);
             }
             else
@@ -106,10 +104,10 @@ public class PlayerManager : MonoBehaviour
         respawnTime[_index] = 0.0f;
     }
 
-    public Nest GetNest(int _index)
-    {
-        return nests[_index];
-    }
+  ////  public Nest GetNest(int _index)
+  //  {
+  //      return nests[_index];
+  //  }
 
 
     public Player GetClosestPlayer(Vector3 _pos)
@@ -125,46 +123,46 @@ public class PlayerManager : MonoBehaviour
         return players[0];
     }
 
-    public void StealEgg(int _playerId)
-    {
-        Nest n = GetNest(_playerId);
-        n.EggStolen();
-    }
-    public Nest GetLargestNest()
-    {
-        int _amount = nests[0].numEggs;
-        if (players.Length == 2)
-        {
-            if(_amount == nests[1].numEggs)
-            {
-                if(_amount == 0)
-                {
-                    return null;
-                }
-                else
-                {
-                    return nests[Random.Range(0, 2)];
-                }
-            }
-            else if(_amount < nests[1].numEggs)
-            {
-                return nests[1];
-            }
-            else
-            {
-                return nests[0];
-            }
-        }
-        else
-        {
-            if (_amount == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return nests[0];
-            }
-        }
-    }
+    //public void StealEgg(int _playerId)
+    //{
+    //    Nest n = GetNest(_playerId);
+    //    n.EggStolen();
+    //}
+    //public Nest GetLargestNest()
+    //{
+    //    int _amount = nests[0].numEggs;
+    //    if (players.Length == 2)
+    //    {
+    //        if(_amount == nests[1].numEggs)
+    //        {
+    //            if(_amount == 0)
+    //            {
+    //                return null;
+    //            }
+    //            else
+    //            {
+    //                return nests[Random.Range(0, 2)];
+    //            }
+    //        }
+    //        else if(_amount < nests[1].numEggs)
+    //        {
+    //            return nests[1];
+    //        }
+    //        else
+    //        {
+    //            return nests[0];
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (_amount == 0)
+    //        {
+    //            return null;
+    //        }
+    //        else
+    //        {
+    //            return nests[0];
+    //        }
+    //    }
+    //}
 }
