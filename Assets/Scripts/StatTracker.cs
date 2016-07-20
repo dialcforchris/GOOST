@@ -62,9 +62,10 @@ public class StatTracker : MonoBehaviour {
         }
 
         textElements[0].text = time[0] + ":" + time[1] + ":" + time[2] + ":" + time[3];
-
         stats.playtime += Time.fixedDeltaTime;
-	}
+
+        textElements[1].text = "" + stats.totalFlaps;
+    }
 }
 
 [System.Serializable]
