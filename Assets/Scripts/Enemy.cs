@@ -213,9 +213,9 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         body.AddForce(_force, ForceMode2D.Impulse);
     }
 
-    public override void LandedOnPlatform()
+    public override void LandedOnPlatform(Collider2D col)
     {
-        base.LandedOnPlatform();
+        base.LandedOnPlatform(col);
         VelocityCap();
     }
 

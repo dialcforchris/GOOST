@@ -4,6 +4,8 @@ using System.Collections;
 public class Player : Actor, ISegmentable<Actor>
 {
     [SerializeField]
+    Animator riderAnimator;
+    [SerializeField]
     private float speed;
     [SerializeField]
     SpriteRenderer spRend;
@@ -206,7 +208,47 @@ public class Player : Actor, ISegmentable<Actor>
     {
         return score;
     }
-    #endregion 
+    #endregion
+
+    public override void LandedOnPlatform(Collider2D col)
+    {
+        base.LandedOnPlatform(col);
+        riderAnimator.Play("cap_flap_a");
+    }
+
+    public override void TakeOffFromPlatform()
+    {
+        base.TakeOffFromPlatform();
+        riderAnimator.Play("cap_flap_b");
+    }
+
+    public override void DetermineAnimationState()
+    {
+        if (onPlatform)
+        {
+            if (Mathf.Abs(body.velocity.x) < 0.25f)
+            {
+                anim.Play("newGoose_idle");
+                riderAnimator.Play("cape_idle");
+            }
+            else
+            {
+                anim.Play("newGoose_run");
+                riderAnimator.Play("cape_flap_a");
+            }
+        }
+        else
+        {
+            if (body.velocity.y > 0)
+            {
+                if (anim.GetCurrentAnimatorStateInfo(0).IsName("newGoose_glide"))
+                {
+                    anim.Play("newGoose_flap");
+                    riderAnimator.Play("cape_flap_b");
+                }
+            }
+        }
+    }
 
     public override void Defeat()
     {

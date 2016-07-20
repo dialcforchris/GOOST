@@ -14,7 +14,7 @@ public class Actor : MonoBehaviour
     public Collider2D actorCollider { get { return col; } }
     [SerializeField] protected Rigidbody2D body = null;
     [SerializeField]
-    private ParticleSystem skidMark;
+    private ParticleSystem skidMark,landingParticle;
     private bool peckUp = true;
 
     [SerializeField] protected Lance lance = null;
@@ -84,6 +84,7 @@ public class Actor : MonoBehaviour
 
     protected virtual IEnumerator DeathAnimation()
     {
+        frameHolder.instance.holdFrame(0.1f);
         FeatherManager.instance.HaveSomeFeathers(transform.position);
         yield return new WaitForSeconds(0.01f);
         anim.Stop();
@@ -163,8 +164,13 @@ public class Actor : MonoBehaviour
         //}
     }
 
-    public virtual void LandedOnPlatform()
+    public virtual void LandedOnPlatform(Collider2D col)
     {
+        //Make sure the player hasn't sunk into the floor for some silly reason when we freeze the Y position of the player
+        float landPosition = col.bounds.max.y;
+        transform.position = new Vector3(transform.position.x, landPosition+0.37f, transform.position.z);
+        
+        landingParticle.Play();
         onPlatform = true;
         body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         anim.Play("newGoose_run");
@@ -182,11 +188,11 @@ public class Actor : MonoBehaviour
        
     }
 
-    protected void DetermineAnimationState()
+    public virtual void DetermineAnimationState()
     {
         if (onPlatform)
         {
-            if (Mathf.Abs(body.velocity.x) < 0.25f)
+            if (Mathf.Abs(body.velocity.x) < 0.5f)
             {
                 anim.Play("newGoose_idle");
             }

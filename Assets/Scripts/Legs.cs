@@ -44,7 +44,7 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
         {
             if (_col.contacts[0].normal == Vector2.up)
             {
-                actor.LandedOnPlatform();
+                actor.LandedOnPlatform(_col.collider);
             }
             else if (_col.contacts[0].normal != Vector2.down)
             {
