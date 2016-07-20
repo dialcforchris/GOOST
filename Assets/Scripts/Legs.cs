@@ -10,9 +10,8 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
     private Collider2D col = null;
     public Collider2D legsCollider { get { return col; } }
 
-
-    [SerializeField]
-    private string[] affectTags = null;
+    private bool legsActive = true;
+    [SerializeField] private string[] affectTags = null;
 
     #region ISegmentable
     public Actor rigBase { get { return actor; } }
@@ -24,21 +23,35 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
 
     public void ActorSpawned()
     {
+        legsActive = true;
         col.enabled = true;
     }
 
     public void ActorDefeated()
     {
+        legsActive = false;
         col.enabled = false;
     }
 
     private void OnCollisionEnter2D(Collision2D _col)
     {
+        if(!legsActive)
+        {
+            return;
+        }
+
         if (_col.collider.tag == "Platform")
         {
             if (_col.contacts[0].normal == Vector2.up)
             {
                 actor.LandedOnPlatform();
+            }
+            else if (_col.contacts[0].normal != Vector2.down)
+            {
+                if (tag == "Enemy")
+                {
+                    ((Enemy)actor).PlatformSideCollision(_col);
+                }
             }
         }
         else

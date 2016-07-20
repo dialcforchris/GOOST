@@ -186,17 +186,11 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         base.OnCollisionEnter2D(_col);
         if (_col.contacts[0].normal == Vector2.down)
         {
-            Debug.Log("J");
             body.AddForce(Vector2.down * platformBounceY, ForceMode2D.Impulse);
         }
         else if(_col.contacts[0].normal != Vector2.up)
         {
-            body.velocity = Vector2.zero;
-            Vector2 _force = _col.contacts[0].normal * platformBounceX;
-            Vector2 _colWorldPos = transform.TransformPoint(col.bounds.center) / 2.0f; 
-            _force.y = (1 - Mathf.Abs(_col.contacts[0].point.y - _colWorldPos.y)) * (_col.contacts[0].point.y > _colWorldPos.y ? -1.0f : 1.0f);
-            Debug.Log("J");
-            body.AddForce(_force, ForceMode2D.Impulse);
+            PlatformSideCollision(_col);
         }
         
 
@@ -210,6 +204,15 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         //}
     }
 
+    public void PlatformSideCollision(Collision2D _col)
+    {
+        body.velocity = Vector2.zero;
+        Vector2 _force = _col.contacts[0].normal * platformBounceX;
+        Vector2 _colWorldPos = transform.TransformPoint(col.bounds.center) / 2.0f;
+        _force.y = (1 - Mathf.Abs(_col.contacts[0].point.y - _colWorldPos.y)) * (_col.contacts[0].point.y > _colWorldPos.y ? -1.0f : 1.0f);
+        body.AddForce(_force, ForceMode2D.Impulse);
+    }
+
     public override void LandedOnPlatform()
     {
         base.LandedOnPlatform();
@@ -218,6 +221,6 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
     public override void TakeOffFromPlatform()
     {
-        base.LandedOnPlatform();
+        base.TakeOffFromPlatform();
     }
 }

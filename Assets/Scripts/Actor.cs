@@ -84,9 +84,9 @@ public class Actor : MonoBehaviour
 
     protected virtual IEnumerator DeathAnimation()
     {
-        yield return new WaitForSeconds(0.5f);
-        anim.Stop();
         FeatherManager.instance.HaveSomeFeathers(transform.position);
+        yield return new WaitForSeconds(0.01f);
+        anim.Stop();
         gameObject.SetActive(false);
     }
 
@@ -137,6 +137,18 @@ public class Actor : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D _col)
     {
+        
+        if (_col.collider.tag == "Platform")
+        {
+            if (_col.contacts[0].collider == col)
+            {
+                if (_col.contacts[0].normal == Vector2.up)
+                {
+                    body.AddForce(new Vector2(_col.transform.position.x > transform.position.x ? -0.5f : 0.5f, 0.0f), ForceMode2D.Impulse);
+                }
+            }
+        }
+
         //if (_col.collider.tag == "Enemy")
         //{
         //    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
@@ -186,4 +198,5 @@ public class Actor : MonoBehaviour
             }
         }
     }
+
 }

@@ -38,47 +38,53 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
 
     private void OnCollisionEnter2D(Collision2D _col)
     {
-        if (lanceActive)
+        if (!lanceActive)
         {
-            foreach(string _s in affectTags)
+            return;
+        }
+
+        foreach(string _s in affectTags)
+        {
+            if(_s == _col.gameObject.tag)
             {
-                if(_s == _col.gameObject.tag)
+                ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+                if (rigSegment != null)
                 {
-                    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-                    if (rigSegment != null)
+                    if (rigSegment.segmentName == "Lance")
                     {
-                        if (rigSegment.segmentName == "Lance")
-                        {
+                        if(_col.contacts[0].normal.x != 0.0f)
+                        { 
                             rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), knockPower);
                             Debug.Log(actor.tag + " lance clashs " + _col.gameObject.tag + " lance");
-                            break;
                         }
-                        else if (rigSegment.segmentName == "Legs")
-                        {
-                            rigSegment.rigBase.ApplyKnockback(_col.collider.transform.position - transform.position, knockPower);
-                            Debug.Log(actor.tag + " lance clashs " + _col.gameObject.tag + " lance");
-                            break;
-                        }
-                        else if (rigSegment.segmentName == _s)
-                        {
-                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), knockPower);
-                            rigSegment.rigBase.Defeat();
-                            Debug.Log(actor.tag + " lance defeats " + _col.gameObject.tag + " body");
-                            break;
-                        }
+                        break;
                     }
-                    break;
+                    else if (rigSegment.segmentName == "Legs")
+                    {
+                        rigSegment.rigBase.ApplyKnockback(_col.collider.transform.position - transform.position, knockPower);
+                        Debug.Log(actor.tag + " lance clashs " + _col.gameObject.tag + " lance");
+                        break;
+                    }
+                    else if (rigSegment.segmentName == _s)
+                    {
+                        rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), knockPower);
+                        rigSegment.rigBase.Defeat();
+                        Debug.Log(actor.tag + " lance defeats " + _col.gameObject.tag + " body");
+                        break;
+                    }
                 }
+                break;
             }
-
-            //if (_col.collider.tag == "Enemy")
-            //{
-            //    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-            //    if (rigSegment != null)
-            //    {
-            //        ((Enemy)rigSegment.rigBase).FindTarget();
-            //    }
-            //}
         }
+
+        //if (_col.collider.tag == "Enemy")
+        //{
+        //    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+        //    if (rigSegment != null)
+        //    {
+        //        ((Enemy)rigSegment.rigBase).FindTarget();
+        //    }
+        //}
     }
+    
 }
