@@ -45,8 +45,6 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     [SerializeField] private float platformBounceX = 0.4f;
     [SerializeField] private float platformBounceY = 0.75f;
 
-    private bool onPlatform = false;
-
     protected override void Start()
     {
         screenWrap.AddScreenWrapCall(UpdateWorldFromView);
@@ -61,7 +59,6 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         behaviour = _behaviour;
         currentBehaviour = behaviour;
         FindTarget();
-        DetermineAnimationState();
         anim.Play("newGoose_flap");
         gameObject.SetActive(true);
     }
@@ -71,41 +68,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
         MovementToTarget();
         base.FixedUpdate();
-        Debug.Log(onPlatform ? "on" : "off");
 
         DetermineAnimationState();
-    }
-
-    private void DetermineAnimationState()
-    {
-        if (onPlatform)
-        {
-            if (Mathf.Abs(body.velocity.x) < 0.1f)
-            {
-                anim.Play("newGoose_idle");
-            }
-            else
-            {
-                anim.Play("newGoose_run");
-            }
-        }
-        else
-        {
-            if (body.velocity.y > 0)
-            {
-                if (anim.GetCurrentAnimatorStateInfo(0).IsName("newGoose_glide"))
-                {
-                    anim.Play("newGoose_flap");
-                }
-            }
-            else
-            {
-                if (anim.GetCurrentAnimatorStateInfo(0).IsName("newGoose_flap"))
-                {
-                    anim.Play("newGoose_glide");
-                }
-            }
-        }
     }
 
     public void FindTarget()
@@ -249,17 +213,11 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public override void LandedOnPlatform()
     {
         base.LandedOnPlatform();
-        onPlatform = true;
-        body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-        anim.Play("newGoose_run");
         VelocityCap();
     }
 
     public override void TakeOffFromPlatform()
     {
         base.LandedOnPlatform();
-        onPlatform = false;
-        body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-        anim.Play("newGoose_flap");
     }
 }

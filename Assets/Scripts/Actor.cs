@@ -24,6 +24,8 @@ public class Actor : MonoBehaviour
     protected Vector3 worldMaxY;
     [SerializeField] protected float viewportMaxY = 1.01f;
 
+    protected bool onPlatform = false;
+
     private bool extending = false;
 
     protected virtual void Start()
@@ -145,11 +147,40 @@ public class Actor : MonoBehaviour
 
     public virtual void LandedOnPlatform()
     {
-        //anim walk
+        onPlatform = true;
+        body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        anim.Play("newGoose_run");
     }
 
     public virtual void TakeOffFromPlatform()
     {
-        //anim fly
+        onPlatform = false;
+        body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+        anim.Play("newGoose_flap");
+    }
+
+    protected void DetermineAnimationState()
+    {
+        if (onPlatform)
+        {
+            if (Mathf.Abs(body.velocity.x) < 0.25f)
+            {
+                anim.Play("newGoose_idle");
+            }
+            else
+            {
+                anim.Play("newGoose_run");
+            }
+        }
+        else
+        {
+            if (body.velocity.y > 0)
+            {
+                if (anim.GetCurrentAnimatorStateInfo(0).IsName("newGoose_glide"))
+                {
+                    anim.Play("newGoose_flap");
+                }
+            }
+        }
     }
 }

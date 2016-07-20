@@ -46,6 +46,8 @@ public class Player : Actor, ISegmentable<Actor>
     }
     private bool isDead = false;
 
+    private bool applyFly = false;
+
     #region ISegmentable
     public Actor rigBase { get { return this; } }
     public string segmentName { get { return "Player"; } }
@@ -90,18 +92,28 @@ public class Player : Actor, ISegmentable<Actor>
             if (Input.GetButtonDown("BeakHeight"+playerId.ToString())||Input.GetKeyDown(KeyCode.L))
             {
                 TogglePeckLocation();
-            }
-
-            if (Input.GetButtonDown("Fly" + playerId.ToString()))
+            } 
+            if(applyFly)
             {
+                body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
                 body.AddForce(new Vector2(0, 50));
                 StatTracker.instance.stats.totalFlaps++;
+                applyFly = false;
             }
-            Dash();
-            DashCoolTime();
-            Invinciblity(invincible);
+            DetermineAnimationState();
         }
 	}
+
+    protected void Update()
+    {
+        if (Input.GetButtonDown("Fly" + playerId.ToString()))
+        {
+            applyFly = true;
+        }
+        Dash();
+        DashCoolTime();
+        Invinciblity(invincible);
+    }
 
     #region movement
     void Movement()
@@ -201,6 +213,7 @@ public class Player : Actor, ISegmentable<Actor>
     {
         if (!invincible)
         {
+            applyFly = false;
             if (collectable > 0)
             {
                 for (int i = 0; i < collectable; i++)
@@ -303,6 +316,7 @@ public class Player : Actor, ISegmentable<Actor>
             return true;
         }
     }
+
   
 
 }

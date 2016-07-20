@@ -45,6 +45,7 @@ public class PlayerManager : MonoBehaviour
     {
         for (int i = 0; i < Input.GetJoystickNames().Length;i++ )
         {
+            Debug.Log(Input.GetJoystickNames().Length);
             if (i<2)
             {
                 players[i].gameObject.SetActive(true);
