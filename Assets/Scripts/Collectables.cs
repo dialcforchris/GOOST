@@ -24,17 +24,23 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
     [SerializeField]
     Collider2D colli;
 
-    void Awake()
-    {
-   
-    }
+    float life = 0;
+    float maxLife = 2;
+    float flash = 0;
+    bool canFlash = false;
+    bool visible = true;
     
+    void Update()
+    {
+        Life();
+        FlashTime(canFlash);
+        Flash(visible);
+    }
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.tag == "Enemy")
         {
             Physics2D.IgnoreCollision(colli, col.collider, true);
-            Debug.Log("Ignoreing");
         }
         if (col.gameObject.tag == "Player")
         {
@@ -60,6 +66,11 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
 
     public void ReturnPool()
     {
+        life = 0;
+        maxLife = 2;
+        flash = 0;
+        canFlash = false;
+        visible = true;
         poolData.ReturnPool(this);
         gameObject.SetActive(false);
     }
@@ -80,10 +91,49 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
         Physics2D.IgnoreLayerCollision(8, 10, true);
         Physics2D.IgnoreLayerCollision(9, 10, true);
 
-        body.AddForce(new Vector2(Random.Range(-1.5f, 1.5f) * (Random.Range(0, 2) == 0 ? 1 : -1), Random.Range(1.15f, 2.5f)), ForceMode2D.Impulse);
+        body.AddForce(new Vector2(Random.Range(-0.5f, 0.5f) * (Random.Range(0, 2) == 0 ? 1 : -1), Random.Range(0.5f, 1.8f)), ForceMode2D.Impulse);
+    }
 
-       // body.AddForce(new Vector2(10, 50));
-       
+    void Life()
+    {
+        if (life<maxLife)
+        {
+            life += Time.deltaTime;
+        }
+        
+        else
+        {
+            if (!canFlash)
+            {
+                life = 0;
+                canFlash = true;
+                return;
+            }
+            else
+            {
+                ReturnPool();
+            }
+        }
+    }
+
+    void FlashTime(bool _canFlash)
+    {
+        if (_canFlash)
+        {
+            if (flash < 0.05f)
+            {
+                flash += Time.deltaTime;
+            }
+            else
+            {
+                visible = !visible;
+                flash = 0;
+            }
+        }
+    }
+    void Flash(bool _on)
+    {
+        spRend.enabled = _on;
     }
 }
 public enum PickUpType
