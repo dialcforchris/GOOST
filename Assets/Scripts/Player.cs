@@ -78,7 +78,7 @@ public class Player : Actor, ISegmentable<Actor>
         if (!isDead)
         {
 
-            Debug.Log(collectable);
+            //Debug.Log(collectable);
             MashTimer();
             Movement();
             base.FixedUpdate();

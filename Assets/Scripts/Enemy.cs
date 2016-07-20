@@ -61,6 +61,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         behaviour = _behaviour;
         currentBehaviour = behaviour;
         FindTarget();
+        DetermineAnimationState();
+        anim.Play("newGoose_flap");
         gameObject.SetActive(true);
     }
 
@@ -69,6 +71,41 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
         MovementToTarget();
         base.FixedUpdate();
+        Debug.Log(onPlatform ? "on" : "off");
+
+        DetermineAnimationState();
+    }
+
+    private void DetermineAnimationState()
+    {
+        if (onPlatform)
+        {
+            if (Mathf.Abs(body.velocity.x) < 0.1f)
+            {
+                anim.Play("newGoose_idle");
+            }
+            else
+            {
+                anim.Play("newGoose_run");
+            }
+        }
+        else
+        {
+            if (body.velocity.y > 0)
+            {
+                if (anim.GetCurrentAnimatorStateInfo(0).IsName("newGoose_glide"))
+                {
+                    anim.Play("newGoose_flap");
+                }
+            }
+            else
+            {
+                if (anim.GetCurrentAnimatorStateInfo(0).IsName("newGoose_flap"))
+                {
+                    anim.Play("newGoose_glide");
+                }
+            }
+        }
     }
 
     public void FindTarget()
@@ -76,7 +113,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         switch(currentBehaviour)
         {
             case EnemyBehaviour.RANDOM:
-                float _y = Mathf.Max(0.2f, Mathf.Min(0.8f, Camera.main.WorldToViewportPoint(transform.position).y + Random.Range(-0.1f, 0.5f)));
+                float _y = Mathf.Max(0.2f, Mathf.Min(0.8f, Camera.main.WorldToViewportPoint(transform.position).y + Random.Range(-0.1f, 0.25f)));
                 if (transform.localScale.x > 0)
                 {
                     viewTarget = new Vector3(1.05f, _y, 10);
@@ -143,7 +180,6 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     private void MovementToTarget()
     {
         body.AddForce(((worldTarget - transform.position).normalized) * speed);
-
         VelocityCap();
 
         if ((worldTarget - transform.position).x > 0) transform.localScale = Vector3.one;
@@ -181,17 +217,21 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         poolData.ReturnPool(this);
     }
 
-    protected void OnCollisionStay2D(Collision2D _col)
+    protected override void OnCollisionEnter2D(Collision2D _col)
     {
+        base.OnCollisionEnter2D(_col);
         if (_col.contacts[0].normal == Vector2.down)
         {
+            Debug.Log("J");
             body.AddForce(Vector2.down * platformBounceY, ForceMode2D.Impulse);
         }
         else if(_col.contacts[0].normal != Vector2.up)
         {
+            body.velocity = Vector2.zero;
             Vector2 _force = _col.contacts[0].normal * platformBounceX;
-            Debug.Log(1 - (Vector2.SqrMagnitude(_col.contacts[0].point - (Vector2)transform.position)));
-            _force.y = (1 - Vector2.SqrMagnitude(_col.contacts[0].point - (Vector2)transform.position)) * (_col.contacts[0].point.y > transform.position.y ? -1.0f : 1.0f);
+            Vector2 _colWorldPos = transform.TransformPoint(col.bounds.center) / 2.0f; 
+            _force.y = (1 - Mathf.Abs(_col.contacts[0].point.y - _colWorldPos.y)) * (_col.contacts[0].point.y > _colWorldPos.y ? -1.0f : 1.0f);
+            Debug.Log("J");
             body.AddForce(_force, ForceMode2D.Impulse);
         }
         
@@ -210,11 +250,16 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     {
         base.LandedOnPlatform();
         onPlatform = true;
+        body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        anim.Play("newGoose_run");
+        VelocityCap();
     }
 
     public override void TakeOffFromPlatform()
     {
         base.LandedOnPlatform();
         onPlatform = false;
+        body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+        anim.Play("newGoose_flap");
     }
 }

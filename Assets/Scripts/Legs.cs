@@ -36,7 +36,10 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
     {
         if (_col.collider.tag == "Platform")
         {
-            actor.LandedOnPlatform();
+            if (_col.contacts[0].normal == Vector2.up)
+            {
+                actor.LandedOnPlatform();
+            }
         }
         else
         {
