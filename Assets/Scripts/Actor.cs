@@ -164,7 +164,7 @@ public class Actor : MonoBehaviour
         onPlatform = true;
         body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         anim.Play("newGoose_run");
-        skidMark.Emit(100);
+        skidMark.Emit(1000);
     }
 
     public virtual void TakeOffFromPlatform()

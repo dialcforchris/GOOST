@@ -49,9 +49,6 @@ public class PlayerManager : MonoBehaviour
             {
                 players[i].gameObject.SetActive(true);
                 players[i].playerId = i;
-                //nests[i].gameObject.SetActive(true);
-                //nests[i].enabled = true;
-                //nests[i].owningPlayer = i;
                 scores[i].gameObject.SetActive(true);
             }
             else
