@@ -164,7 +164,10 @@ public class Actor : MonoBehaviour
         onPlatform = true;
         body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         anim.Play("newGoose_run");
-        skidMark.Emit(1000);
+        if (body.velocity.x > 5||body.velocity.x<-5)
+        {
+            skidMark.Emit(2);
+        }
     }
 
     public virtual void TakeOffFromPlatform()
@@ -172,6 +175,7 @@ public class Actor : MonoBehaviour
         onPlatform = false;
         body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
         anim.Play("newGoose_flap");
+       
     }
 
     protected void DetermineAnimationState()
