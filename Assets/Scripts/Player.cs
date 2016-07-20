@@ -267,9 +267,12 @@ public class Player : Actor, ISegmentable<Actor>
             }
             else
             {
-                isDead = true;
-                base.Defeat();
-                PlayerManager.instance.RespawnPlayer(playerId);
+               Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+               c.OnPooled(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+               c.transform.position = transform.position;
+               isDead = true;
+               base.Defeat();
+               PlayerManager.instance.RespawnPlayer(playerId);
             }
         }
     }

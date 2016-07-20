@@ -22,6 +22,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     private GameObject bEgg;
     float hatchTime = 0;
     float maxHatchTime = 6;
+    float invinsible = 0;
     public int score = 50;
     private int _owningPlayer = 0;
     public int owningPlayer
@@ -37,7 +38,8 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         {
             getLaid = false;
         }
-      
+        if (InvincibilityTimer())
+        Hatch();
 	}
     
     void Hatch()
@@ -48,9 +50,9 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             }
             else
             {
-                //spawn a magpie
+                hatchTime = 0;
                 Enemy e = EnemyManager.instance.EnemyPool();
-                e.transform.position = transform.position;
+                e.transform.position = new Vector2(transform.position.x,transform.position.y+0.8f);
                 e.Spawn((EnemyBehaviour)Random.Range(0, 5));
                 ReturnPool();
             }
@@ -59,14 +61,17 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
  
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Player")
+        if (InvincibilityTimer())
         {
-            ISegmentable<Actor> rigSegment = col.gameObject.GetComponent<ISegmentable<Actor>>();
-            if (rigSegment != null)
+            if (col.gameObject.tag == "Player")
             {
-                Player p = (Player)rigSegment.rigBase;
+                ISegmentable<Actor> rigSegment = col.gameObject.GetComponent<ISegmentable<Actor>>();
+                if (rigSegment != null)
+                {
+                    Player p = (Player)rigSegment.rigBase;
                     p.ChangeScore(score);
                     ReturnPool();
+                }
             }
         }
     }
@@ -79,6 +84,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         }
         col.isTrigger = false;
         body.gravityScale = 1;
+        body.AddForce(new Vector2(Random.Range(-0.8f,0.8f),Random.Range(1, 3)));
         body.constraints = RigidbodyConstraints2D.None;
         body.mass = 0.2f;
         _owningPlayer = 3;
@@ -87,6 +93,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
 
     public void ReturnPool()
     {
+        invinsible = 0;
         poolData.ReturnPool(this);
         gameObject.SetActive(false);
     }
@@ -109,4 +116,14 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             _owningPlayer = 3;
         }
     }
+
+   bool InvincibilityTimer()
+   {
+        if (invinsible<0.5f)
+        {
+            invinsible += Time.deltaTime;
+            return false;
+        }
+        return true;
+   }
 }

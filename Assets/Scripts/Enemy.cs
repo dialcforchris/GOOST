@@ -62,7 +62,11 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         anim.Play("newGoose_flap");
         gameObject.SetActive(true);
     }
-
+    void Update()
+    {
+        EggTimer();
+        LayAnEgg();
+    }
     protected override void FixedUpdate()
     {
         aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
@@ -175,7 +179,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         
         //SilverCoin _coin = CoinPool.instance.PoolCoin();
         //_coin.transform.position = transform.position;
-        //////////////////////////////////////////////////////////////////////////////////POOL EGG
+        Egg e = EggPool.instance.PoolEgg();
+          e.transform.position = transform.position;
 
         --numActive;
         poolData.ReturnPool(this);
@@ -222,5 +227,33 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public override void TakeOffFromPlatform()
     {
         base.TakeOffFromPlatform();
+    }
+
+    void LayAnEgg()
+    {
+        if (EggTimer())
+        {
+            if (Random.value>eggChance)
+            {
+                Egg e = EggPool.instance.PoolEgg();
+                e.transform.position = new Vector2(transform.position.x + 0.5f, transform.position.y - 1f);
+                e.OnPooled();
+            }
+        }
+        eggTime = 0;
+    }
+
+    bool EggTimer()
+    {
+        if (eggTime < eggCooldown)
+        {
+            eggTime += Time.deltaTime;
+            return false;
+        }
+        else
+        {
+            LayAnEgg();
+            return true;
+        }
     }
 }

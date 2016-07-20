@@ -27,6 +27,7 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
     float life = 0;
     float maxLife = 2;
     float flash = 0;
+    float invinsible = 0;
     bool canFlash = false;
     bool visible = true;
     
@@ -42,25 +43,29 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
         {
             Physics2D.IgnoreCollision(colli, col.collider, true);
         }
-        if (col.gameObject.tag == "Player")
-        {
-            ISegmentable<Actor> rigSegment = col.gameObject.GetComponent<ISegmentable<Actor>>();
-            if (rigSegment != null)
-            {
-                Player p = (Player)rigSegment.rigBase;
 
-                if (p.playerType == PlayerType.BADGUY)
+        if (InvincibilityTimer())
+        {
+            if (col.gameObject.tag == "Player")
+            {
+                ISegmentable<Actor> rigSegment = col.gameObject.GetComponent<ISegmentable<Actor>>();
+                if (rigSegment != null)
                 {
-                    p.collectable += type == PickUpType.MONEY ? 1 : 0;
-                    p.ChangeScore(type == PickUpType.MONEY ? score : altScore);
+                    Player p = (Player)rigSegment.rigBase;
+
+                    if (p.playerType == PlayerType.BADGUY)
+                    {
+                        p.collectable += type == PickUpType.MONEY ? 1 : 0;
+                        p.ChangeScore(type == PickUpType.MONEY ? score : altScore);
+                    }
+                    else
+                    {
+                        p.collectable += type == PickUpType.HARDDRIVE ? 1 : 0;
+                        p.ChangeScore(type == PickUpType.HARDDRIVE ? score : altScore);
+                    }
                 }
-                else
-                {
-                    p.collectable += type == PickUpType.HARDDRIVE ? 1 : 0;
-                    p.ChangeScore(type == PickUpType.HARDDRIVE ?  score: altScore);
-                }
+                ReturnPool();
             }
-            ReturnPool();
         }
     }
 
@@ -77,9 +82,10 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
 
     public void OnPooled(PickUpType _type)
     {
+        visible = true;
        gameObject.SetActive(true);
        type = _type;
-
+       invinsible = 0;
        spRend.sprite = sprites[type == PickUpType.HARDDRIVE ? 0 : 1];
           
         gameObject.SetActive(true);
@@ -134,6 +140,16 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
     void Flash(bool _on)
     {
         spRend.enabled = _on;
+    }
+
+    bool InvincibilityTimer()
+    {
+        if (invinsible < 0.1f)
+        {
+            invinsible += Time.deltaTime;
+            return false;
+        }
+        return true;
     }
 }
 public enum PickUpType
