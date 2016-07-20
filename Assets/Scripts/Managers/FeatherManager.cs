@@ -10,6 +10,7 @@ public class FeatherManager : MonoBehaviour {
     }
     [SerializeField]
     ParticleSystem feathers;
+    [SerializeField] ParticleSystem skid;
 	// Use this for initialization
 	void Start()
     {
@@ -28,6 +29,4 @@ public class FeatherManager : MonoBehaviour {
         }
         feathers.Play();
     }
-
-   
 }
