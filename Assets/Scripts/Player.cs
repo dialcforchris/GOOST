@@ -29,6 +29,10 @@ public class Player : Actor, ISegmentable<Actor>
     public bool carryingEgg = false;
     #endregion
 
+
+    float dashcool = 0;
+    float maxDashCool = 3f;
+   
     float flashTime = 0;
     bool flashBool = false;
     float invicibleTimer = 0;
@@ -65,6 +69,7 @@ public class Player : Actor, ISegmentable<Actor>
     {
         base.Start();
         allsprites = transform.GetComponentsInChildren<SpriteRenderer>();
+        dashcool = maxDashCool;
     }
 	
 	// Update is called once per frame
@@ -92,6 +97,8 @@ public class Player : Actor, ISegmentable<Actor>
                 body.AddForce(new Vector2(0, 50));
                 StatTracker.instance.stats.totalFlaps++;
             }
+            Dash();
+            DashCoolTime();
             Invinciblity(invincible);
         }
 	}
@@ -100,7 +107,7 @@ public class Player : Actor, ISegmentable<Actor>
     void Movement()
     {
         VelocityCheck();
-        body.AddForce(new Vector2(Input.GetAxis("Horizontal"+playerId) * (speed), 0));
+        body.AddForce(new Vector2(Input.GetAxis("Horizontal"+playerId) * (speed),0));
 
         if (Input.GetAxis("Horizontal"+playerId) < 0)
             transform.localScale = new Vector3(-1, 1, 1);
@@ -268,6 +275,36 @@ public class Player : Actor, ISegmentable<Actor>
             flashTime = 0;
         }
     }
+
+    void Dash()
+    {
+        if (Input.GetButton("Interact"+playerId)&&DashCoolTime())
+        {
+            if (transform.localScale.x>0)
+            {
+                body.AddForce(new Vector2(transform.right.x * (speed * 100.5f),0));
+            }
+            else
+            {
+                body.AddForce(new Vector2(-transform.right.x * (speed * 100.5f),0));
+            }
+            dashcool = 0;
+        }
+    }
+    bool DashCoolTime()
+    {
+        if (dashcool<maxDashCool)
+        {
+            dashcool += Time.deltaTime;
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+  
+
 }
 public enum PlayerType
 {
