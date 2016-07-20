@@ -13,7 +13,8 @@ public class Actor : MonoBehaviour
     [SerializeField] protected Collider2D col = null;
     public Collider2D actorCollider { get { return col; } }
     [SerializeField] protected Rigidbody2D body = null;
-  
+    [SerializeField]
+    private ParticleSystem skidMark;
     private bool peckUp = true;
 
     [SerializeField] protected Lance lance = null;
@@ -151,6 +152,7 @@ public class Actor : MonoBehaviour
         onPlatform = true;
         body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         anim.Play("newGoose_run");
+        skidMark.Emit(100);
     }
 
     public virtual void TakeOffFromPlatform()
