@@ -15,7 +15,7 @@ public class Player : Actor, ISegmentable<Actor>
     }
     private int _playerId = 3;
     private int score = 0;
-
+    private SpriteRenderer[] allsprites;
     #region egg stuff [old shit]
     private int _eggLives = 3;
     public int eggMash = 0;
@@ -32,7 +32,7 @@ public class Player : Actor, ISegmentable<Actor>
     float flashTime = 0;
     bool flashBool = false;
     float invicibleTimer = 0;
-    float maxInvin = 0.8f;
+    float maxInvin = 2f;
     bool invincible = false;
     private int _collectable = 10;
     public int collectable
@@ -61,10 +61,11 @@ public class Player : Actor, ISegmentable<Actor>
     {
         base.OnEnable();
     }
-    protected override void Start () 
+    protected override void Start()
     {
         base.Start();
-	}
+        allsprites = transform.GetComponentsInChildren<SpriteRenderer>();
+    }
 	
 	// Update is called once per frame
 	protected override void FixedUpdate () 
@@ -122,6 +123,8 @@ public class Player : Actor, ISegmentable<Actor>
     }
     #endregion
 
+
+    //kind of redundant
     #region egg stuff
     void LayAnEgg()
     {
@@ -237,13 +240,26 @@ public class Player : Actor, ISegmentable<Actor>
             }
             FlashSprite();
         }
+        else
+        {
+            foreach (SpriteRenderer s in allsprites)
+            {
+                s.enabled = true;
+            }
+            spRend.enabled = true;
+        }
     }
+
     void FlashSprite()
     {
       
         if (flashTime<0.1f)
         {
             flashTime += Time.deltaTime;
+            foreach (SpriteRenderer s in allsprites)
+            {
+                s.enabled = flashBool;
+            }
             spRend.enabled = flashBool;
         }
         else
