@@ -13,7 +13,7 @@ public class Actor : MonoBehaviour
     [SerializeField] protected Collider2D col = null;
     public Collider2D actorCollider { get { return col; } }
     [SerializeField] protected Rigidbody2D body = null;
-
+  
     private bool peckUp = true;
 
     [SerializeField] protected Lance lance = null;
@@ -83,6 +83,7 @@ public class Actor : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         anim.Stop();
+        FeatherManager.instance.HaveSomeFeathers(transform.position);
         gameObject.SetActive(false);
     }
 
