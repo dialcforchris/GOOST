@@ -137,26 +137,21 @@ public class Actor : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D _col)
     {
-        
+
+    }
+
+    protected virtual void OnCollisionStay2D(Collision2D _col)
+    {
         if (_col.collider.tag == "Platform")
         {
-            if (_col.contacts[0].collider == col)
+            if (_col.contacts[0].otherCollider == col)
             {
                 if (_col.contacts[0].normal == Vector2.up)
                 {
-                    body.AddForce(new Vector2(_col.transform.position.x > transform.position.x ? -0.5f : 0.5f, 0.0f), ForceMode2D.Impulse);
+                    body.AddForce(new Vector2(_col.transform.position.x > transform.position.x ? -0.05f : 0.05f, 0.0f), ForceMode2D.Impulse);
                 }
             }
         }
-
-        //if (_col.collider.tag == "Enemy")
-        //{
-        //    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        //    if (rigSegment != null)
-        //    {
-        //        ((Enemy)rigSegment.rigBase).FindTarget();
-        //    }
-        //}
     }
 
     public virtual void LandedOnPlatform()
