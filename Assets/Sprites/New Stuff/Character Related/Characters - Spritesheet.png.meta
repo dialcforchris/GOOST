@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 73ede35d64463a4448c4f8984fe265ec
-timeCreated: 1468943766
+timeCreated: 1469005923
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -9,14 +9,16 @@ TextureImporter:
     21300004: weapon_b
     21300006: cape_hat_a
     21300008: cape_hat_b
-    21300010: cape_hat_c
-    21300012: cape_hat_d
-    21300014: cape_hat_e
+    21300010: cape_hat_idle
+    21300012: cape_hat_c
+    21300014: cape_hat_d
     21300016: backpack_a
     21300018: backpack_b
     21300020: backpack_c
     21300022: backpack_d
     21300024: backpack_e
+    21300026: cape_hat_e
+    21300028: cape_hat_f
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -100,89 +102,90 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 32
+        y: 29
         width: 47
-        height: 39
+        height: 42
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -23.5, y: 19.5}
-        - {x: -23.5, y: -11.5}
-        - {x: 23.5, y: -11.5}
-        - {x: 23.5, y: 19.5}
+      - - {x: -20.5, y: 20}
+        - {x: -23.5, y: 17}
+        - {x: -23.5, y: -9}
+        - {x: -14.5, y: -13}
+        - {x: 23.5, y: -13}
+        - {x: 23.5, y: 20}
     - name: cape_hat_b
       rect:
         serializedVersion: 2
         x: 48
-        y: 32
+        y: 29
         width: 47
-        height: 39
+        height: 42
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -17.5, y: 19.5}
-        - {x: -23.5, y: 17.5}
-        - {x: -23.5, y: -12.5}
-        - {x: 5.5, y: -12.5}
-        - {x: 23.5, y: -10.5}
-        - {x: 23.5, y: 19.5}
-    - name: cape_hat_c
+      - - {x: -14.5, y: 19}
+        - {x: -23.5, y: 16}
+        - {x: -23.5, y: -14}
+        - {x: 5.5, y: -14}
+        - {x: 23.5, y: -12}
+        - {x: 23.5, y: 19}
+    - name: cape_hat_idle
       rect:
         serializedVersion: 2
         x: 96
-        y: 32
+        y: 29
         width: 47
-        height: 39
+        height: 42
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 8.5, y: 19.5}
-        - {x: 5.5, y: 14.5}
-        - {x: -6.5, y: -6.5}
-        - {x: -6.5, y: -16.5}
-        - {x: -5.5, y: -19.5}
-        - {x: 20.5, y: -19.5}
-        - {x: 23.5, y: -17.5}
-        - {x: 23.5, y: 19.5}
-    - name: cape_hat_d
+      - - {x: 9.5, y: 19}
+        - {x: 5.5, y: 13}
+        - {x: -6.5, y: -8}
+        - {x: -6.5, y: -18}
+        - {x: -5.5, y: -21}
+        - {x: 20.5, y: -21}
+        - {x: 23.5, y: -19}
+        - {x: 23.5, y: 19}
+    - name: cape_hat_c
       rect:
         serializedVersion: 2
         x: 144
-        y: 32
+        y: 29
         width: 47
-        height: 39
+        height: 42
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 5.5, y: 19.5}
-        - {x: -15.5, y: -2.5}
-        - {x: -15.5, y: -15.5}
-        - {x: -12.5, y: -19.5}
-        - {x: 2.5, y: -19.5}
-        - {x: 23.5, y: -12.5}
-        - {x: 23.5, y: 19.5}
-    - name: cape_hat_e
+      - - {x: -18.5, y: 21}
+        - {x: -23.5, y: 16}
+        - {x: -23.5, y: -10}
+        - {x: -1.5, y: -13}
+        - {x: 23.5, y: -13}
+        - {x: 23.5, y: 21}
+    - name: cape_hat_d
       rect:
         serializedVersion: 2
         x: 192
-        y: 32
+        y: 29
         width: 47
-        height: 39
+        height: 42
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 6.5, y: 19.5}
-        - {x: -16.5, y: -5.5}
-        - {x: -16.5, y: -16.5}
-        - {x: -13.5, y: -19.5}
-        - {x: 5.5, y: -19.5}
-        - {x: 23.5, y: -13.5}
-        - {x: 23.5, y: 19.5}
+      - - {x: 7.5, y: 19}
+        - {x: -11.5, y: -10}
+        - {x: -11.5, y: -20}
+        - {x: -9.5, y: -21}
+        - {x: 13.5, y: -21}
+        - {x: 23.5, y: -15}
+        - {x: 23.5, y: 19}
     - name: backpack_a
       rect:
         serializedVersion: 2
@@ -238,6 +241,43 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+    - name: cape_hat_e
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 29
+        width: 47
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 6.5, y: 19}
+        - {x: -15.5, y: -4}
+        - {x: -15.5, y: -17}
+        - {x: -12.5, y: -21}
+        - {x: 2.5, y: -21}
+        - {x: 23.5, y: -14}
+        - {x: 23.5, y: 19}
+    - name: cape_hat_f
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 29
+        width: 47
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 7.5, y: 19}
+        - {x: -16.5, y: -7}
+        - {x: -16.5, y: -18}
+        - {x: -13.5, y: -21}
+        - {x: 5.5, y: -21}
+        - {x: 23.5, y: -15}
+        - {x: 23.5, y: 18}
+        - {x: 20.5, y: 19}
     outline: []
   spritePackingTag: 
   userData: 
