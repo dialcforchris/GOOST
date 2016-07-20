@@ -16,6 +16,7 @@ public class Player : Actor, ISegmentable<Actor>
     private int _playerId = 3;
     private int score = 0;
     private SpriteRenderer[] allsprites;
+   
     #region egg stuff [old shit]
     private int _eggLives = 3;
     public int eggMash = 0;
