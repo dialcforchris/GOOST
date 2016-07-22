@@ -10,8 +10,6 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     public bool getLaid = false;
     public bool inNest = false;
     [SerializeField]
-    private GameObject brokenEgg;
-    [SerializeField]
     private Collider2D col;
     [SerializeField]
     private Rigidbody2D body;
@@ -19,7 +17,8 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     private Enemy magpie;
     [SerializeField]
     private Animator ani;
-    private GameObject bEgg;
+    [SerializeField]
+    GameObject broken;
     float hatchTime = 0;
     float maxHatchTime = 6;
     float invinsible = 0;
@@ -30,8 +29,13 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         get { return _owningPlayer; }
         set { _owningPlayer = value; }
     }
-	
-	// Update is called once per frame
+    Transform[] shellPos;
+	void Start()
+    {
+        shellPos = broken.transform.GetComponentsInChildren<Transform>();
+    }
+
+   // Update is called once per frame
 	void Update ()
     {
         if (getLaid)
@@ -50,6 +54,9 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             }
             else
             {
+               GameObject brokenEgg = (GameObject)Instantiate(broken);
+               brokenEgg.transform.position = transform.position;
+               brokenEgg.transform.rotation = transform.rotation;
                 hatchTime = 0;
                 Enemy e = EnemyManager.instance.EnemyPool();
                 e.transform.position = new Vector2(transform.position.x,transform.position.y+0.8f);
@@ -93,6 +100,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
 
     public void ReturnPool()
     {
+        
         invinsible = 0;
         poolData.ReturnPool(this);
         gameObject.SetActive(false);

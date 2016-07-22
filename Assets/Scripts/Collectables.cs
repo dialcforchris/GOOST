@@ -63,25 +63,24 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
                         p.collectable += type == PickUpType.HARDDRIVE ? 1 : 0;
                         p.ChangeScore(type == PickUpType.HARDDRIVE ? score : altScore);
                     }
+                    ReturnPool();
                 }
-                ReturnPool();
             }
         }
     }
 
     public void ReturnPool()
     {
-        life = 0;
-        maxLife = 2;
-        flash = 0;
-        canFlash = false;
-        visible = true;
+        
         poolData.ReturnPool(this);
         gameObject.SetActive(false);
     }
 
     public void OnPooled(PickUpType _type)
     {
+       life = 0;
+       flash = 0;
+       canFlash = false;
        visible = true;
        gameObject.SetActive(true);
        type = _type;
