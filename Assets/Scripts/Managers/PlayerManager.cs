@@ -77,10 +77,18 @@ public class PlayerManager : MonoBehaviour
             i.type = Image.Type.Filled;
         }
     }
-   
+
+    public void SetupPlayer(int index)
+    {
+        players[index].gameObject.SetActive(true);
+        players[index].playerId = index;
+        scores[index].gameObject.SetActive(true);
+        //Some sort of particle effect wouldn't go amiss here
+    }
+
     void Update()
     {
-        for(int i = 0; i < playerRespawn.Length; ++i)
+        for (int i = 0; i < playerRespawn.Length; ++i)
         {
             if (playerRespawn[i])
             {
