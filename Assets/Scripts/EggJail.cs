@@ -21,7 +21,7 @@ public class EggJail : MonoBehaviour
     private void Awake()
     {
         eggJail = this;
-        egg = EggPool.instance.PoolEgg();
+        //egg = EggPool.instance.PoolEgg();
         egg.DisablePhysics(true);
         egg.transform.position = transform.position;
     }

@@ -15,10 +15,10 @@ public class EggPool : MonoBehaviour
         objectPool = new ObjectPool<Egg>(eggPrefab, 10, transform);
     }
 
-    public Egg PoolEgg()
+    public Egg PoolEgg(EnemyBehaviour _behaviour, float _speed)
     {
         Egg _egg = objectPool.GetPooledObject();
-        _egg.OnPooled();
+        _egg.OnPooled(_behaviour, _speed);
         return _egg;
     }
 }

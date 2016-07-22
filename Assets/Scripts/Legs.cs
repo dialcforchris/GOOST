@@ -35,7 +35,7 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
 
     private void OnCollisionEnter2D(Collision2D _col)
     {
-        if(!legsActive)
+        if (!legsActive)
         {
             return;
         }
@@ -54,44 +54,41 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
                 }
             }
         }
-        else
+        ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+        if (rigSegment != null)
         {
             foreach (string _s in affectTags)
             {
                 if (_s == _col.gameObject.tag)
                 {
-                    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-                    if (rigSegment != null)
-                    {
-                        if (rigSegment.segmentName == "Lance")
-                        {
-                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.collider.transform.position.x - transform.position.x, -1.0f), knockPower);
-                            Debug.Log(actor.tag + " legs clashs " + _col.gameObject.tag + " lance");
-                            break;
-                        }
-                        else if (rigSegment.segmentName == _s)
-                        {
-                            rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -1.0f), knockPower);
-                            rigSegment.rigBase.Defeat();
-                            Debug.Log(actor.tag + " legs defeats " + _col.gameObject.tag + " body");
-                            break;
-                        }
-                    }
+                    rigSegment.rigBase.Defeat();
                     break;
                 }
-
-
-                //if (_col.collider.tag == "Enemy")
-                //{
-                //    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-                //    if (rigSegment != null)
-                //    {
-                //        ((Enemy)rigSegment.rigBase).FindTarget();
-                //    }
-                //}
             }
         }
     }
+
+    private void OnCollisionStay2D(Collision2D _col)
+    {
+        if (!legsActive)
+        {
+            return;
+        }
+
+        ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+        if (rigSegment != null)
+        {
+            if (rigSegment.segmentName == "Lance")
+            {
+                rigSegment.rigBase.ApplyKnockback(new Vector2(_col.collider.transform.position.x - transform.position.x, -1.0f), knockPower);
+            }
+            else if (rigSegment.segmentName == "Player" || rigSegment.segmentName == "Enemy")
+            {
+                rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -1.0f), knockPower); 
+            }
+        }
+    }
+
 
     private void OnCollisionExit2D(Collision2D _col)
     {

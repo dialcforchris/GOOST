@@ -4,8 +4,15 @@ using System.Collections;
 [System.Serializable]
 public struct Wave
 {
-    public EnemyBehaviour[] enemySpawnOrder;
-    public float[] enemySpawnOrderRate; 
+    public WaveSettings[] settings;
+}
+
+[System.Serializable]
+public struct WaveSettings
+{
+    public EnemyBehaviour enemySpawnOrder;
+    public float spawnRate;
+    public float speed;
 }
 
 public class EnemyManager : MonoBehaviour
@@ -16,7 +23,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private Enemy enemyPrefab = null;
     private ObjectPool<Enemy> objectPool = null;
 
-    private Vector3[] spawnTransforms = null;
+    [SerializeField] private Transform[] spawnTransforms = null;
 
     private float spawnTime = 0;
 
@@ -36,27 +43,19 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         objectPool = new ObjectPool<Enemy>(enemyPrefab, 10, transform);
-        spawnTransforms = new Vector3[6];
-        spawnTransforms[0] = Camera.main.ViewportToWorldPoint(new Vector3(-0.1f, 0.1f, 10.0f));
-        spawnTransforms[1] = Camera.main.ViewportToWorldPoint(new Vector3(-0.1f, 0.9f, 10.0f));
-        spawnTransforms[2] = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 0.1f, 10.0f));
-        spawnTransforms[3] = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 0.9f, 10.0f));
-        spawnTransforms[4] = Camera.main.ViewportToWorldPoint(new Vector3(0.1f, 1.1f, 10.0f));
-        spawnTransforms[5] = Camera.main.ViewportToWorldPoint(new Vector3(0.9f, 1.1f, 10.0f));
     }
 
     private void Update()
     {
-       
-        if (spawnIndex < waves[currentWave].enemySpawnOrder.Length)
+        if (spawnIndex < waves[currentWave].settings.Length)
         {
             spawnTime += Time.deltaTime;
-            if (spawnTime >= waves[currentWave].enemySpawnOrderRate[spawnIndex])
+            if (spawnTime >= waves[currentWave].settings[spawnIndex].spawnRate)
             {
                 spawnTime = 0;
                 Enemy _e = objectPool.GetPooledObject();
-                _e.transform.position = SpawnPoint();
-                _e.Spawn(waves[currentWave].enemySpawnOrder[spawnIndex]);
+                _e.transform.position = spawnTransforms[Random.Range(0, spawnTransforms.Length)].position;
+                _e.Spawn(waves[currentWave].settings[spawnIndex].enemySpawnOrder, waves[currentWave].settings[spawnIndex].speed);
                 ++spawnIndex;
             }
         }
@@ -78,12 +77,6 @@ public class EnemyManager : MonoBehaviour
             }
         }
         
-    }
-
-    private Vector3 SpawnPoint()
-    {
-        int _spawnPoint = Random.Range(0, 3) * 2;
-        return Vector3.Lerp(spawnTransforms[_spawnPoint], spawnTransforms[_spawnPoint + 1], Random.Range(0.0f, 1.0f));
     }
 
     public Enemy EnemyPool()

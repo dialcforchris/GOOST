@@ -20,10 +20,10 @@ public class Nest : MonoBehaviour
     {
         for (int i = 0; i < maxEggs;i++ )
         {
-            Egg e = EggPool.instance.PoolEgg();
-            e.transform.position = eggTrans[i].position;
-            anEggs.Add(e);
-            e.DisablePhysics(true);
+            //Egg e = EggPool.instance.PoolEgg();
+            //e.transform.position = eggTrans[i].position;
+            //anEggs.Add(e);
+            //e.DisablePhysics(true);
         }
     }
 
@@ -134,12 +134,12 @@ public class Nest : MonoBehaviour
     {
         if (numEggs < maxEggs)
         {
-            anEggs.Add(EggPool.instance.PoolEgg());
+            //anEggs.Add(EggPool.instance.PoolEgg());
         }
         else
         {
-            Egg e = EggPool.instance.PoolEgg();
-            e.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
+            //Egg e = EggPool.instance.PoolEgg();
+            //e.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
         }
     }
 }

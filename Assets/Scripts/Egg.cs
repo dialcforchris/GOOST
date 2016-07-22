@@ -25,6 +25,10 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     float invinsible = 0;
     public int score = 50;
     private int _owningPlayer = 0;
+
+    private EnemyBehaviour parentType;
+    private float parentSpeed;
+
     public int owningPlayer
     {
         get { return _owningPlayer; }
@@ -53,7 +57,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
                 hatchTime = 0;
                 Enemy e = EnemyManager.instance.EnemyPool();
                 e.transform.position = new Vector2(transform.position.x,transform.position.y+0.8f);
-                e.Spawn((EnemyBehaviour)Random.Range(0, 5));
+                e.Spawn(parentType, parentSpeed);
                 ReturnPool();
             }
     }
@@ -76,7 +80,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         }
     }
 
-    public void OnPooled()
+    public void OnPooled(EnemyBehaviour _parentType, float _parentSpeed)
     {
         if (getLaid)
         {
@@ -88,6 +92,8 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         body.constraints = RigidbodyConstraints2D.None;
         body.mass = 0.2f;
         _owningPlayer = 3;
+        parentType = _parentType;
+        parentSpeed = _parentSpeed;
         gameObject.SetActive(true);
     }
 

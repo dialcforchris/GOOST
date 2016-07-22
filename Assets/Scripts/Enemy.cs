@@ -24,6 +24,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     [SerializeField] private ScreenWrap screenWrap = null;
 
     public static int numActive = 0;
+    public static int roughMaxActive = 10;
 
     private EnemyBehaviour behaviour = EnemyBehaviour.RANDOM;
     private EnemyBehaviour currentBehaviour;
@@ -45,31 +46,46 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     [SerializeField] private float platformBounceX = 0.4f;
     [SerializeField] private float platformBounceY = 0.75f;
 
+    [SerializeField] private float takeOffCooldown = 3.0f;
+    private float takeOffTime = 0.0f;
+
     protected override void Start()
     {
         screenWrap.AddScreenWrapCall(UpdateWorldFromView);
         base.Start();
     }
 
-    public void Spawn(EnemyBehaviour _behaviour)
+    public void Spawn(EnemyBehaviour _behaviour, float _speed)
     {
         Respawn();
         aggression = 0.0f;
         ++numActive;
         behaviour = _behaviour;
         currentBehaviour = behaviour;
+        speed = _speed;
         FindTarget();
         anim.Play("newGoose_flap");
         gameObject.SetActive(true);
     }
     void Update()
     {
-        EggTimer();
         LayAnEgg();
     }
     protected override void FixedUpdate()
     {
         aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
+
+        if(onPlatform)
+        {
+            takeOffTime += Time.deltaTime;
+            if(takeOffTime >= takeOffCooldown)
+            {
+                body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+                body.AddForce(new Vector2(0, 50));
+                takeOffTime = 0.0f;
+            }
+        }
+
         MovementToTarget();
         base.FixedUpdate();
 
@@ -82,7 +98,20 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         switch(currentBehaviour)
         {
             case EnemyBehaviour.RANDOM:
-                float _y = Mathf.Max(0.2f, Mathf.Min(0.8f, Camera.main.WorldToViewportPoint(transform.position).y + Random.Range(-0.1f, 0.25f)));
+                float _y = Random.value;
+                if (_y < 0.1f)
+                {
+                    _y = Random.Range(0.2f, 0.4f);
+                }
+                else if (_y < 0.6f)
+                {
+                    _y = Random.Range(0.7f, 0.9f);
+                }
+                else
+                {
+                    _y = Mathf.Max(0.2f, Mathf.Min(0.9f, Camera.main.WorldToViewportPoint(transform.position).y + Random.Range(-0.1f, 0.25f)));
+                } 
+
                 if (transform.localScale.x > 0)
                 {
                     viewTarget = new Vector3(1.05f, _y, 10);
@@ -180,7 +209,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         
         //SilverCoin _coin = CoinPool.instance.PoolCoin();
         //_coin.transform.position = transform.position;
-        Egg e = EggPool.instance.PoolEgg();
+        Egg e = EggPool.instance.PoolEgg(behaviour, speed);
           e.transform.position = transform.position;
 
         --numActive;
@@ -190,15 +219,33 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     protected override void OnCollisionEnter2D(Collision2D _col)
     {
         base.OnCollisionEnter2D(_col);
-        if (_col.contacts[0].normal == Vector2.down)
+        if (_col.collider.tag == "Player" || _col.collider.tag == "Enemy")
         {
-            body.AddForce(Vector2.down * platformBounceY, ForceMode2D.Impulse);
+            if (_col.contacts[0].normal.x != 0.0f)
+            {
+                transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
+                FindTarget();
+            }
         }
-        else if(_col.contacts[0].normal != Vector2.up)
-        {
-            PlatformSideCollision(_col);
-        }
+    }
+
+    protected override void OnCollisionStay2D(Collision2D _col)
+    {
+        base.OnCollisionStay2D(_col);
         
+        if (_col.collider.tag == "Platform")
+        {
+            if (_col.contacts[0].normal == Vector2.down)
+            {
+                body.velocity = new Vector2(body.velocity.x, 0.0f);
+                body.AddForce(Vector2.down * platformBounceY, ForceMode2D.Impulse);
+            }
+            else if (_col.contacts[0].normal != Vector2.up)
+            {
+                PlatformSideCollision(_col);
+            }
+        }
+
 
         //if (_col.collider.tag == "Enemy")
         //{
@@ -223,6 +270,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     {
         base.LandedOnPlatform(col);
         VelocityCap();
+        takeOffTime = 0.0f;
     }
 
     public override void TakeOffFromPlatform()
@@ -234,16 +282,15 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     {
         if (EggTimer())
         {
-            Debug.Log("Egg time done");
-            if (Random.value>eggChance)
+            if (numActive < roughMaxActive)
             {
-                Debug.Log("Laid");
-
-                Egg e = EggPool.instance.PoolEgg();
-                e.transform.position = new Vector2(transform.position.x + 0.5f, transform.position.y - 1f);
-                e.OnPooled();
+                if (Random.value < eggChance)
+                {
+                    Egg e = EggPool.instance.PoolEgg(behaviour, speed);
+                    e.transform.position = new Vector2(transform.position.x + 0.5f, transform.position.y - 1f);
+                    //e.OnPooled();
+                }
             }
-            eggTime = 0;
         }
     }
 
@@ -256,7 +303,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         }
         else
         {
-          //  LayAnEgg();
+            eggTime = 0;
             return true;
         }
     }

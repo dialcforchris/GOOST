@@ -67,12 +67,13 @@ public class Actor : MonoBehaviour
     public virtual void ApplyKnockback(Vector2 _direction, float _power)
     {
         body.velocity = new Vector2(0.0f, body.velocity.y);
-        body.AddForce(_direction.normalized * _power);
+        body.AddForce(_direction.normalized * _power, ForceMode2D.Impulse);
     }
 
     public virtual void Defeat()
     {
         col.enabled = false;
+        body.velocity = Vector2.zero;
         lance.ActorDefeated();
         legs.ActorDefeated();
         foreach(ActorSegment _seg in segments)
@@ -84,7 +85,7 @@ public class Actor : MonoBehaviour
 
     protected virtual IEnumerator DeathAnimation()
     {
-        frameHolder.instance.holdFrame(0.1f);
+        //frameHolder.instance.holdFrame(0.1f);
         FeatherManager.instance.HaveSomeFeathers(transform.position);
         yield return new WaitForSeconds(0.01f);
         anim.Stop();

@@ -41,6 +41,7 @@ public class Player : Actor, ISegmentable<Actor>
     float invicibleTimer = 0;
     float maxInvin = 2f;
     bool invincible = false;
+    bool invinciblePermanence = false;
     private int _collectable = 10;
     public int collectable
     {
@@ -158,8 +159,8 @@ public class Player : Actor, ISegmentable<Actor>
         {
             eggMash = 0;
             eggtimer = 0;
-            Egg e = EggPool.instance.PoolEgg();
-            e.DisablePhysics(true);
+            //Egg e = EggPool.instance.PoolEgg();
+            //e.DisablePhysics(true);
         }
     }
 
@@ -213,13 +214,13 @@ public class Player : Actor, ISegmentable<Actor>
     public override void LandedOnPlatform(Collider2D col)
     {
         base.LandedOnPlatform(col);
-        riderAnimator.Play("cap_flap_a");
+        riderAnimator.Play("cape_flap_a");
     }
 
     public override void TakeOffFromPlatform()
     {
         base.TakeOffFromPlatform();
-        riderAnimator.Play("cap_flap_b");
+        riderAnimator.Play("cape_flap_b");
     }
 
     public override void DetermineAnimationState()
@@ -254,7 +255,6 @@ public class Player : Actor, ISegmentable<Actor>
     {
         if (!invincible)
         {
-            applyFly = false;
             if (collectable > 0)
             {
                 for (int i = 0; i < collectable; i++)
@@ -263,16 +263,20 @@ public class Player : Actor, ISegmentable<Actor>
                     c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
                 }
                 _collectable = 0;
+
+                Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
+                invinciblePermanence = true;
                 invincible = true;
             }
             else
             {
-               Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
-               c.OnPooled(playerType == PlayerType.GOODGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
-               c.transform.position = transform.position;
-               isDead = true;
-               base.Defeat();
-               PlayerManager.instance.RespawnPlayer(playerId);
+                applyFly = false;
+                Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                c.OnPooled(playerType == PlayerType.GOODGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                c.transform.position = transform.position;
+                isDead = true;
+                base.Defeat();
+                PlayerManager.instance.RespawnPlayer(playerId);
             }
         }
     }
@@ -284,8 +288,11 @@ public class Player : Actor, ISegmentable<Actor>
             base.Respawn();
             isDead = false;
             _eggLives--;
-            transform.position = Vector2.zero;
+            transform.position = Vector2.up;
+            TakeOffFromPlatform();
             invincible = true;
+            Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
+            invinciblePermanence = true;
         }
     }
   
@@ -296,6 +303,14 @@ public class Player : Actor, ISegmentable<Actor>
             if (invicibleTimer<maxInvin)
             {
                 invicibleTimer += Time.deltaTime;
+                if(invinciblePermanence)
+                {
+                    if(invicibleTimer > maxInvin / 2.0f)
+                    {
+                        Physics2D.IgnoreLayerCollision(8 + playerId, 10, false);
+                        invinciblePermanence = false;
+                    }
+                }
             }
             else
             {
