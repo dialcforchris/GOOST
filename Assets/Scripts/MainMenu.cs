@@ -5,6 +5,8 @@ using System.Collections;
 
 public class MainMenu : MonoBehaviour {
 
+    public static MainMenu instance;
+
     [Header("Main menu")]
     public Text[] mainMenuElements;
     public Image[] mainMenuCursor;
@@ -15,12 +17,16 @@ public class MainMenu : MonoBehaviour {
     public Text[] optionsElements;
     public Image[] optionsCursor;
 
+    [Header("Ready up menu")]
+    public Text[] readyTextPrompts;
+    public GameObject readyUpBounds;
+
     int mainMenuIndex,optionsIndex;
     [SerializeField]
     bool transitioning;
 
-    menuState currentState;
-    enum menuState
+    public menuState currentState;
+    public enum menuState
     {
         mainMenu,
         readyUpScreen,
@@ -29,13 +35,16 @@ public class MainMenu : MonoBehaviour {
         statsScreen,
     }
 
+    public void Awake()
+    { instance = this; }
+
     IEnumerator rotateMenus(Vector3 start, Vector3 end)
     {
         float lerpy = 0;
         while (lerpy < 1)
         {
             start = transform.rotation.eulerAngles;
-            transform.rotation =  Quaternion.Euler(new Vector3(Mathf.LerpAngle(start.x,end.x,lerpy), Mathf.LerpAngle(start.y, end.y, lerpy), Mathf.LerpAngle(start.z, end.z, lerpy)));
+            transform.rotation = Quaternion.Euler(new Vector3(Mathf.LerpAngle(start.x, end.x, lerpy), Mathf.LerpAngle(start.y, end.y, lerpy), Mathf.LerpAngle(start.z, end.z, lerpy)));
             lerpy += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
@@ -75,10 +84,22 @@ public class MainMenu : MonoBehaviour {
                     StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(90, 0, 0)));
                     break;
                 case 4:
+                    //no button pressing allowed during this time
                     transitioning = true;
+                    
                     currentState = menuState.readyUpScreen;
+                    GameStateManager.instance.ChangeState(GameStates.STATE_READYUP);
+
+                    //Make sure the players can't escape the screen
+                    readyUpBounds.SetActive(true);
+                    readyTextPrompts[0].text = "Press the fly button\n to spawn";
+                    readyTextPrompts[1].text = "Press the fly button\n to spawn";
+
+                    //Turn some off/on to help aid visibility
                     menuScreens[3].GetComponent<Canvas>().enabled = false;
                     menuScreens[4].SetActive(true);
+
+                    //Display the correct menu
                     StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(-90, 0, 0)));
                     break;
             }
@@ -88,41 +109,49 @@ public class MainMenu : MonoBehaviour {
     bool scrolling;
     void Update()
     {
-        if (!transitioning)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_MENU)
         {
-            switch (currentState)
+            if (!transitioning)
             {
-                case menuState.mainMenu:
-                    mainMenu();
-                    break;
-                case menuState.readyUpScreen:
-                    if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
-                    {
-                        switchMenus(0);
-                    }
-                    break;
-                case menuState.leaderboardsMenu:
-                    if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
-                    {
-                        switchMenus(0);
-                    }
-                    break;
-                case menuState.statsScreen:
-                    if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
-                    {
-                        switchMenus(0);
-                    }
-                    break;
-                case menuState.optionsMenu:
-                    optionsMenu();
-                    break;
+                switch (currentState)
+                {
+                    case menuState.mainMenu:
+                        mainMenu();
+                        break;
+                    case menuState.readyUpScreen:
+                        break;
+                    case menuState.optionsMenu:
+                        optionsMenu();
+                        break;
+                    default:
+                        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
+                        {
+                            switchMenus(0);
+                        }
+                        break;
+                }
             }
+        }
+        if (GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
+        {
+            if (Input.GetButtonDown("Fly0") && !PlayerManager.instance.GetPlayer(0).gameObject.activeSelf)
+            {
+                PlayerManager.instance.SetupPlayer(0);
+                readyTextPrompts[1].text = "Press _ to change thing \n Press _ to ready up";
+            }
+            if (Input.GetButtonDown("Fly1") && !PlayerManager.instance.GetPlayer(1).gameObject.activeSelf)
+            {
+                PlayerManager.instance.SetupPlayer(1);
+                readyTextPrompts[1].text = "Press _ to change thing \n Press _ to ready up";
+            }
+
+
         }
     }
 
-    void changeSelection(Image[] cursors,Text[] menuElements,ref int menuIndex)
+    void changeSelection(Image[] cursors, Text[] menuElements, ref int menuIndex)
     {
-        if (Input.GetAxis("Vertical") < 0 && !scrolling)
+        if ((Input.GetAxis("Vertical0") < 0 || Input.GetAxis("Vertical1") < 0) && !scrolling)
         {
             scrolling = true;
             menuIndex++;
@@ -136,7 +165,7 @@ public class MainMenu : MonoBehaviour {
             Invoke("allowMove", 0.25f);
 
         }
-        else if (Input.GetAxis("Vertical") > 0 && !scrolling)
+        else if ((Input.GetAxis("Vertical0") > 0 || Input.GetAxis("Vertical1") > 0) && !scrolling)
         {
             scrolling = true;
             menuIndex--;
@@ -150,7 +179,7 @@ public class MainMenu : MonoBehaviour {
             Invoke("allowMove", 0.25f);
 
         }
-        else if (Input.GetAxis("Vertical") == 0 && scrolling)
+        else if (Input.GetAxis("Vertical0") == 0 && Input.GetAxis("Vertical1") == 0 && scrolling)
         {
             CancelInvoke("allowMove");
             scrolling = false;
@@ -161,7 +190,7 @@ public class MainMenu : MonoBehaviour {
     {
         changeSelection(mainMenuCursor, mainMenuElements, ref mainMenuIndex);
 
-        if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
+        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
         {
             switch(mainMenuIndex)
             {
@@ -197,7 +226,7 @@ public class MainMenu : MonoBehaviour {
     {
         changeSelection(optionsCursor, optionsElements, ref optionsIndex);
 
-        if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
+        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
         {
             switch (optionsIndex)
             {

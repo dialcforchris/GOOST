@@ -6,7 +6,8 @@ public enum GameStates
     STATE_MENU,
     STATE_PAUSE,
     STATE_GAMEOVER,
-    STATE_SPLASH,
+    STATE_TRANSITIONING,
+    STATE_READYUP,
     GAMESTATES_COUNT
 }
 
@@ -18,6 +19,7 @@ public class GameStateManager : MonoBehaviour
     public static GameStateManager instance { get { return singleton; } }
 
     private GameState[] states = new GameState[(int)GameStates.GAMESTATES_COUNT];
+    [SerializeField]
     private GameStates currentState;
     public GameStates previousState;
 
@@ -34,8 +36,9 @@ public class GameStateManager : MonoBehaviour
             states[(int)GameStates.STATE_MENU] = new MenuState();
             states[(int)GameStates.STATE_PAUSE] = new PauseState();
             states[(int)GameStates.STATE_GAMEOVER] = new GameOverState();
-            states[(int)GameStates.STATE_SPLASH] = new SplashScreenState();
-            ChangeState(GameStates.STATE_GAMEPLAY);
+            states[(int)GameStates.STATE_TRANSITIONING] = new TransitioningState();
+            states[(int)GameStates.STATE_READYUP] = new ReadyUpState();
+            ChangeState(GameStates.STATE_MENU);
         }
         
     }

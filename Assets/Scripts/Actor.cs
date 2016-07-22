@@ -13,8 +13,8 @@ public class Actor : MonoBehaviour
     [SerializeField] protected Collider2D col = null;
     public Collider2D actorCollider { get { return col; } }
     [SerializeField] protected Rigidbody2D body = null;
-    [SerializeField]
-    private ParticleSystem skidMark,landingParticle;
+
+    public  ParticleSystem skidMark,landingParticle;
     private bool peckUp = true;
 
     [SerializeField] protected Lance lance = null;
@@ -85,7 +85,11 @@ public class Actor : MonoBehaviour
 
     protected virtual IEnumerator DeathAnimation()
     {
+<<<<<<< HEAD
         //frameHolder.instance.holdFrame(0.1f);
+=======
+        //frameHolder.instance.holdFrame(0.25f);
+>>>>>>> origin/master
         FeatherManager.instance.HaveSomeFeathers(transform.position);
         yield return new WaitForSeconds(0.01f);
         anim.Stop();
@@ -106,9 +110,12 @@ public class Actor : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (transform.position.y > worldMaxY.y)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            body.velocity = new Vector2(body.velocity.x, -0.5f);
+            if (transform.position.y > worldMaxY.y)
+            {
+                body.velocity = new Vector2(body.velocity.x, -0.5f);
+            }
         }
     }
 
@@ -174,10 +181,15 @@ public class Actor : MonoBehaviour
         landingParticle.Play();
         onPlatform = true;
         body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-        anim.Play("newGoose_run");
-        if (body.velocity.x > 5||body.velocity.x<-5)
+        if (Mathf.Abs(body.velocity.x) > 0)
+            anim.Play("newGoose_run");
+        else
+            anim.Play("newGoose_idle");
+
+        if (body.velocity.x > 5 || body.velocity.x < -5)
         {
-            skidMark.Emit(2);
+            skidMark.Emit(1);
+            skidMark.transform.position = transform.position;
         }
     }
 
@@ -186,7 +198,6 @@ public class Actor : MonoBehaviour
         onPlatform = false;
         body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
         anim.Play("newGoose_flap");
-       
     }
 
     public virtual void DetermineAnimationState()

@@ -21,7 +21,7 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
 
     private void OnEnable()
     {
-        platformManager.instance.NoCollisionsPlease(col);
+   //     platformManager.instance.NoCollisionsPlease(col);
     }
 
     public void ActorSpawned()

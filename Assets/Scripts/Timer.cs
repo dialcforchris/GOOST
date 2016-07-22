@@ -21,7 +21,7 @@ public class Timer : MonoBehaviour {
 	void Start ()
     {
         TimerText.text = ""+currentTime;
-        StartCoroutine(TextInOut(true));
+        //StartCoroutine(TextInOut(true));
     }
 
     bool countdown;
@@ -94,6 +94,8 @@ public class Timer : MonoBehaviour {
             }
 
             countdownText.text = "Go!";
+            GameStateManager.instance.ChangeState(GameStates.STATE_GAMEPLAY);
+
             yield return new WaitForSeconds(.95f);
             countdownTextAnimator.gameObject.SetActive(false);
             counting = true;
