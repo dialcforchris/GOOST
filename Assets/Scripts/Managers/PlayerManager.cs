@@ -12,6 +12,18 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Player[] players = null;
   // [SerializeField] private Nest[] nests = null;
     [SerializeField] private Text[] scores = null;
+    [SerializeField]
+    private Text[] lives;
+    [SerializeField]
+    private Text[] coll;
+    [SerializeField]
+    private Image[] lifeSprite;
+    [SerializeField]
+    Sprite[] playerSprites;
+    [SerializeField]
+    Sprite[] collectableSprites;
+    [SerializeField]
+    private Image[] collectables;
 
     [SerializeField] private float respawnLength = 1.0f;
     private bool[] playerRespawn = null;
@@ -72,7 +84,7 @@ public class PlayerManager : MonoBehaviour
                 }
             }
         }
-        UpdateScores();
+        UpdateUI();
     }
     public Player GetPlayer(int _playerIndex)
     {
@@ -87,25 +99,11 @@ public class PlayerManager : MonoBehaviour
         return amountOfPlayers;
     }
 
-    void UpdateScores()
-    {
-        for (int i = 0; i < players.Length;i++ )
-        {
-            scores[i].text = players[i].GetScore().ToString();
-        }
-    }
-
     public void RespawnPlayer(int _index)
     {
         playerRespawn[_index] = true;
         respawnTime[_index] = 0.0f;
     }
-
-  ////  public Nest GetNest(int _index)
-  //  {
-  //      return nests[_index];
-  //  }
-
 
     public Player GetClosestPlayer(Vector3 _pos)
     {
@@ -119,47 +117,38 @@ public class PlayerManager : MonoBehaviour
         }
         return players[0];
     }
+    void UpdateScores()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            scores[i].text = players[i].GetScore().ToString();
+        }
+    }
 
-    //public void StealEgg(int _playerId)
-    //{
-    //    Nest n = GetNest(_playerId);
-    //    n.EggStolen();
-    //}
-    //public Nest GetLargestNest()
-    //{
-    //    int _amount = nests[0].numEggs;
-    //    if (players.Length == 2)
-    //    {
-    //        if(_amount == nests[1].numEggs)
-    //        {
-    //            if(_amount == 0)
-    //            {
-    //                return null;
-    //            }
-    //            else
-    //            {
-    //                return nests[Random.Range(0, 2)];
-    //            }
-    //        }
-    //        else if(_amount < nests[1].numEggs)
-    //        {
-    //            return nests[1];
-    //        }
-    //        else
-    //        {
-    //            return nests[0];
-    //        }
-    //    }
-    //    else
-    //    {
-    //        if (_amount == 0)
-    //        {
-    //            return null;
-    //        }
-    //        else
-    //        {
-    //            return nests[0];
-    //        }
-    //    }
-    //}
+    void UpdateLives()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            scores[i].text = players[i].eggLives.ToString();
+        }
+    }
+    void UpdateCollectables()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            scores[i].text = players[i].collectable.ToString();
+        }
+    }
+
+    void UpdateUI()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            scores[i].text = players[i].GetScore().ToString();
+            lives[i].text = "X"+players[i].eggLives.ToString();
+            coll[i].text = "X"+players[i].collectable.ToString();
+            lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+            collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+        }
+    }
 }

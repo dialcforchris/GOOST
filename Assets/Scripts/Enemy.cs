@@ -242,8 +242,6 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
             Debug.Log("Egg time done");
             if (Random.value>eggChance)
             {
-                Debug.Log("Laid");
-
                 Egg e = EggPool.instance.PoolEgg();
                 e.transform.position = new Vector2(transform.position.x + 0.5f, transform.position.y - 1f);
                 e.OnPooled();

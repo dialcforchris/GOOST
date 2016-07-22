@@ -7,6 +7,15 @@ public class ScoreUI : MonoBehaviour
     [SerializeField]
     private Text[] scores;
     Player[] players;
+    [SerializeField]
+    private Text[] Lives;
+    [SerializeField]
+    private Text[] coll;
+    [SerializeField]
+    private Image[] lives;
+    [SerializeField]
+    private Image[] collectables;
+
 	// Use this for initialization
 	void Start () 
     {
@@ -20,15 +29,12 @@ public class ScoreUI : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
-        //UpdateScores();
+     //   UpdateScores();
 	}
 
-    void UpdateScores()
+   
+    void UpdateLives()
     {
-        for (int i = 0; i < players.Length;i++ )
-        {
-            Debug.Log(i);
-            scores[i].text = players[i].GetScore().ToString();
-        }
+
     }
 }
