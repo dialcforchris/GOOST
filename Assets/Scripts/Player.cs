@@ -8,6 +8,24 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     private float speed;
     [SerializeField]
+    private SpriteRenderer cape;
+    [SerializeField]
+    private SpriteRenderer backpack;
+    [SerializeField]
+    private Sprite[] backpackChoice;
+
+    //customisable stuff
+    public int backpackChosen = 0;
+    [SerializeField]
+    private SpriteRenderer weapon;
+    [SerializeField]
+    private Sprite[] weaponChoice;
+    public PlayerType playerType
+    {
+        get { return _playerType; }
+    }
+
+    [SerializeField]
     SpriteRenderer spRend;
     [SerializeField]
     private PlayerType _playerType;
@@ -69,6 +87,7 @@ public class Player : Actor, ISegmentable<Actor>
     protected override void OnEnable()
     {
         base.OnEnable();
+        SwitchGuys(_playerType);
     }
     protected override void Start()
     {
@@ -325,6 +344,10 @@ public class Player : Actor, ISegmentable<Actor>
                 s.enabled = flashBool;
             }
             spRend.enabled = flashBool;
+            if (playerType == PlayerType.BADGUY)
+            {
+                cape.enabled = flashBool;
+            }
         }
         else
         {
@@ -339,11 +362,11 @@ public class Player : Actor, ISegmentable<Actor>
         {
             if (transform.localScale.x>0)
             {
-                body.AddForce(new Vector2(transform.right.x * (speed * 100.5f),0));
+                body.AddForce(new Vector2(transform.right.x * (5),0),ForceMode2D.Impulse);
             }
             else
             {
-                body.AddForce(new Vector2(-transform.right.x * (speed * 100.5f),0));
+                body.AddForce(new Vector2(-transform.right.x * (5), 0), ForceMode2D.Impulse);
             }
             dashcool = 0;
         }
@@ -358,6 +381,28 @@ public class Player : Actor, ISegmentable<Actor>
         else
         {
             return true;
+        }
+    }
+
+    void SwitchGuys(PlayerType _type)
+    {
+        switch(_playerType)
+        {
+            case PlayerType.GOODGUY:
+                {
+                    cape.gameObject.SetActive(false);
+                    backpack.sprite = backpackChoice[backpackChosen];
+                    backpack.gameObject.SetActive(true);
+                    weapon.sprite = weaponChoice[1];
+                    break;
+                }
+            case PlayerType.BADGUY:
+                {
+                    cape.gameObject.SetActive(true);
+                    backpack.gameObject.SetActive(false);
+                    weapon.sprite = weaponChoice[0];
+                    break;
+                }
         }
     }
 }
