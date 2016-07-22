@@ -3,7 +3,7 @@ public class PauseState : GameState
 {
     public override void OnStateActivate()
     {
-        Time.timeScale = 0;//0.001f;
+        Time.timeScale = 0.001f;
         GameStateManager.instance.PauseMenu.SetActive(true);
     }
 
@@ -15,7 +15,7 @@ public class PauseState : GameState
 
     public override void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Joystick1Button7))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Joystick1Button10) || Input.GetKeyDown(KeyCode.Joystick1Button9))
             GameStateManager.instance.ChangeState(GameStateManager.instance.previousState);
 
         #region axis based input

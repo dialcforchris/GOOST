@@ -93,61 +93,67 @@ public class Player : Actor, ISegmentable<Actor>
     }
 	
 	// Update is called once per frame
-	protected override void FixedUpdate () 
+	protected override void FixedUpdate ()
     {
-        if (!isDead)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            //Debug.Log(collectable);
-            MashTimer();
-            Movement();
-            base.FixedUpdate();
+            if (!isDead)
+            {
+                //Debug.Log(collectable);
+                MashTimer();
+                Movement();
+                base.FixedUpdate();
 
-            if(Input.GetButtonDown("Peck"+playerId.ToString())||Input.GetKeyDown(KeyCode.P))
-            {
-                Peck();
+                if (Input.GetButtonDown("Peck" + playerId.ToString()) || Input.GetKeyDown(KeyCode.P))
+                {
+                    Peck();
+                }
+                if (Input.GetButtonDown("BeakHeight" + playerId.ToString()) || Input.GetKeyDown(KeyCode.L))
+                {
+                    TogglePeckLocation();
+                }
+                if (applyFly)
+                {
+                    body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+                    body.AddForce(new Vector2(0, 50));
+                    StatTracker.instance.stats.totalFlaps++;
+                    applyFly = false;
+                }
+                DetermineAnimationState();
             }
-            if (Input.GetButtonDown("BeakHeight"+playerId.ToString())||Input.GetKeyDown(KeyCode.L))
-            {
-                TogglePeckLocation();
-            } 
-            if(applyFly)
-            {
-                body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-                body.AddForce(new Vector2(0, 50));
-                StatTracker.instance.stats.totalFlaps++;
-                applyFly = false;
-            }
-            DetermineAnimationState();
         }
     }
 
     protected void Update()
     {
-        if (Input.GetButtonDown("Fly" + playerId.ToString()))
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            applyFly = true;
-        }
+            if (Input.GetButtonDown("Fly" + playerId.ToString()))
+            {
+                applyFly = true;
+            }
 
-        if (onPlatform)
-        {
-            if (Input.GetAxis("Horizontal" + playerId) < 0 && body.velocity.x > 5)
-                base.skidMark.Emit(1);
-            else if (Input.GetAxis("Horizontal" + playerId) > 0 && body.velocity.x < -5)
-                base.skidMark.Emit(1);
-            else if (Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.25f && Mathf.Abs(body.velocity.x) > 5)
-                base.skidMark.Emit(1);
+            if (onPlatform)
+            {
+                if (Input.GetAxis("Horizontal" + playerId) < 0 && body.velocity.x > 5)
+                    base.skidMark.Emit(1);
+                else if (Input.GetAxis("Horizontal" + playerId) > 0 && body.velocity.x < -5)
+                    base.skidMark.Emit(1);
+                else if (Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.25f && Mathf.Abs(body.velocity.x) > 5)
+                    base.skidMark.Emit(1);
 
-            if (Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.25f)
-                body.drag = 3.5f;
+                if (Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.25f)
+                    body.drag = 3.5f;
+                else
+                    body.drag = 1;
+            }
             else
                 body.drag = 1;
-        }
-        else
-            body.drag = 1;
 
-        Dash();
-        DashCoolTime();
-        Invinciblity(invincible);
+            Dash();
+            DashCoolTime();
+            Invinciblity(invincible);
+        }
     }
 
     #region movement
@@ -160,11 +166,6 @@ public class Player : Actor, ISegmentable<Actor>
             transform.localScale = new Vector3(-1, 1, 1);
         if (Input.GetAxis("Horizontal"+playerId) > 0)
             transform.localScale = Vector3.one;
-
-        /*if (body.velocity.x > 0)
-                transform.localScale = Vector3.one;
-        if (body.velocity.x < 0)
-                transform.localScale = new Vector3(-1, 1, 1);*/
     }
   
     void VelocityCheck()

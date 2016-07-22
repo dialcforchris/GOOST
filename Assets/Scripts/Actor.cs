@@ -105,17 +105,19 @@ public class Actor : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (onPlatform)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            if (body.velocity.x > 5 || body.velocity.x < -5)
+            if (onPlatform)
             {
-                //skidMark.Emit(1);
+                if (body.velocity.x > 5 || body.velocity.x < -5)
+                {
+                    //skidMark.Emit(1);
+                }
             }
-        }
-
-        if (transform.position.y > worldMaxY.y)
-        {
-            body.velocity = new Vector2(body.velocity.x, -0.5f);
+            if (transform.position.y > worldMaxY.y)
+            {
+                body.velocity = new Vector2(body.velocity.x, -0.5f);
+            }
         }
     }
 
@@ -181,8 +183,12 @@ public class Actor : MonoBehaviour
         landingParticle.Play();
         onPlatform = true;
         body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-        anim.Play("newGoose_run");
-        if (body.velocity.x > 5||body.velocity.x<-5)
+        if (Mathf.Abs(body.velocity.x) > 0)
+            anim.Play("newGoose_run");
+        else
+            anim.Play("newGoose_idle");
+
+        if (body.velocity.x > 5 || body.velocity.x < -5)
         {
             skidMark.Emit(1);
         }
@@ -192,7 +198,7 @@ public class Actor : MonoBehaviour
     {
         onPlatform = false;
         body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-        anim.Play("newGoose_flap");       
+        anim.Play("newGoose_flap");
     }
 
     public virtual void DetermineAnimationState()
