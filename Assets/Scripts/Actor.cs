@@ -85,11 +85,6 @@ public class Actor : MonoBehaviour
 
     protected virtual IEnumerator DeathAnimation()
     {
-<<<<<<< HEAD
-        //frameHolder.instance.holdFrame(0.1f);
-=======
-        //frameHolder.instance.holdFrame(0.25f);
->>>>>>> origin/master
         FeatherManager.instance.HaveSomeFeathers(transform.position);
         yield return new WaitForSeconds(0.01f);
         anim.Stop();

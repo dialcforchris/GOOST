@@ -42,12 +42,15 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
    // Update is called once per frame
 	void Update ()
     {
-        if (getLaid)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            getLaid = false;
+            if (getLaid)
+            {
+                getLaid = false;
+            }
+            if (InvincibilityTimer())
+            Hatch();
         }
-        if (InvincibilityTimer())
-        Hatch();
 	}
     
     void Hatch()

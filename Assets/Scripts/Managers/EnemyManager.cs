@@ -47,36 +47,38 @@ public class EnemyManager : MonoBehaviour
 
     private void Update()
     {
-        if (spawnIndex < waves[currentWave].settings.Length)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            spawnTime += Time.deltaTime;
-            if (spawnTime >= waves[currentWave].settings[spawnIndex].spawnRate)
+            if (spawnIndex < waves[currentWave].settings.Length)
             {
-                spawnTime = 0;
-                Enemy _e = objectPool.GetPooledObject();
-                _e.transform.position = spawnTransforms[Random.Range(0, spawnTransforms.Length)].position;
-                _e.Spawn(waves[currentWave].settings[spawnIndex].enemySpawnOrder, waves[currentWave].settings[spawnIndex].speed);
-                ++spawnIndex;
-            }
-        }
-        else
-        {
-            if (Enemy.numActive == 0)
-            {
-                nextWaveTime += Time.deltaTime;
-                if(nextWaveTime >= nextWaveLength)
+                spawnTime += Time.deltaTime;
+                if (spawnTime >= waves[currentWave].settings[spawnIndex].spawnRate)
                 {
-                    nextWaveTime = 0.0f;
-                    ++currentWave;
-                    spawnIndex = 0;
-                    if (currentWave == waves.Length)
+                    spawnTime = 0;
+                    Enemy _e = objectPool.GetPooledObject();
+                    _e.transform.position = spawnTransforms[Random.Range(0, spawnTransforms.Length)].position;
+                    _e.Spawn(waves[currentWave].settings[spawnIndex].enemySpawnOrder, waves[currentWave].settings[spawnIndex].speed);
+                    ++spawnIndex;
+                }
+            }
+            else
+            {
+                if (Enemy.numActive == 0)
+                {
+                    nextWaveTime += Time.deltaTime;
+                    if (nextWaveTime >= nextWaveLength)
                     {
-                        --currentWave;
+                        nextWaveTime = 0.0f;
+                        ++currentWave;
+                        spawnIndex = 0;
+                        if (currentWave == waves.Length)
+                        {
+                            --currentWave;
+                        }
                     }
                 }
             }
         }
-        
     }
 
     public Enemy EnemyPool()

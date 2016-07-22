@@ -8,14 +8,28 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     private float speed;
     [SerializeField]
-    SpriteRenderer spRend;
+    private SpriteRenderer cape;
     [SerializeField]
-    private PlayerType _playerType;
+    private SpriteRenderer backpack;
+    [SerializeField]
+    private Sprite[] backpackChoice;
+
+    //customisable stuff
+    public int backpackChosen = 0;
+    [SerializeField]
+    private SpriteRenderer weapon;
+    [SerializeField]
+    private Sprite[] weaponChoice;
     public PlayerType playerType
     {
         get { return _playerType; }
     }
-    private int _playerId = 3;
+
+    [SerializeField]
+    SpriteRenderer spRend = null;
+    [SerializeField]
+    private PlayerType _playerType = PlayerType.GOODGUY;
+    private int _playerId = 0;
     private int score = 0;
     private SpriteRenderer[] allsprites;
    
@@ -33,8 +47,8 @@ public class Player : Actor, ISegmentable<Actor>
     #endregion
 
 
-    float dashcool = 0;
-    float maxDashCool = 3f;
+    public float dashcool = 0;
+    float maxDashCool = 5.0f;
    
     float flashTime = 0;
     bool flashBool = false;
@@ -70,6 +84,7 @@ public class Player : Actor, ISegmentable<Actor>
     protected override void OnEnable()
     {
         base.OnEnable();
+        SwitchGuys(_playerType);
     }
     protected override void Start()
     {
@@ -81,41 +96,65 @@ public class Player : Actor, ISegmentable<Actor>
 	// Update is called once per frame
 	protected override void FixedUpdate () 
     {
-        if (!isDead)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY || GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
         {
-            //Debug.Log(collectable);
-            MashTimer();
-            Movement();
-            base.FixedUpdate();
+            if (!isDead)
+            {
+                //Debug.Log(collectable);
+                MashTimer();
+                Movement();
+                base.FixedUpdate();
 
-            if(Input.GetButtonDown("Peck"+playerId.ToString())||Input.GetKeyDown(KeyCode.P))
-            {
-                Peck();
+                if (Input.GetButtonDown("Peck" + playerId.ToString()) || Input.GetKeyDown(KeyCode.P))
+                {
+                    Peck();
+                }
+                if (Input.GetButtonDown("BeakHeight" + playerId.ToString()) || Input.GetKeyDown(KeyCode.L))
+                {
+                    TogglePeckLocation();
+                }
+                if (applyFly)
+                {
+                    body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+                    body.AddForce(new Vector2(0, 50));
+                    StatTracker.instance.stats.totalFlaps++;
+                    applyFly = false;
+                }
+                DetermineAnimationState();
             }
-            if (Input.GetButtonDown("BeakHeight"+playerId.ToString())||Input.GetKeyDown(KeyCode.L))
-            {
-                TogglePeckLocation();
-            } 
-            if(applyFly)
-            {
-                body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-                body.AddForce(new Vector2(0, 50));
-                StatTracker.instance.stats.totalFlaps++;
-                applyFly = false;
-            }
-            DetermineAnimationState();
         }
 	}
 
     protected void Update()
     {
-        if (Input.GetButtonDown("Fly" + playerId.ToString()))
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY || GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
         {
-            applyFly = true;
+            if (Input.GetButtonDown("Fly" + playerId.ToString()))
+            {
+                applyFly = true;
+            }
+
+            if (onPlatform)
+            {
+                if (Input.GetAxis("Horizontal" + playerId) < 0 && body.velocity.x > 5)
+                    base.skidMark.Emit(1);
+                else if (Input.GetAxis("Horizontal" + playerId) > 0 && body.velocity.x < -5)
+                    base.skidMark.Emit(1);
+                else if (Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.25f && Mathf.Abs(body.velocity.x) > 5)
+                    base.skidMark.Emit(1);
+
+                if (Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.25f)
+                    body.drag = 3.5f;
+                else
+                    body.drag = 1;
+            }
+            else
+                body.drag = 1;
+
+            Dash();
+            DashCoolTime();
+            Invinciblity(invincible);
         }
-        Dash();
-        DashCoolTime();
-        Invinciblity(invincible);
     }
 
     #region movement
@@ -129,10 +168,6 @@ public class Player : Actor, ISegmentable<Actor>
         if (Input.GetAxis("Horizontal"+playerId) > 0)
             transform.localScale = Vector3.one;
 
-        if (body.velocity.x > 0)
-                transform.localScale = Vector3.one;
-        if (body.velocity.x < 0)
-                transform.localScale = new Vector3(-1, 1, 1);
     }
   
     void VelocityCheck()
@@ -227,7 +262,7 @@ public class Player : Actor, ISegmentable<Actor>
     {
         if (onPlatform)
         {
-            if (Mathf.Abs(body.velocity.x) < 0.25f)
+            if (Mathf.Abs(body.velocity.x) < 0.25f || Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.25f)
             {
                 anim.Play("newGoose_idle");
                 riderAnimator.Play("cape_idle");
@@ -272,7 +307,7 @@ public class Player : Actor, ISegmentable<Actor>
             {
                 applyFly = false;
                 Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
-                c.OnPooled(playerType == PlayerType.GOODGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                //c.OnPooled(playerType == PlayerType.GOODGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
                 c.transform.position = transform.position;
                 isDead = true;
                 base.Defeat();
@@ -340,6 +375,10 @@ public class Player : Actor, ISegmentable<Actor>
                 s.enabled = flashBool;
             }
             spRend.enabled = flashBool;
+            if (playerType == PlayerType.BADGUY)
+            {
+                cape.enabled = flashBool;
+            }
         }
         else
         {
@@ -354,11 +393,11 @@ public class Player : Actor, ISegmentable<Actor>
         {
             if (transform.localScale.x>0)
             {
-                body.AddForce(new Vector2(transform.right.x * (speed * 100.5f),0));
+                body.AddForce(new Vector2(transform.right.x * (5), 0), ForceMode2D.Impulse);
             }
             else
             {
-                body.AddForce(new Vector2(-transform.right.x * (speed * 100.5f),0));
+                body.AddForce(new Vector2(-transform.right.x * (5), 0), ForceMode2D.Impulse);
             }
             dashcool = 0;
         }
@@ -373,6 +412,28 @@ public class Player : Actor, ISegmentable<Actor>
         else
         {
             return true;
+        }
+    }
+
+    void SwitchGuys(PlayerType _type)
+    {
+        switch (_playerType)
+        {
+            case PlayerType.GOODGUY:
+                {
+                    cape.gameObject.SetActive(false);
+                    backpack.sprite = backpackChoice[backpackChosen];
+                    backpack.gameObject.SetActive(true);
+                    weapon.sprite = weaponChoice[1];
+                    break;
+                }
+            case PlayerType.BADGUY:
+                {
+                    cape.gameObject.SetActive(true);
+                    backpack.gameObject.SetActive(false);
+                    weapon.sprite = weaponChoice[0];
+                    break;
+                }
         }
     }
 }

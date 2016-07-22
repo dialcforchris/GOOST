@@ -69,28 +69,33 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     }
     void Update()
     {
-        LayAnEgg();
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+        {
+            LayAnEgg();
+        }
     }
     protected override void FixedUpdate()
     {
-        aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
-
-        if(onPlatform)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            takeOffTime += Time.deltaTime;
-            if(takeOffTime >= takeOffCooldown)
+            aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
+
+            if (onPlatform)
             {
-                body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-                body.AddForce(new Vector2(0, 50));
-                takeOffTime = 0.0f;
+                takeOffTime += Time.deltaTime;
+                if (takeOffTime >= takeOffCooldown)
+                {
+                    body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+                    body.AddForce(new Vector2(0, 50));
+                    takeOffTime = 0.0f;
+                }
             }
+
+            MovementToTarget();
+            base.FixedUpdate();
+
+            DetermineAnimationState();
         }
-
-        MovementToTarget();
-        base.FixedUpdate();
-
-        DetermineAnimationState();
-      
     }
 
     public void FindTarget()
