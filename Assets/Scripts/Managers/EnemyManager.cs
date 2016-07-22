@@ -47,37 +47,38 @@ public class EnemyManager : MonoBehaviour
 
     private void Update()
     {
-       
-        if (spawnIndex < waves[currentWave].enemySpawnOrder.Length)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            spawnTime += Time.deltaTime;
-            if (spawnTime >= waves[currentWave].enemySpawnOrderRate[spawnIndex])
+            if (spawnIndex < waves[currentWave].enemySpawnOrder.Length)
             {
-                spawnTime = 0;
-                Enemy _e = objectPool.GetPooledObject();
-                _e.transform.position = SpawnPoint();
-                _e.Spawn(waves[currentWave].enemySpawnOrder[spawnIndex]);
-                ++spawnIndex;
-            }
-        }
-        else
-        {
-            if (Enemy.numActive == 0)
-            {
-                nextWaveTime += Time.deltaTime;
-                if(nextWaveTime >= nextWaveLength)
+                spawnTime += Time.deltaTime;
+                if (spawnTime >= waves[currentWave].enemySpawnOrderRate[spawnIndex])
                 {
-                    nextWaveTime = 0.0f;
-                    ++currentWave;
-                    spawnIndex = 0;
-                    if (currentWave == waves.Length)
+                    spawnTime = 0;
+                    Enemy _e = objectPool.GetPooledObject();
+                    _e.transform.position = SpawnPoint();
+                    _e.Spawn(waves[currentWave].enemySpawnOrder[spawnIndex]);
+                    ++spawnIndex;
+                }
+            }
+            else
+            {
+                if (Enemy.numActive == 0)
+                {
+                    nextWaveTime += Time.deltaTime;
+                    if (nextWaveTime >= nextWaveLength)
                     {
-                        --currentWave;
+                        nextWaveTime = 0.0f;
+                        ++currentWave;
+                        spawnIndex = 0;
+                        if (currentWave == waves.Length)
+                        {
+                            --currentWave;
+                        }
                     }
                 }
             }
         }
-        
     }
 
     private Vector3 SpawnPoint()

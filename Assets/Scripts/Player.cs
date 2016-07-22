@@ -95,7 +95,7 @@ public class Player : Actor, ISegmentable<Actor>
 	// Update is called once per frame
 	protected override void FixedUpdate ()
     {
-        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY || GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
         {
             if (!isDead)
             {
@@ -126,7 +126,7 @@ public class Player : Actor, ISegmentable<Actor>
 
     protected void Update()
     {
-        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY || GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
         {
             if (Input.GetButtonDown("Fly" + playerId.ToString()))
             {
@@ -176,8 +176,7 @@ public class Player : Actor, ISegmentable<Actor>
         }
     }
     #endregion
-
-
+    
     //kind of redundant
     #region egg stuff
     void LayAnEgg()

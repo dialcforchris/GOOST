@@ -21,7 +21,7 @@ public class Timer : MonoBehaviour {
 	void Start ()
     {
         TimerText.text = ""+currentTime;
-        StartCoroutine(TextInOut(true));
+        //StartCoroutine(TextInOut(true));
     }
 
     bool countdown;

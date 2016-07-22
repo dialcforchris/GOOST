@@ -7,6 +7,7 @@ public enum GameStates
     STATE_PAUSE,
     STATE_GAMEOVER,
     STATE_TRANSITIONING,
+    STATE_READYUP,
     GAMESTATES_COUNT
 }
 
@@ -36,6 +37,7 @@ public class GameStateManager : MonoBehaviour
             states[(int)GameStates.STATE_PAUSE] = new PauseState();
             states[(int)GameStates.STATE_GAMEOVER] = new GameOverState();
             states[(int)GameStates.STATE_TRANSITIONING] = new TransitioningState();
+            states[(int)GameStates.STATE_READYUP] = new ReadyUpState();
             ChangeState(GameStates.STATE_MENU);
         }
         

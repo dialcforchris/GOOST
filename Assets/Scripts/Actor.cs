@@ -107,13 +107,6 @@ public class Actor : MonoBehaviour
     {
         if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            if (onPlatform)
-            {
-                if (body.velocity.x > 5 || body.velocity.x < -5)
-                {
-                    //skidMark.Emit(1);
-                }
-            }
             if (transform.position.y > worldMaxY.y)
             {
                 body.velocity = new Vector2(body.velocity.x, -0.5f);

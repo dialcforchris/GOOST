@@ -43,7 +43,7 @@ public class PlayerManager : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < Input.GetJoystickNames().Length;i++ )
+        /*for (int i = 0; i < Input.GetJoystickNames().Length;i++ )
         {
             if (i<2)
             {
@@ -55,24 +55,54 @@ public class PlayerManager : MonoBehaviour
             {
                 break;
             }
-        }
+        }*/
     }
-   
+
+    public void SetupPlayer(int index)
+    {
+        players[index].gameObject.SetActive(true);
+        players[index].playerId = index;
+        scores[index].gameObject.SetActive(true);
+        //Some sort of particle effect wouldn't go amiss here
+    }
+
     void Update()
     {
-        for(int i = 0; i < playerRespawn.Length; ++i)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_MENU)
         {
-            if (playerRespawn[i])
+            if (MainMenu.instance.currentState == MainMenu.menuState.readyUpScreen)
             {
-                respawnTime[i] += Time.deltaTime;
-                if(respawnTime[i] >= respawnLength)
+                if (Input.GetButtonDown("Fly0"))
                 {
-                    playerRespawn[i] = false;
-                    players[i].Respawn();
+                    //spawn player 1
+                     
+                }
+                if (Input.GetButtonDown("Fly1"))
+                {
+                    //spawn player 2
+                    players[1].gameObject.SetActive(true);
+                    players[1].playerId = 1;
+                    scores[1].gameObject.SetActive(true);
+                    //Some sort of particle effect wouldn't go amiss here
                 }
             }
         }
-        UpdateScores();
+        else if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+        {
+            for (int i = 0; i < playerRespawn.Length; ++i)
+            {
+                if (playerRespawn[i])
+                {
+                    respawnTime[i] += Time.deltaTime;
+                    if (respawnTime[i] >= respawnLength)
+                    {
+                        playerRespawn[i] = false;
+                        players[i].Respawn();
+                    }
+                }
+            }
+            UpdateScores();
+        }
     }
     public Player GetPlayer(int _playerIndex)
     {
