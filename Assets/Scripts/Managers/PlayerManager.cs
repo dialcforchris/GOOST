@@ -24,11 +24,14 @@ public class PlayerManager : MonoBehaviour
     Sprite[] collectableSprites;
     [SerializeField]
     private Image[] collectables;
-
+    [SerializeField]
+    private Image[] boosts;
+    [Range(0, 1)]
+    public float fillAmount;
     [SerializeField] private float respawnLength = 1.0f;
     private bool[] playerRespawn = null;
     private float[] respawnTime = null;
-
+    
 
     //set this properly when we have a splash screen menu
     private int amountOfPlayers = 2;
@@ -67,6 +70,11 @@ public class PlayerManager : MonoBehaviour
             {
                 break;
             }
+        }
+        foreach (Image i in boosts)
+        {
+            i.fillMethod = Image.FillMethod.Horizontal;
+            i.type = Image.Type.Filled;
         }
     }
    
@@ -149,6 +157,8 @@ public class PlayerManager : MonoBehaviour
             coll[i].text = "X"+players[i].collectable.ToString();
             lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
             collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+            boosts[i].fillAmount = players[i].dashcool;
         }
+       
     }
 }

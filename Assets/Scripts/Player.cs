@@ -47,8 +47,8 @@ public class Player : Actor, ISegmentable<Actor>
     #endregion
 
 
-    float dashcool = 0;
-    float maxDashCool = 3f;
+    public float dashcool = 0;
+    float maxDashCool = 1f;
    
     float flashTime = 0;
     bool flashBool = false;
@@ -390,7 +390,7 @@ public class Player : Actor, ISegmentable<Actor>
     {
         if (dashcool<maxDashCool)
         {
-            dashcool += Time.deltaTime;
+            dashcool += Time.deltaTime/5;
             return false;
         }
         else
