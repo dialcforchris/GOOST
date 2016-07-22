@@ -185,6 +185,7 @@ public class Actor : MonoBehaviour
         if (body.velocity.x > 5||body.velocity.x<-5)
         {
             skidMark.Emit(1);
+            skidMark.transform.position = transform.position;
         }
     }
 
