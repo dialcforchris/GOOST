@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SplashScreenState : GameState
+public class TransitioningState : GameState
 {
     public override void OnStateActivate()
     {

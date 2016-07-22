@@ -88,41 +88,44 @@ public class MainMenu : MonoBehaviour {
     bool scrolling;
     void Update()
     {
-        if (!transitioning)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_MENU)
         {
-            switch (currentState)
+            if (!transitioning)
             {
-                case menuState.mainMenu:
-                    mainMenu();
-                    break;
-                case menuState.readyUpScreen:
-                    if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
-                    {
-                        switchMenus(0);
-                    }
-                    break;
-                case menuState.leaderboardsMenu:
-                    if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
-                    {
-                        switchMenus(0);
-                    }
-                    break;
-                case menuState.statsScreen:
-                    if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
-                    {
-                        switchMenus(0);
-                    }
-                    break;
-                case menuState.optionsMenu:
-                    optionsMenu();
-                    break;
+                switch (currentState)
+                {
+                    case menuState.mainMenu:
+                        mainMenu();
+                        break;
+                    case menuState.readyUpScreen:
+                        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
+                        {
+                            switchMenus(0);
+                        }
+                        break;
+                    case menuState.leaderboardsMenu:
+                        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
+                        {
+                            switchMenus(0);
+                        }
+                        break;
+                    case menuState.statsScreen:
+                        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
+                        {
+                            switchMenus(0);
+                        }
+                        break;
+                    case menuState.optionsMenu:
+                        optionsMenu();
+                        break;
+                }
             }
         }
     }
 
     void changeSelection(Image[] cursors,Text[] menuElements,ref int menuIndex)
     {
-        if (Input.GetAxis("Vertical") < 0 && !scrolling)
+        if ((Input.GetAxis("Vertical0") < 0 || Input.GetAxis("Vertical1") < 0) && !scrolling)
         {
             scrolling = true;
             menuIndex++;
@@ -136,7 +139,7 @@ public class MainMenu : MonoBehaviour {
             Invoke("allowMove", 0.25f);
 
         }
-        else if (Input.GetAxis("Vertical") > 0 && !scrolling)
+        else if ((Input.GetAxis("Vertical0") > 0 || Input.GetAxis("Vertical1") > 0) && !scrolling)
         {
             scrolling = true;
             menuIndex--;
@@ -150,7 +153,7 @@ public class MainMenu : MonoBehaviour {
             Invoke("allowMove", 0.25f);
 
         }
-        else if (Input.GetAxis("Vertical") == 0 && scrolling)
+        else if (Input.GetAxis("Vertical0") == 0 && Input.GetAxis("Vertical1") == 0 && scrolling)
         {
             CancelInvoke("allowMove");
             scrolling = false;
@@ -161,7 +164,7 @@ public class MainMenu : MonoBehaviour {
     {
         changeSelection(mainMenuCursor, mainMenuElements, ref mainMenuIndex);
 
-        if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
+        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
         {
             switch(mainMenuIndex)
             {
@@ -197,7 +200,7 @@ public class MainMenu : MonoBehaviour {
     {
         changeSelection(optionsCursor, optionsElements, ref optionsIndex);
 
-        if (Input.GetAxis("Fire1") > 0 || Input.GetButtonDown("Fire1"))
+        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
         {
             switch (optionsIndex)
             {

@@ -64,17 +64,22 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     }
     void Update()
     {
-        EggTimer();
-        LayAnEgg();
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+        {
+            EggTimer();
+            LayAnEgg();
+        }
     }
     protected override void FixedUpdate()
     {
-        aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
-        MovementToTarget();
-        base.FixedUpdate();
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+        {
+            aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
+            MovementToTarget();
+            base.FixedUpdate();
 
-        DetermineAnimationState();
-      
+            DetermineAnimationState();
+        }      
     }
 
     public void FindTarget()
