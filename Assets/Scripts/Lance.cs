@@ -17,7 +17,7 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
     public string segmentName { get { return "Lance"; } }
     #endregion
 
-    [SerializeField] private float knockPower = 50.0f;
+    [SerializeField] private float knockPower = 70.0f;
 
     private void OnEnable()
     {

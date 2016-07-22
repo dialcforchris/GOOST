@@ -39,7 +39,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     [SerializeField] private float aggressionSpeed = 0.5f;
 
     private float eggTime = 0.0f;
-    [SerializeField] private float eggCooldown = 7.5f;
+    [SerializeField] private float eggCooldown = 2.5f;
     [SerializeField][Range(0.0f,1.0f)] private float eggChance = 0.5f;
 
     [SerializeField] private float platformBounceX = 0.4f;
@@ -74,6 +74,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         base.FixedUpdate();
 
         DetermineAnimationState();
+      
     }
 
     public void FindTarget()
@@ -233,14 +234,17 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     {
         if (EggTimer())
         {
+            Debug.Log("Egg time done");
             if (Random.value>eggChance)
             {
+                Debug.Log("Laid");
+
                 Egg e = EggPool.instance.PoolEgg();
                 e.transform.position = new Vector2(transform.position.x + 0.5f, transform.position.y - 1f);
                 e.OnPooled();
             }
+            eggTime = 0;
         }
-        eggTime = 0;
     }
 
     bool EggTimer()
@@ -252,7 +256,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         }
         else
         {
-            LayAnEgg();
+          //  LayAnEgg();
             return true;
         }
     }

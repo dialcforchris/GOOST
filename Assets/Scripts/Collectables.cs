@@ -82,7 +82,7 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
 
     public void OnPooled(PickUpType _type)
     {
-        visible = true;
+       visible = true;
        gameObject.SetActive(true);
        type = _type;
        invinsible = 0;

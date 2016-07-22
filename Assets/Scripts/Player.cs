@@ -268,7 +268,7 @@ public class Player : Actor, ISegmentable<Actor>
             else
             {
                Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
-               c.OnPooled(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+               c.OnPooled(playerType == PlayerType.GOODGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
                c.transform.position = transform.position;
                isDead = true;
                base.Defeat();

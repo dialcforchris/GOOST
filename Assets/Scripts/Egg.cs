@@ -119,7 +119,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
 
    bool InvincibilityTimer()
    {
-        if (invinsible<0.5f)
+        if (invinsible<0.2f)
         {
             invinsible += Time.deltaTime;
             return false;
