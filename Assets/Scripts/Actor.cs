@@ -13,8 +13,8 @@ public class Actor : MonoBehaviour
     [SerializeField] protected Collider2D col = null;
     public Collider2D actorCollider { get { return col; } }
     [SerializeField] protected Rigidbody2D body = null;
-    [SerializeField]
-    private ParticleSystem skidMark,landingParticle;
+
+    public  ParticleSystem skidMark,landingParticle;
     private bool peckUp = true;
 
     [SerializeField] protected Lance lance = null;
@@ -84,7 +84,7 @@ public class Actor : MonoBehaviour
 
     protected virtual IEnumerator DeathAnimation()
     {
-        frameHolder.instance.holdFrame(0.1f);
+        //frameHolder.instance.holdFrame(0.25f);
         FeatherManager.instance.HaveSomeFeathers(transform.position);
         yield return new WaitForSeconds(0.01f);
         anim.Stop();
@@ -105,6 +105,14 @@ public class Actor : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        if (onPlatform)
+        {
+            if (body.velocity.x > 5 || body.velocity.x < -5)
+            {
+                //skidMark.Emit(1);
+            }
+        }
+
         if (transform.position.y > worldMaxY.y)
         {
             body.velocity = new Vector2(body.velocity.x, -0.5f);
@@ -176,7 +184,7 @@ public class Actor : MonoBehaviour
         anim.Play("newGoose_run");
         if (body.velocity.x > 5||body.velocity.x<-5)
         {
-            skidMark.Emit(2);
+            skidMark.Emit(1);
         }
     }
 
@@ -184,8 +192,7 @@ public class Actor : MonoBehaviour
     {
         onPlatform = false;
         body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-        anim.Play("newGoose_flap");
-       
+        anim.Play("newGoose_flap");       
     }
 
     public virtual void DetermineAnimationState()

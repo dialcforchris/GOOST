@@ -15,7 +15,7 @@ public class Player : Actor, ISegmentable<Actor>
     {
         get { return _playerType; }
     }
-    private int _playerId = 3;
+    private int _playerId = 0;
     private int score = 0;
     private SpriteRenderer[] allsprites;
    
@@ -104,7 +104,7 @@ public class Player : Actor, ISegmentable<Actor>
             }
             DetermineAnimationState();
         }
-	}
+    }
 
     protected void Update()
     {
@@ -112,6 +112,24 @@ public class Player : Actor, ISegmentable<Actor>
         {
             applyFly = true;
         }
+
+        if (onPlatform)
+        {
+            if (Input.GetAxis("Horizontal" + playerId) < 0 && body.velocity.x > 5)
+                base.skidMark.Emit(1);
+            else if (Input.GetAxis("Horizontal" + playerId) > 0 && body.velocity.x < -5)
+                base.skidMark.Emit(1);
+            else if (Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.25f && Mathf.Abs(body.velocity.x) > 5)
+                base.skidMark.Emit(1);
+
+            if (Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.25f)
+                body.drag = 3.5f;
+            else
+                body.drag = 1;
+        }
+        else
+            body.drag = 1;
+
         Dash();
         DashCoolTime();
         Invinciblity(invincible);
@@ -128,10 +146,10 @@ public class Player : Actor, ISegmentable<Actor>
         if (Input.GetAxis("Horizontal"+playerId) > 0)
             transform.localScale = Vector3.one;
 
-        if (body.velocity.x > 0)
+        /*if (body.velocity.x > 0)
                 transform.localScale = Vector3.one;
         if (body.velocity.x < 0)
-                transform.localScale = new Vector3(-1, 1, 1);
+                transform.localScale = new Vector3(-1, 1, 1);*/
     }
   
     void VelocityCheck()
@@ -226,7 +244,7 @@ public class Player : Actor, ISegmentable<Actor>
     {
         if (onPlatform)
         {
-            if (Mathf.Abs(body.velocity.x) < 0.25f)
+            if (Mathf.Abs(body.velocity.x) < 0.25f ||Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.25f)
             {
                 anim.Play("newGoose_idle");
                 riderAnimator.Play("cape_idle");
