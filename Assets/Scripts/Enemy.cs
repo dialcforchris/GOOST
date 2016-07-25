@@ -217,7 +217,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     {
         base.Defeat(_type);
 
-        Collectables c = CollectablePool.instance.PoolCollectables(_type == PlayerType.BADGUY? PickUpType.HARDDRIVE:PickUpType.MONEY);
+        Collectables c = CollectablePool.instance.PoolCollectables(_type == PlayerType.BADGUY? PickUpType.MONEY:PickUpType.HARDDRIVE);
         c.transform.position = transform.position;
         ////SilverCoin _coin = CoinPool.instance.PoolCoin();
         ////_coin.transform.position = transform.position;

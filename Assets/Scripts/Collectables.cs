@@ -27,7 +27,8 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
     float life = 0;
     float maxLife = 2;
     float flash = 0;
-    float invinsible = 0;
+    float invincible = 0;
+    float invincibleDuration = 0.1f;
     bool canFlash = false;
     bool visible = true;
     
@@ -36,16 +37,20 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
         Life();
         FlashTime(canFlash);
         Flash(visible);
+        if(invincible < invincibleDuration)
+        {
+            InvincibilityTimer();
+        }
     }
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Enemy")
-        {
-            Physics2D.IgnoreCollision(colli, col.collider, true);
-        }
+        //if (col.gameObject.tag == "Enemy")
+        //{
+        //    Physics2D.IgnoreCollision(colli, col.collider, true);
+        //}
 
-        if (InvincibilityTimer())
-        {
+        //if (InvincibilityTimer())
+        //{
             if (col.gameObject.tag == "Player")
             {
                 ISegmentable<Actor> rigSegment = col.gameObject.GetComponent<ISegmentable<Actor>>();
@@ -66,7 +71,7 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
                     ReturnPool();
                 }
             }
-        }
+        //}
     }
 
     public void ReturnPool()
@@ -84,7 +89,7 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
        visible = true;
        gameObject.SetActive(true);
        type = _type;
-       invinsible = 0;
+       invincible = 0;
        spRend.sprite = sprites[type == PickUpType.HARDDRIVE ? 0 : 1];
           
         gameObject.SetActive(true);
@@ -93,8 +98,8 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
         body.gravityScale = 1.0f;
        
       
-        Physics2D.IgnoreLayerCollision(8, 10, true);
-        Physics2D.IgnoreLayerCollision(9, 10, true);
+        Physics2D.IgnoreLayerCollision(8, 11, true);
+        Physics2D.IgnoreLayerCollision(9, 11, true);
 
         body.AddForce(new Vector2(Random.Range(-0.5f, 0.5f) * (Random.Range(0, 2) == 0 ? 1 : -1), Random.Range(0.5f, 1.8f)), ForceMode2D.Impulse);
     }
@@ -143,12 +148,14 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
 
     bool InvincibilityTimer()
     {
-        if (invinsible < 0.1f)
+        invincible += Time.deltaTime;
+        if (invincible >= invincibleDuration)
         {
-            invinsible += Time.deltaTime;
-            return false;
+            Physics2D.IgnoreLayerCollision(8, 11, false);
+            Physics2D.IgnoreLayerCollision(9, 11, false);
+            return true;
         }
-        return true;
+        return false;
     }
 }
 public enum PickUpType
