@@ -38,15 +38,15 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
         if (!legsActive)
         {
             return;
-        }
+        }  
 
         if (_col.collider.tag == "Platform")
         {
-            if (_col.contacts[0].normal == Vector2.up)
+            if (_col.contacts[0].normal.y > 0)
             {
                 actor.LandedOnPlatform(_col.collider);
             }
-            else if (_col.contacts[0].normal != Vector2.down)
+            else if (_col.contacts[0].normal.x != 0.0f)
             {
                 if (tag == "Enemy")
                 {
@@ -61,7 +61,7 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
             {
                 if (_s == _col.gameObject.tag)
                 {
-                    rigSegment.rigBase.Defeat();
+                    rigSegment.rigBase.Defeat(actor.playerType);
                     break;
                 }
             }
@@ -92,6 +92,11 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
 
     private void OnCollisionExit2D(Collision2D _col)
     {
+        if(_col.contacts[0].otherCollider != col)
+        {
+            Debug.Log("issue");
+        }
+
         if (_col.collider.tag == "Platform")
         {
             actor.TakeOffFromPlatform();

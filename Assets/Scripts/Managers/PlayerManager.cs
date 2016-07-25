@@ -9,9 +9,10 @@ public class PlayerManager : MonoBehaviour
     {
         get{return playerManager;}
     }
-    [SerializeField] private Player[] players = null;
-  // [SerializeField] private Nest[] nests = null;
-    [SerializeField] private Text[] scores = null;
+    [SerializeField] 
+    private Player[] players = null;
+    [SerializeField] 
+    private Text[] scores = null;
     [SerializeField]
     private Text[] lives;
     [SerializeField]
@@ -126,7 +127,10 @@ public class PlayerManager : MonoBehaviour
                 }
             }
         }
-        UpdateUI();
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+        {
+            UpdateUI();
+        }
     }
     public Player GetPlayer(int _playerIndex)
     {
@@ -159,28 +163,7 @@ public class PlayerManager : MonoBehaviour
         }
         return players[0];
     }
-    void UpdateScores()
-    {
-        for (int i = 0; i < players.Length; i++)
-        {
-            scores[i].text = players[i].GetScore().ToString();
-        }
-    }
-
-    void UpdateLives()
-    {
-        for (int i = 0; i < players.Length; i++)
-        {
-            scores[i].text = players[i].eggLives.ToString();
-        }
-    }
-    void UpdateCollectables()
-    {
-        for (int i = 0; i < players.Length; i++)
-        {
-            scores[i].text = players[i].collectable.ToString();
-        }
-    }
+   
 
     void UpdateUI()
     {

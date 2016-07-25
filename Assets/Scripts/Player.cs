@@ -20,15 +20,10 @@ public class Player : Actor, ISegmentable<Actor>
     private SpriteRenderer weapon;
     [SerializeField]
     private Sprite[] weaponChoice;
-    public PlayerType playerType
-    {
-        get { return _playerType; }
-    }
-
+   
     [SerializeField]
     SpriteRenderer spRend = null;
     [SerializeField]
-    private PlayerType _playerType = PlayerType.GOODGUY;
     private int _playerId = 0;
     private int score = 0;
     private SpriteRenderer[] allsprites;
@@ -120,10 +115,10 @@ public class Player : Actor, ISegmentable<Actor>
                     StatTracker.instance.stats.totalFlaps++;
                     applyFly = false;
                 }
+                DetermineAnimationState();
             }
         }
-        DetermineAnimationState();
-    }
+	}
 
     protected void Update()
     {
@@ -286,35 +281,32 @@ public class Player : Actor, ISegmentable<Actor>
         }
     }
 
-    public override void Defeat()
+    public override void Defeat(PlayerType _type)
     {
-        if (GameStateManager.instance.GetState() != GameStates.STATE_READYUP && GameStateManager.instance.GetState() != GameStates.STATE_TRANSITIONING)
+        if (!invincible)
         {
-            if (!invincible)
+            if (collectable > 0)
             {
-                if (collectable > 0)
+                for (int i = 0; i < collectable; i++)
                 {
-                    for (int i = 0; i < collectable; i++)
-                    {
-                        Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
-                        c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
-                    }
-                    _collectable = 0;
-
-                    Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
-                    invinciblePermanence = true;
-                    invincible = true;
-                }
-                else
-                {
-                    applyFly = false;
                     Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
-                    //c.OnPooled(playerType == PlayerType.GOODGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
-                    c.transform.position = transform.position;
-                    isDead = true;
-                    base.Defeat();
-                    PlayerManager.instance.RespawnPlayer(playerId);
+                    c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
                 }
+                _collectable = 0;
+
+                Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
+                invinciblePermanence = true;
+                invincible = true;
+            }
+            else
+            {
+                applyFly = false;
+                Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                //c.OnPooled(playerType == PlayerType.GOODGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                c.transform.position = transform.position;
+                isDead = true;
+                base.Defeat(_type);
+                PlayerManager.instance.RespawnPlayer(playerId);
             }
         }
     }
@@ -440,8 +432,3 @@ public class Player : Actor, ISegmentable<Actor>
         }
     }
 }
-public enum PlayerType
-{
-    BADGUY,
-    GOODGUY,
-};

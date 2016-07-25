@@ -159,7 +159,8 @@ public class LeaderBoard : MonoBehaviour
             return false;
         }
     }
-    public void SetScore(int _score)
+
+    public void SetScore(int _score,int _playerId)
     {
         playerScore = _score;
         if (CheckIfHighScore(_score))
@@ -167,6 +168,7 @@ public class LeaderBoard : MonoBehaviour
             enterName.SetActive(true);
         }
     }
+
     public void SetName(string _name)
     {
         playerName = _name;

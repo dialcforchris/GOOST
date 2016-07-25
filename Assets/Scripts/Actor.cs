@@ -17,6 +17,13 @@ public class Actor : MonoBehaviour
     public Rigidbody2D GooseyBod { get { return body; } }
 
     public  ParticleSystem skidMark,landingParticle;
+ 
+    [SerializeField]
+    protected PlayerType _playerType = PlayerType.GOODGUY;
+    public PlayerType playerType
+    {
+        get { return _playerType; }
+    }
     private bool peckUp = true;
 
     [SerializeField] protected Lance lance = null;
@@ -72,7 +79,7 @@ public class Actor : MonoBehaviour
         body.AddForce(_direction.normalized * _power, ForceMode2D.Impulse);
     }
 
-    public virtual void Defeat()
+    public virtual void Defeat(PlayerType _type)
     {
         col.enabled = false;
         body.velocity = Vector2.zero;
@@ -152,7 +159,7 @@ public class Actor : MonoBehaviour
         {
             if (_col.contacts[0].otherCollider == col)
             {
-                if (_col.contacts[0].normal == Vector2.up)
+                if (_col.contacts[0].normal.y > 0.0f)
                 {
                     body.AddForce(new Vector2(_col.transform.position.x > transform.position.x ? -0.05f : 0.05f, 0.0f), ForceMode2D.Impulse);
                 }
@@ -171,30 +178,36 @@ public class Actor : MonoBehaviour
 
     public virtual void LandedOnPlatform(Collider2D col)
     {
-        //Make sure the player hasn't sunk into the floor for some silly reason when we freeze the Y position of the player
-        float landPosition = col.bounds.max.y;
-        transform.position = new Vector3(transform.position.x, landPosition+0.37f, transform.position.z);
-        
-        landingParticle.Play();
-        onPlatform = true;
-        body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-        if (Mathf.Abs(body.velocity.x) > 0)
-            anim.Play("newGoose_run");
-        else
-            anim.Play("newGoose_idle");
-
-        if (body.velocity.x > 5 || body.velocity.x < -5)
+        if (!onPlatform)
         {
-            skidMark.Emit(1);
-            skidMark.transform.position = transform.position;
+            //Make sure the player hasn't sunk into the floor for some silly reason when we freeze the Y position of the player
+            float landPosition = col.bounds.max.y;
+            transform.position = new Vector3(transform.position.x, landPosition + 0.37f, transform.position.z);
+
+            landingParticle.Play();
+            onPlatform = true;
+            body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            if (Mathf.Abs(body.velocity.x) > 0)
+                anim.Play("newGoose_run");
+            else
+                anim.Play("newGoose_idle");
+
+            if (body.velocity.x > 5 || body.velocity.x < -5)
+            {
+                skidMark.Emit(1);
+                skidMark.transform.position = transform.position;
+            }
         }
     }
 
     public virtual void TakeOffFromPlatform()
     {
-        onPlatform = false;
-        body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-        anim.Play("newGoose_flap");
+        if (onPlatform)
+        {
+            onPlatform = false;
+            body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+            anim.Play("newGoose_flap");
+        }
     }
 
     public virtual void DetermineAnimationState()
@@ -223,3 +236,10 @@ public class Actor : MonoBehaviour
     }
 
 }
+public enum PlayerType
+{
+    BADGUY,
+    GOODGUY,
+    ENEMY,
+    COUNT
+};

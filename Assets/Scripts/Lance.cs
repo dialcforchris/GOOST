@@ -50,7 +50,7 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
             {
                 if (_s == _col.gameObject.tag)
                 {
-                    rigSegment.rigBase.Defeat();
+                    rigSegment.rigBase.Defeat(actor.playerType);
                     break;
                 }
             }
