@@ -43,6 +43,7 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         objectPool = new ObjectPool<Enemy>(enemyPrefab, 10, transform);
+        Physics2D.IgnoreLayerCollision(10, 11);
     }
 
     private void Update()
