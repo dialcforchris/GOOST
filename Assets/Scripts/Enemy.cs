@@ -213,14 +213,16 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         //FindTarget();
     }
 
-    public override void Defeat()
+    public override void Defeat(PlayerType _type)
     {
-        base.Defeat();
-        
-        //SilverCoin _coin = CoinPool.instance.PoolCoin();
-        //_coin.transform.position = transform.position;
-        Egg e = EggPool.instance.PoolEgg(behaviour, speed);
-          e.transform.position = transform.position;
+        base.Defeat(_type);
+
+        Collectables c = CollectablePool.instance.PoolCollectables(_type == PlayerType.BADGUY? PickUpType.HARDDRIVE:PickUpType.MONEY);
+        c.transform.position = transform.position;
+        ////SilverCoin _coin = CoinPool.instance.PoolCoin();
+        ////_coin.transform.position = transform.position;
+        //Egg e = EggPool.instance.PoolEgg(behaviour, speed);
+        //  e.transform.position = transform.position;
 
         --numActive;
         anim.Stop();

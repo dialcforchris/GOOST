@@ -17,6 +17,13 @@ public class Actor : MonoBehaviour
     public Rigidbody2D GooseyBod { get { return body; } }
 
     public  ParticleSystem skidMark,landingParticle;
+ 
+    [SerializeField]
+    protected PlayerType _playerType = PlayerType.GOODGUY;
+    public PlayerType playerType
+    {
+        get { return _playerType; }
+    }
     private bool peckUp = true;
 
     [SerializeField] protected Lance lance = null;
@@ -72,7 +79,7 @@ public class Actor : MonoBehaviour
         body.AddForce(_direction.normalized * _power, ForceMode2D.Impulse);
     }
 
-    public virtual void Defeat()
+    public virtual void Defeat(PlayerType _type)
     {
         col.enabled = false;
         body.velocity = Vector2.zero;
@@ -229,3 +236,10 @@ public class Actor : MonoBehaviour
     }
 
 }
+public enum PlayerType
+{
+    BADGUY,
+    GOODGUY,
+    ENEMY,
+    COUNT
+};
