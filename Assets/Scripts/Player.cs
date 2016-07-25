@@ -9,13 +9,8 @@ public class Player : Actor, ISegmentable<Actor>
     private float speed;
     [SerializeField]
     private SpriteRenderer cape;
-    [SerializeField]
-    private SpriteRenderer backpack;
-    [SerializeField]
-    private Sprite[] backpackChoice;
-
-    //customisable stuff
-    public int backpackChosen = 0;
+    public SpriteRenderer backpack;
+    
     [SerializeField]
     private SpriteRenderer weapon;
     [SerializeField]
@@ -414,7 +409,6 @@ public class Player : Actor, ISegmentable<Actor>
             case PlayerType.GOODGUY:
                 {
                     cape.gameObject.SetActive(false);
-                    backpack.sprite = backpackChoice[backpackChosen];
                     backpack.gameObject.SetActive(true);
                     weapon.sprite = weaponChoice[1];
                     break;

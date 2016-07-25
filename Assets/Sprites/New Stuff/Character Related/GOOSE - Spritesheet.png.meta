@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 8be1abfb63d9b834cbf5764951ec63e5
-timeCreated: 1469459073
+timeCreated: 1469460179
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -326,7 +326,7 @@ TextureImporter:
     - name: goose_wing_e
       rect:
         serializedVersion: 2
-        x: 166
+        x: 165
         y: 26
         width: 35
         height: 39
@@ -334,15 +334,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 10.5, y: 3.5}
-        - {x: 1.5, y: 3.5}
-        - {x: -14.5, y: -6.5}
-        - {x: -14.5, y: -13.5}
-        - {x: -3.5, y: -16.5}
-        - {x: 15.5, y: -16.5}
+      - - {x: 2.5, y: 3.5}
+        - {x: -13.5, y: -6.5}
+        - {x: -13.5, y: -8.5}
+        - {x: -12.5, y: -10.5}
+        - {x: -5.5, y: -16.5}
+        - {x: 12.5, y: -16.5}
         - {x: 17.5, y: -13.5}
         - {x: 17.5, y: -0.5}
-        - {x: 16.5, y: 2.5}
+        - {x: 11.5, y: 3.5}
     - name: goose_head_a
       rect:
         serializedVersion: 2

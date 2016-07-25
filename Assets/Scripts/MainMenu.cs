@@ -202,12 +202,17 @@ public class MainMenu : MonoBehaviour
         {
             StartCoroutine(CharacterImageTransition(false, 0));
         }
+        if (Input.GetButtonDown("Fly1") && bigHead[1])
+        {
+            StartCoroutine(CharacterImageTransition(false, 1));
+        }
 
         #region select cosmetics
         if (Mathf.Abs(Input.GetAxis("Horizontal0")) > 0 && !bigHead[0] && !customised[0] && !scrolling[0])
         {
             //Scroll control
             scrolling[0] = true;
+            StopCoroutine(allowMove(0));
             StartCoroutine(allowMove(0));
 
             //Change cosmetic index
@@ -229,6 +234,7 @@ public class MainMenu : MonoBehaviour
         {
             //Scroll control
             scrolling[1] = true;
+            StopCoroutine(allowMove(1));
             StartCoroutine(allowMove(1));
 
             cosmeticIndex[1] += (Input.GetAxis("Horizontal1") > 0) ? 1 : -1;
@@ -250,6 +256,7 @@ public class MainMenu : MonoBehaviour
             //Setup player
             CustomGeese[0].SetActive(false);
             PlayerManager.instance.SetupPlayer(0);
+            PlayerManager.instance.GetPlayer(0).headSprite.sprite = hats[cosmeticIndex[0]];
             readyTextPrompts[0].text = "Press Dash and Fly\n buttons to ready up";
             clouds[0].gameObject.SetActive(true);
             leftCloudPlatform.SetActive(true);
@@ -260,6 +267,8 @@ public class MainMenu : MonoBehaviour
             //Setup player
             CustomGeese[1].SetActive(false);
             PlayerManager.instance.SetupPlayer(1);
+            PlayerManager.instance.GetPlayer(1).backpack.sprite = backpacks[cosmeticIndex[1]];
+
             readyTextPrompts[1].text = "Press Dash and Fly\n buttons to ready up";
             clouds[1].gameObject.SetActive(true);
             rightCloudPlatform.SetActive(true);

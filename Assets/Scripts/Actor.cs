@@ -9,6 +9,7 @@ public interface ISegmentable<T> where T : Actor
 
 public class Actor : MonoBehaviour
 {
+    public SpriteRenderer headSprite;
     [SerializeField] protected Animator anim = null;
     [SerializeField] protected Collider2D col = null;
     public Collider2D actorCollider { get { return col; } }
