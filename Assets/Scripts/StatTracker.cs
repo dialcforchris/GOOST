@@ -74,17 +74,9 @@ public class GameStatistics
     [SerializeField]
     public float playtime=0;
     [SerializeField]
-    public int eggsLaid=0;
-    [SerializeField]
     public int roundsPlayed = 0;
     [SerializeField]
-    public int silverSpentOnEggs=0;
-    [SerializeField]
-    public int magpiesKilled = 0;
-    [SerializeField]
     public int totalFlaps = 0;
-    [SerializeField]
-    public int eggsStolen = 0;
 
     //Rounds won/lost?
 }

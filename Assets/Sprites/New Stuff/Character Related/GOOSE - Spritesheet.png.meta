@@ -1,14 +1,14 @@
 fileFormatVersion: 2
 guid: 8be1abfb63d9b834cbf5764951ec63e5
-timeCreated: 1469452270
+timeCreated: 1469459073
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
-    21300000: goose_head
+    21300000: goose_head_default
     21300002: goose_neck
     21300004: goose_neck2
-    21300006: GOOSE - Spritesheet_3
-    21300008: GOOSE - Spritesheet_4
+    21300006: goose_head_d
+    21300008: goose_head_e
     21300010: goose_body_d
     21300012: goose_body_a
     21300014: goose_body_b
@@ -23,10 +23,13 @@ TextureImporter:
     21300032: goose_foot
     21300034: goose_body_e
     21300036: goose_wing_e
-    21300038: GOOSE - Spritesheet_0
-    21300040: GOOSE - Spritesheet_1
+    21300038: goose_head_a
+    21300040: goose_head_b
     21300042: GOOSE -backpack
     21300044: GOOSE - lance
+    21300046: goose_head_c
+    21300048: goose_head_f
+    21300050: goose_head_g
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -73,11 +76,11 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: goose_head
+    - name: goose_head_default
       rect:
         serializedVersion: 2
         x: 47
-        y: 86
+        y: 110
         width: 20
         height: 17
       alignment: 9
@@ -88,7 +91,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 74
-        y: 85
+        y: 109
         width: 5
         height: 14
       alignment: 7
@@ -99,7 +102,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 80
-        y: 84
+        y: 109
         width: 7
         height: 15
       alignment: 9
@@ -110,7 +113,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 6
-        y: 45
+        y: 69
         width: 35
         height: 39
       alignment: 0
@@ -129,7 +132,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 47
-        y: 45
+        y: 69
         width: 35
         height: 39
       alignment: 0
@@ -150,7 +153,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 88
-        y: 45
+        y: 69
         width: 35
         height: 39
       alignment: 0
@@ -173,7 +176,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 129
-        y: 45
+        y: 69
         width: 35
         height: 39
       alignment: 0
@@ -200,7 +203,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 2
+        y: 26
         width: 35
         height: 39
       alignment: 0
@@ -218,7 +221,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 42
-        y: 2
+        y: 26
         width: 35
         height: 39
       alignment: 0
@@ -238,7 +241,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 83
-        y: 2
+        y: 26
         width: 35
         height: 39
       alignment: 0
@@ -257,7 +260,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 124
-        y: 2
+        y: 26
         width: 35
         height: 39
       alignment: 0
@@ -277,7 +280,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 89
-        y: 91
+        y: 115
         width: 2
         height: 7
       alignment: 2
@@ -288,7 +291,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 89
-        y: 87
+        y: 111
         width: 6
         height: 2
       alignment: 9
@@ -299,7 +302,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 170
-        y: 45
+        y: 69
         width: 35
         height: 39
       alignment: 0
@@ -323,39 +326,39 @@ TextureImporter:
     - name: goose_wing_e
       rect:
         serializedVersion: 2
-        x: 165
-        y: 2
+        x: 166
+        y: 26
         width: 35
         height: 39
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 2.5, y: 3.5}
-        - {x: -13.5, y: -6.5}
-        - {x: -13.5, y: -8.5}
-        - {x: -12.5, y: -10.5}
-        - {x: -5.5, y: -16.5}
-        - {x: 12.5, y: -16.5}
+      - - {x: 10.5, y: 3.5}
+        - {x: 1.5, y: 3.5}
+        - {x: -14.5, y: -6.5}
+        - {x: -14.5, y: -13.5}
+        - {x: -3.5, y: -16.5}
+        - {x: 15.5, y: -16.5}
         - {x: 17.5, y: -13.5}
         - {x: 17.5, y: -0.5}
-        - {x: 11.5, y: 3.5}
-    - name: GOOSE - Spritesheet_0
+        - {x: 16.5, y: 2.5}
+    - name: goose_head_a
       rect:
         serializedVersion: 2
         x: 23
-        y: 86
+        y: 110
         width: 20
         height: 17
       alignment: 9
       pivot: {x: 0.475, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: GOOSE - Spritesheet_1
+    - name: goose_head_b
       rect:
         serializedVersion: 2
         x: 2
-        y: 86
+        y: 110
         width: 20
         height: 17
       alignment: 9
@@ -366,7 +369,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 100
-        y: 84
+        y: 108
         width: 29
         height: 20
       alignment: 0
@@ -377,11 +380,66 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 134
-        y: 87
+        y: 111
         width: 71
         height: 10
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: goose_head_c
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 1
+        width: 20
+        height: 17
+      alignment: 9
+      pivot: {x: 0.475, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: goose_head_d
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 1
+        width: 20
+        height: 17
+      alignment: 9
+      pivot: {x: 0.475, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: goose_head_e
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 1
+        width: 20
+        height: 17
+      alignment: 9
+      pivot: {x: 0.475, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: goose_head_f
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 1
+        width: 20
+        height: 17
+      alignment: 9
+      pivot: {x: 0.475, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: goose_head_g
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 1
+        width: 20
+        height: 17
+      alignment: 9
+      pivot: {x: 0.475, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     outline: []
