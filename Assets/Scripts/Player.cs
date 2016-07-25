@@ -302,7 +302,6 @@ public class Player : Actor, ISegmentable<Actor>
             {
                 applyFly = false;
                 Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
-                //c.OnPooled(playerType == PlayerType.GOODGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
                 c.transform.position = transform.position;
                 isDead = true;
                 base.Defeat(_type);
@@ -361,7 +360,6 @@ public class Player : Actor, ISegmentable<Actor>
 
     void FlashSprite()
     {
-      
         if (flashTime<0.1f)
         {
             flashTime += Time.deltaTime;
