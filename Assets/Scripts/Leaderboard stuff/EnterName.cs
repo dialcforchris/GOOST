@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class EnterName : MonoBehaviour
 {
     public Text[] box;
+    public Text playerName;
     int[] currentCharacter;
     public Text score;
     int selectBox = 0;
@@ -13,11 +14,11 @@ public class EnterName : MonoBehaviour
     float coolDown = 0;
     float maxCool = 0.2f;
     string theName = string.Empty;
+    public int playerNumber = 0;
 	
     // Use this for initialization
 	void Awake () 
     {
-
         coolDown = maxCool;
         currentCharacter = new int[box.Length];
         for (int i = 0; i < currentCharacter.Length;i++ )
@@ -29,21 +30,29 @@ public class EnterName : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
+        for (int i = 0; i < PlayerManager.instance.NumberOfPlayers();)
+        {
+            playerNumber = i;
             MenuInput();
             box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
             ChangeTextColour();
-        //    score.text = "Your Score: " + Player.instance.score.ToString();
-            if (Input.GetButtonDown("Fire1"))
+            score.text = "Player " + playerNumber + 1 + " Score: " + PlayerManager.instance.GetPlayer(playerNumber).GetScore().ToString();
+            if (Input.GetButtonDown("Fire" + playerNumber))
+            {
                 SelectName();
+                i++;
+            }
+        }
+        gameObject.SetActive(false);
     }
 
     void MenuInput()
     {
         if (ConvertToPos())
         {
-            if (Input.GetAxis("Horizontal") != 0 && SelectCoolDown())
+            if (Input.GetAxis("Horizontal"+playerNumber) != 0 && SelectCoolDown())
             {
-                if (Input.GetAxis("Horizontal") > 0)
+                if (Input.GetAxis("Horizontal"+playerNumber) > 0)
                 {
                     if (selectBox == box.Length - 1)
                     {
@@ -54,7 +63,7 @@ public class EnterName : MonoBehaviour
                         selectBox++;
                     }
                 }
-                else if (Input.GetAxis("Horizontal") < 0)
+                else if (Input.GetAxis("Horizontal"+playerNumber) < 0)
                 {
                     if (selectBox == 0)
                     {
@@ -71,9 +80,9 @@ public class EnterName : MonoBehaviour
         }
         else
         {
-            if (Input.GetAxis("Vertical") != 0 && SelectCoolDown())
+            if (Input.GetAxis("Vertical"+playerNumber) != 0 && SelectCoolDown())
             {
-                if (Input.GetAxis("Vertical") < 0)
+                if (Input.GetAxis("Vertical"+playerNumber) < 0)
                 {
                     if (selectChar > 65)
                         selectChar--;
@@ -81,7 +90,7 @@ public class EnterName : MonoBehaviour
                     else
                         selectChar = 90;
                 }
-                else if (Input.GetAxis("Vertical") > 0)
+                else if (Input.GetAxis("Vertical"+playerNumber) > 0)
                 {
                     if (selectChar < 90)
                         selectChar++;
@@ -132,13 +141,13 @@ public class EnterName : MonoBehaviour
         theName =  theName.Insert(3, "&");
         LeaderBoard.instance.SetName(theName);
         LeaderBoard.instance.AddNewScoreToLB();
-        transform.parent.gameObject.SetActive(false);
+     //   transform.parent.gameObject.SetActive(false);
     }
 
     bool ConvertToPos()
     {
-        float hori = Input.GetAxis("Horizontal");
-        float verti = Input.GetAxis("Vertical");
+        float hori = Input.GetAxis("Horizontal"+playerNumber);
+        float verti = Input.GetAxis("Vertical" + playerNumber);
         if (hori < 0)
         {
             hori -= hori * 2;

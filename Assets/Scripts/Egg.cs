@@ -73,7 +73,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     }
 
  
-    void OnCollisionEnter2D(Collision2D col)
+    void OnCollisionStay2D(Collision2D col)
     {
         if (InvincibilityTimer())
         {
