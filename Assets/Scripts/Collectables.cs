@@ -18,6 +18,8 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
     [SerializeField]
     Sprite[] sprites;
     [SerializeField]
+    Sprite[] backSprites;
+    [SerializeField]
     Rigidbody2D body;
     [SerializeField]
     SpriteRenderer spRend;
@@ -34,6 +36,15 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
     
     void Update()
     {
+
+        if (transform.eulerAngles.y>90&&transform.eulerAngles.y<270)
+        {
+           spRend.sprite = backSprites[type == PickUpType.HARDDRIVE ? 0 : 1];
+        }
+        else
+        {
+            spRend.sprite = sprites[type == PickUpType.HARDDRIVE ? 0 : 1];
+        }
         Life();
         FlashTime(canFlash);
         Flash(visible);
@@ -90,7 +101,8 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
        gameObject.SetActive(true);
        type = _type;
        invincible = 0;
-       spRend.sprite = sprites[type == PickUpType.HARDDRIVE ? 0 : 1];
+      // spRend.sprite = sprites[type == PickUpType.HARDDRIVE ? 0 : 1];
+       ///spRendBack.sprite = backSprites[type == PickUpType.HARDDRIVE ? 0 : 1];
           
         gameObject.SetActive(true);
 
