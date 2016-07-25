@@ -20,15 +20,10 @@ public class Player : Actor, ISegmentable<Actor>
     private SpriteRenderer weapon;
     [SerializeField]
     private Sprite[] weaponChoice;
-    public PlayerType playerType
-    {
-        get { return _playerType; }
-    }
-
+   
     [SerializeField]
     SpriteRenderer spRend = null;
     [SerializeField]
-    private PlayerType _playerType = PlayerType.GOODGUY;
     private int _playerId = 0;
     private int score = 0;
     private SpriteRenderer[] allsprites;
@@ -286,7 +281,7 @@ public class Player : Actor, ISegmentable<Actor>
         }
     }
 
-    public override void Defeat()
+    public override void Defeat(PlayerType _type)
     {
         if (!invincible)
         {
@@ -310,7 +305,7 @@ public class Player : Actor, ISegmentable<Actor>
                 //c.OnPooled(playerType == PlayerType.GOODGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
                 c.transform.position = transform.position;
                 isDead = true;
-                base.Defeat();
+                base.Defeat(_type);
                 PlayerManager.instance.RespawnPlayer(playerId);
             }
         }
@@ -437,8 +432,3 @@ public class Player : Actor, ISegmentable<Actor>
         }
     }
 }
-public enum PlayerType
-{
-    BADGUY,
-    GOODGUY,
-};
