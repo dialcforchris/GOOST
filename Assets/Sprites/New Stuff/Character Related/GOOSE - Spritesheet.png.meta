@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 8be1abfb63d9b834cbf5764951ec63e5
-timeCreated: 1468939226
+timeCreated: 1469452270
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -23,6 +23,10 @@ TextureImporter:
     21300032: goose_foot
     21300034: goose_body_e
     21300036: goose_wing_e
+    21300038: GOOSE - Spritesheet_0
+    21300040: GOOSE - Spritesheet_1
+    21300042: GOOSE -backpack
+    21300044: GOOSE - lance
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -72,19 +76,19 @@ TextureImporter:
     - name: goose_head
       rect:
         serializedVersion: 2
-        x: 0
-        y: 96
-        width: 11
-        height: 8
+        x: 47
+        y: 86
+        width: 20
+        height: 17
       alignment: 9
-      pivot: {x: 0.1666666, y: 0}
+      pivot: {x: 0.475, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: goose_neck
       rect:
         serializedVersion: 2
-        x: 12
-        y: 90
+        x: 74
+        y: 85
         width: 5
         height: 14
       alignment: 7
@@ -94,8 +98,8 @@ TextureImporter:
     - name: goose_neck2
       rect:
         serializedVersion: 2
-        x: 18
-        y: 89
+        x: 80
+        y: 84
         width: 7
         height: 15
       alignment: 9
@@ -272,8 +276,8 @@ TextureImporter:
     - name: goose_leg
       rect:
         serializedVersion: 2
-        x: 27
-        y: 96
+        x: 89
+        y: 91
         width: 2
         height: 7
       alignment: 2
@@ -283,8 +287,8 @@ TextureImporter:
     - name: goose_foot
       rect:
         serializedVersion: 2
-        x: 27
-        y: 92
+        x: 89
+        y: 87
         width: 6
         height: 2
       alignment: 9
@@ -336,6 +340,50 @@ TextureImporter:
         - {x: 17.5, y: -13.5}
         - {x: 17.5, y: -0.5}
         - {x: 11.5, y: 3.5}
+    - name: GOOSE - Spritesheet_0
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 86
+        width: 20
+        height: 17
+      alignment: 9
+      pivot: {x: 0.475, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: GOOSE - Spritesheet_1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 86
+        width: 20
+        height: 17
+      alignment: 9
+      pivot: {x: 0.475, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: GOOSE -backpack
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 84
+        width: 29
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: GOOSE - lance
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 87
+        width: 71
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     outline: []
   spritePackingTag: 
   userData: 
