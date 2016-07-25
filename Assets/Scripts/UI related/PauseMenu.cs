@@ -79,7 +79,7 @@ public class PauseMenu : MonoBehaviour
         options[index].color = highlightColour;
         #endregion
 
-        if (Input.GetButton("Interact0"))
+        if (Input.GetButton("Interact0") || Input.GetButton("Interact1"))
         {
             switch (index)
             {

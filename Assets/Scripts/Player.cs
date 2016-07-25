@@ -115,9 +115,9 @@ public class Player : Actor, ISegmentable<Actor>
                     StatTracker.instance.stats.totalFlaps++;
                     applyFly = false;
                 }
-                DetermineAnimationState();
             }
         }
+                DetermineAnimationState();
 	}
 
     protected void Update()
@@ -162,7 +162,6 @@ public class Player : Actor, ISegmentable<Actor>
             transform.localScale = new Vector3(-1, 1, 1);
         if (Input.GetAxis("Horizontal"+playerId) > 0)
             transform.localScale = Vector3.one;
-
     }
   
     void VelocityCheck()

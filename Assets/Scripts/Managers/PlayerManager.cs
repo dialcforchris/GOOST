@@ -59,7 +59,10 @@ public class PlayerManager : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < Input.GetJoystickNames().Length; i++)
+        //This code has been relocated to SetupPlayer();
+        //Feel free to un-comment it for testing purposes.
+
+        /*for (int i = 0; i < Input.GetJoystickNames().Length; i++)
         {
             if (i < 2)
             {
@@ -71,7 +74,7 @@ public class PlayerManager : MonoBehaviour
             {
                 break;
             }
-        }
+        }*/
         foreach (Image i in boosts)
         {
             i.fillMethod = Image.FillMethod.Horizontal;

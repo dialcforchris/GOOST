@@ -4,12 +4,13 @@ using System.Collections;
 
 public class Timer : MonoBehaviour {
 
+    public static Timer instance;
+
     [SerializeField]
     private Animator countdownTextAnimator;
     [SerializeField]
     private Text countdownText;
-
-
+    
     public int maxSeconds;
     [SerializeField]
     float currentTime;
@@ -20,6 +21,7 @@ public class Timer : MonoBehaviour {
 
 	void Start ()
     {
+        instance = this;
         TimerText.text = ""+currentTime;
         //StartCoroutine(TextInOut(true));
     }
@@ -55,7 +57,7 @@ public class Timer : MonoBehaviour {
             TimerText.text = ""+(int)(currentTime);
         }
     }
-    IEnumerator TextInOut(bool InOut)
+    public IEnumerator TextInOut(bool InOut)
     {
         countdown = true;
         countdownTextAnimator.gameObject.SetActive(true);

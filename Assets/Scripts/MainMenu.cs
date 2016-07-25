@@ -195,6 +195,7 @@ public class MainMenu : MonoBehaviour
         //Player 2
         if (Input.GetButton("Fly1") && Input.GetButton("Interact1") && !pressingReady[1])
         {
+            pressingReady[1] = true;
             ready[1] = !ready[1];
             readyIndicator[1].color = ready[1] ? Color.yellow : Color.white;
             readyTextPrompts[1].text = "Press Dash and Fly\n again to cancel";
@@ -202,6 +203,7 @@ public class MainMenu : MonoBehaviour
         }
         else if(!Input.GetButton("Fly1") && !Input.GetButton("Interact1"))
             pressingReady[1] = false;
+
         #endregion
 
         if (ready[0] & ready[1])
@@ -219,7 +221,8 @@ public class MainMenu : MonoBehaviour
             PlayerManager.instance.GetPlayer(0).TakeOffFromPlatform();
             PlayerManager.instance.GetPlayer(1).TakeOffFromPlatform();
 
-            Physics2D.gravity = Vector2.down*9.81f * 2.5f;
+            StartCoroutine(BounceyGeese(0));
+            StartCoroutine(BounceyGeese(1));
 
             //Pan camera towards ground
             Camera.main.GetComponent<CameraController>().switchViews(false);
@@ -228,7 +231,7 @@ public class MainMenu : MonoBehaviour
         #region holding dash to quit
         if (Input.GetButton("Interact1") || Input.GetButton("Interact0"))
         {
-            returnTimer += Time.deltaTime;
+            returnTimer += Time.deltaTime*.5f;
             returnImage.fillAmount = returnTimer;
             if (returnTimer > 1)
             {
@@ -248,6 +251,33 @@ public class MainMenu : MonoBehaviour
         }
         #endregion
     }
+
+   public  IEnumerator BounceyGeese(int index)
+    {
+        yield return new WaitForSeconds(2);
+        float lerpy = 0; 
+
+        //Don't allow any other forces to act on the goose, we're in control now.
+        PlayerManager.instance.GetPlayer(index).GooseyBod.isKinematic = true;
+
+        while (lerpy < 1)
+        {
+            Vector3 pos =PlayerManager.instance.GetPlayer(index).transform.position;
+            PlayerManager.instance.GetPlayer(index).transform.position = new Vector3(index>0 ? 6 : -6, bounceNess.Evaluate(lerpy)+2.15f, pos.z);
+            lerpy += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        //Give control back to the goose, since he's been so good.
+        PlayerManager.instance.GetPlayer(index).GooseyBod.isKinematic = false;
+
+        yield return new WaitForSeconds(0);
+        //Make sure the countdown text is only triggered once
+        if (index == 0)
+            StartCoroutine(Timer.instance.TextInOut(true));
+    }
+
+    public AnimationCurve bounceNess;
 
     IEnumerator CharacterImageTransition(bool inOut, int index)
     {
@@ -377,5 +407,20 @@ public class MainMenu : MonoBehaviour
     void allowMove()
     {
         scrolling = false;
+    }
+}
+
+[CustomEditor(typeof(MainMenu))]
+public class MainMenuTester : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        MainMenu scriptToControl = (MainMenu)target;
+        if (GUILayout.Button("bounce"))
+        {
+            scriptToControl.StartCoroutine(scriptToControl.BounceyGeese(0));
+        }
+
     }
 }
