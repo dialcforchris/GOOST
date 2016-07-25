@@ -38,7 +38,7 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
         if (!legsActive)
         {
             return;
-        }  
+        }
 
         if (_col.collider.tag == "Platform")
         {
@@ -54,18 +54,25 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
                 }
             }
         }
-        ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        if (rigSegment != null)
+        else
         {
-            foreach (string _s in affectTags)
+            ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
             {
-                if (_s == _col.gameObject.tag)
+                foreach (string _s in affectTags)
                 {
-                    rigSegment.rigBase.Defeat(actor.playerType);
-                    break;
+                    if (_s == _col.gameObject.tag)
+                    {
+                        if (rigSegment.segmentName == "Player" || rigSegment.segmentName == "Enemy")
+                        {
+                            rigSegment.rigBase.Defeat(actor.playerType);
+                        }
+                        break;
+                    }
                 }
             }
         }
+        OnCollisionStay2D(_col);
     }
 
     private void OnCollisionStay2D(Collision2D _col)

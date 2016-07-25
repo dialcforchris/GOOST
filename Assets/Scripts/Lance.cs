@@ -50,11 +50,19 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
             {
                 if (_s == _col.gameObject.tag)
                 {
-                    rigSegment.rigBase.Defeat(actor.playerType);
+                    if (rigSegment.segmentName == "Player" || rigSegment.segmentName == "Enemy")
+                    {
+                        if (_col.contacts[0].normal.x != 0.0f)
+                        {
+                            rigSegment.rigBase.Defeat(actor.playerType);
+                        }
+                    }
                     break;
                 }
             }
         }
+
+        OnCollisionStay2D(_col);
     }
 
     private void OnCollisionStay2D(Collision2D _col)
@@ -83,14 +91,6 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
                 rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), knockPower);
             }
         }
-
-        //if (_col.collider.tag == "Enemy")
-        //{
-        //    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        //    if (rigSegment != null)
-        //    {
-        //        ((Enemy)rigSegment.rigBase).FindTarget();
-        //    }
-        //}
     }
 }
+
