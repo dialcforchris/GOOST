@@ -64,8 +64,13 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         currentBehaviour = behaviour;
         speed = _speed;
         FindTarget();
-        anim.Play("newGoose_flap");
         gameObject.SetActive(true);
+
+        takeOffTime = 0.0f;
+        eggTime = 0.0f;
+        onPlatform = false;
+        body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+        anim.Play("newGoose_flap");
     }
     void Update()
     {
@@ -218,6 +223,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
           e.transform.position = transform.position;
 
         --numActive;
+        anim.Stop();
         poolData.ReturnPool(this);
     }
 
@@ -229,6 +235,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
             if (_col.contacts[0].normal.x != 0.0f)
             {
                 transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
+                Vector2 _force = _col.contacts[0].normal * platformBounceX;
+                body.AddForce(_force, ForceMode2D.Impulse);
                 FindTarget();
             }
         }
@@ -240,12 +248,12 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         
         if (_col.collider.tag == "Platform")
         {
-            if (_col.contacts[0].normal == Vector2.down)
+            if (_col.contacts[0].normal.y < 0)
             {
                 body.velocity = new Vector2(body.velocity.x, 0.0f);
                 body.AddForce(Vector2.down * platformBounceY, ForceMode2D.Impulse);
             }
-            else if (_col.contacts[0].normal != Vector2.up)
+            else if (_col.contacts[0].normal.x != 0.0f)
             {
                 PlatformSideCollision(_col);
             }
