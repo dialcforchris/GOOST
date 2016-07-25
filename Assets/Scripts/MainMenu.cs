@@ -22,11 +22,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     Text[] readyTextPrompts;
     [SerializeField]
-    GameObject readyUpBounds;
+    GameObject readyUpBounds,leftCloudPlatform,rightCloudPlatform;
     [SerializeField]
     Image returnImage;
     [SerializeField]
-    Image[] readyIndicator, characterImg;
+    Image[] readyIndicator, characterImg,clouds;
     [SerializeField]
     Vector2[] characterImgStart, characterImgEnd;
 
@@ -201,7 +201,7 @@ public class MainMenu : MonoBehaviour
             readyTextPrompts[1].text = "Press Dash and Fly\n again to cancel";
             //Mb play a sound?
         }
-        else if(!Input.GetButton("Fly1") && !Input.GetButton("Interact1"))
+        else if (!Input.GetButton("Fly1") && !Input.GetButton("Interact1"))
             pressingReady[1] = false;
 
         #endregion
@@ -231,7 +231,7 @@ public class MainMenu : MonoBehaviour
         #region holding dash to quit
         if (Input.GetButton("Interact1") || Input.GetButton("Interact0"))
         {
-            returnTimer += Time.deltaTime*.5f;
+            returnTimer += Time.deltaTime * .5f;
             returnImage.fillAmount = returnTimer;
             if (returnTimer > 1)
             {
@@ -252,18 +252,18 @@ public class MainMenu : MonoBehaviour
         #endregion
     }
 
-   public  IEnumerator BounceyGeese(int index)
+    public IEnumerator BounceyGeese(int index)
     {
         yield return new WaitForSeconds(2);
-        float lerpy = 0; 
+        float lerpy = 0;
 
         //Don't allow any other forces to act on the goose, we're in control now.
         PlayerManager.instance.GetPlayer(index).GooseyBod.isKinematic = true;
 
         while (lerpy < 1)
         {
-            Vector3 pos =PlayerManager.instance.GetPlayer(index).transform.position;
-            PlayerManager.instance.GetPlayer(index).transform.position = new Vector3(index>0 ? 6 : -6, bounceNess.Evaluate(lerpy)+2.15f, pos.z);
+            Vector3 pos = PlayerManager.instance.GetPlayer(index).transform.position;
+            PlayerManager.instance.GetPlayer(index).transform.position = new Vector3(index > 0 ? 6 : -6, bounceNess.Evaluate(lerpy) + 2.15f, pos.z);
             lerpy += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
@@ -286,18 +286,56 @@ public class MainMenu : MonoBehaviour
         {
             if (inOut)
             {
+                if (index == 0)
+                    leftCloudPlatform.SetActive(false);
+                else
+                    rightCloudPlatform.SetActive(false);
+
+                clouds[index].gameObject.SetActive(false);
+                //Fade in character image
                 Color col = characterImg[index].color;
                 col.a = lerpy;
                 characterImg[index].color = col;
+                //Move character image out of screen
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgEnd[index], characterImgStart[index], lerpy);
+
+                //Fade out clouds
+                //Also Text + indicator
+                Color Col_ = clouds[index].color;
+                Col_.a = 1 - lerpy;
+                clouds[index].color = Col_;
+                readyIndicator[index].color = Col_;
+                readyTextPrompts[index].color = Col_;
+
+                Color Col_black = readyTextPrompts[index].GetComponent<Outline>().effectColor;
+                Col_black.a = 1 - lerpy;
+                readyTextPrompts[index].GetComponent<Outline>().effectColor = Col_black;
             }
             else
             {
+                if (index == 0)
+                    leftCloudPlatform.SetActive(true);
+                else
+                    rightCloudPlatform.SetActive(true);
+
+                clouds[index].gameObject.SetActive(true);
+
                 Color col = characterImg[index].color;
                 col.a = 1 - lerpy;
                 characterImg[index].color = col;
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgStart[index], characterImgEnd[index], lerpy);
-                //characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImg[index].rectTransform.anchoredPosition, characterImgEnd[index], lerpy);
+
+                //Fade in clouds
+                //Also Text + indicator
+                Color Col_ = clouds[index].color;
+                Col_.a = lerpy;
+                clouds[index].color = Col_;
+                readyIndicator[index].color = Col_;
+                readyTextPrompts[index].color = Col_;
+
+                Color Col_black = readyTextPrompts[index].GetComponent<Outline>().effectColor;
+                Col_black.a = lerpy;
+                readyTextPrompts[index].GetComponent<Outline>().effectColor = Col_black;
             }
             lerpy += Time.deltaTime * 1.5f;
             yield return new WaitForEndOfFrame();
