@@ -156,11 +156,11 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
             case EnemyBehaviour.HIGH_FLYER:
                 if (transform.localScale.x > 0)
                 {
-                    viewTarget = new Vector3(1.05f, Random.Range(0.85f, 0.95f), 10);
+                    viewTarget = new Vector3(1.05f, Random.Range(0.80f, 0.95f), 10);
                 }
                 else
                 {
-                    viewTarget = new Vector3(-0.05f, Random.Range(0.85f, 0.95f), 10);
+                    viewTarget = new Vector3(-0.05f, Random.Range(0.80f, 0.95f), 10);
                 }
                 break;
         }
@@ -247,10 +247,36 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         {
             if (_col.contacts[0].normal.x != 0.0f)
             {
-                transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
-                Vector2 _force = _col.contacts[0].normal * platformBounceX;
-                body.AddForce(_force, ForceMode2D.Impulse);
-                FindTarget();
+                if(transform.localScale.x > 0)
+                {
+                    if(_col.contacts[0].point.x > transform.position.x)
+                    {
+                        transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
+                        FindTarget();
+                    }
+                }
+                else
+                {
+                    if (_col.contacts[0].point.x < transform.position.x)
+                    {
+                        transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
+                        FindTarget();
+                    }
+                }
+
+                if (_col.contacts[0].otherCollider == col)
+                {
+                    Actor _actor = _col.collider.GetComponent<Actor>();
+                    if (_actor)
+                    {
+                        _actor.ApplyKnockback(_col.contacts[0].normal, platformBounceX);
+                    }
+                }
+                //body.velocity = new Vector2(0.0f, body.velocity.y);
+                //transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
+                //Vector2 _force = _col.contacts[0].normal * platformBounceX;
+                //body.AddForce(_force, ForceMode2D.Impulse);
+                //FindTarget();
             }
         }
     }

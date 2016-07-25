@@ -256,7 +256,7 @@ public class Player : Actor, ISegmentable<Actor>
     {
         if (onPlatform)
         {
-            if (Mathf.Abs(body.velocity.x) < 0.25f || Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.25f)
+            if (Mathf.Abs(body.velocity.x) < 0.1f || Mathf.Abs(Input.GetAxis("Horizontal" + playerId)) < 0.1f)
             {
                 anim.Play("newGoose_idle");
                 riderAnimator.Play("cape_idle");

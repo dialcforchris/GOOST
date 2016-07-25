@@ -214,7 +214,7 @@ public class Actor : MonoBehaviour
     {
         if (onPlatform)
         {
-            if (Mathf.Abs(body.velocity.x) < 0.5f)
+            if (Mathf.Abs(body.velocity.x) < 0.01f)
             {
                 anim.Play("newGoose_idle");
             }
