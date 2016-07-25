@@ -49,6 +49,10 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     [SerializeField] private float takeOffCooldown = 3.0f;
     private float takeOffTime = 0.0f;
 
+    private Player closestPlayer = null;
+
+    [SerializeField] private LayerMask RayLayerMask;
+
     protected override void Start()
     {
         screenWrap.AddScreenWrapCall(UpdateWorldFromView);
@@ -83,7 +87,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     {
         if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
+            aggression = Mathf.Min(1.0f, aggression + 1 +(aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
 
             if (onPlatform)
             {
@@ -108,39 +112,34 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         switch(currentBehaviour)
         {
             case EnemyBehaviour.RANDOM:
-                float _y = Random.value;
-                if (_y < 0.1f)
-                {
-                    _y = Random.Range(0.2f, 0.4f);
-                }
-                else if (_y < 0.6f)
-                {
-                    _y = Random.Range(0.7f, 0.9f);
-                }
-                else
-                {
-                    _y = Mathf.Max(0.2f, Mathf.Min(0.9f, Camera.main.WorldToViewportPoint(transform.position).y + Random.Range(-0.1f, 0.25f)));
-                } 
-
-                if (transform.localScale.x > 0)
-                {
-                    viewTarget = new Vector3(1.05f, _y, 10);
-                }
-                else
-                {
-                    viewTarget = new Vector3(-0.05f, _y, 10);
-                }
-                
+                RandomTarget();
                 break;
             case EnemyBehaviour.AGGRESSIVE:
-                //if (aggression > Random.Range(0.0f, 1.0f))
-                //{
-                //    viewTarget = Camera.main.WorldToViewportPoint(PlayerManager.instance.GetClosestPlayer(transform.position).transform.position);
-                //}
-                //else
-                //{
-                //    viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
-                //}
+                if (aggression > Random.Range(0.0f, 1.0f))
+                {
+                    closestPlayer = PlayerManager.instance.GetClosestPlayer(transform.position);
+                    RaycastHit2D _hit = Physics2D.Raycast(transform.position, closestPlayer.transform.position - transform.position, Mathf.Infinity, RayLayerMask.value);
+                    if(_hit.transform.tag == "Player")
+                    {
+                        viewTarget = Camera.main.WorldToViewportPoint(_hit.point);
+                    }
+                    else
+                    {
+                        Vector3 _view = Camera.main.WorldToViewportPoint(transform.position);
+                        if (_view.x > 1.0f || _view.x < 0.0f)
+                        {
+                            viewTarget = new Vector3(transform.localScale.x > 0 ? 1.05f : -0.05f, Camera.main.WorldToViewportPoint(closestPlayer.transform.position).y, 10);
+                        }
+                        else
+                        {
+                            viewTarget = new Vector3(transform.localScale.x > 0 ? 1.05f : -0.05f, _view.y, 10);
+                        }
+                    }
+                }
+                else
+                {
+                    RandomTarget();
+                }
                 break;
             case EnemyBehaviour.HUNTER:
               ////  Nest _nest = PlayerManager.instance.GetLargestNest();
@@ -167,6 +166,32 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         UpdateWorldFromView(false);
     }
 
+    private void RandomTarget()
+    {
+        float _y = Random.value;
+        if (_y < 0.1f)
+        {
+            _y = Random.Range(0.2f, 0.4f);
+        }
+        else if (_y < 0.6f)
+        {
+            _y = Random.Range(0.7f, 0.9f);
+        }
+        else
+        {
+            _y = Mathf.Max(0.2f, Mathf.Min(0.9f, Camera.main.WorldToViewportPoint(transform.position).y + Random.Range(-0.1f, 0.25f)));
+        }
+
+        if (transform.localScale.x > 0)
+        {
+            viewTarget = new Vector3(1.05f, _y, 10);
+        }
+        else
+        {
+            viewTarget = new Vector3(-0.05f, _y, 10);
+        }
+    }
+
     private void UpdateWorldFromView(bool _wrap)
     {
         worldTarget = Camera.main.ViewportToWorldPoint(viewTarget);
@@ -179,6 +204,10 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                 }
                 break;
             case EnemyBehaviour.AGGRESSIVE:
+                if (_wrap)
+                {
+                    FindTarget();
+                }
                 break;
             case EnemyBehaviour.HUNTER:
                 break;

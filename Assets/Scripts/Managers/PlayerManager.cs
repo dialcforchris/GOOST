@@ -158,7 +158,14 @@ public class PlayerManager : MonoBehaviour
         {
             if(Vector3.SqrMagnitude(players[1].transform.position - _pos) < _distance)
             {
-                return players[1];
+                if (players[1].isActiveAndEnabled)
+                {
+                    return players[1];
+                }
+                else
+                {
+                    return players[0];
+                }
             }
         }
         return players[0];
