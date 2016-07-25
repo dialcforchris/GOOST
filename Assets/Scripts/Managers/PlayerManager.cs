@@ -58,9 +58,9 @@ public class PlayerManager : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < Input.GetJoystickNames().Length;i++ )
+        for (int i = 0; i < Input.GetJoystickNames().Length; i++)
         {
-            if (i<2)
+            if (i < 2)
             {
                 players[i].gameObject.SetActive(true);
                 players[i].playerId = i;
@@ -84,6 +84,29 @@ public class PlayerManager : MonoBehaviour
         players[index].playerId = index;
         scores[index].gameObject.SetActive(true);
         //Some sort of particle effect wouldn't go amiss here
+
+        //Set position
+        switch (index)
+        {
+            case 0:
+                players[index].transform.position = new Vector3(-3.5f, 29.5f, 0);
+                break;
+            case 1:
+                players[index].transform.position = new Vector3(3.5f, 29.5f, 0);
+                break;
+        }
+    }
+
+    public void ResetPlayers()
+    {
+        players[0].GooseyBod.velocity = Vector3.zero;
+        players[0].GooseyBod.angularVelocity = 0;
+        players[1].GooseyBod.velocity = Vector3.zero;
+        players[1].GooseyBod.angularVelocity = 0;
+
+
+        players[0].gameObject.SetActive(false);
+        players[1].gameObject.SetActive(false);
     }
 
     void Update()

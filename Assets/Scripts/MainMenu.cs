@@ -3,7 +3,8 @@ using UnityEditor;
 using UnityEngine.UI;
 using System.Collections;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour
+{
 
     public static MainMenu instance;
 
@@ -18,11 +19,18 @@ public class MainMenu : MonoBehaviour {
     public Image[] optionsCursor;
 
     [Header("Ready up menu")]
-    public Text[] readyTextPrompts;
-    public GameObject readyUpBounds;
-
-    int mainMenuIndex,optionsIndex;
     [SerializeField]
+    Text[] readyTextPrompts;
+    [SerializeField]
+    GameObject readyUpBounds;
+    [SerializeField]
+    Image returnImage;
+    [SerializeField]
+    Image[] readyIndicator, characterImg;
+    [SerializeField]
+    Vector2[] characterImgStart, characterImgEnd;
+
+    int mainMenuIndex, optionsIndex;
     bool transitioning;
 
     public menuState currentState;
@@ -36,7 +44,11 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void Awake()
-    { instance = this; }
+    {
+        instance = this;
+        ready = new bool[2] { false, false };
+        pressingReady = new bool[2] { false, false };
+    }
 
     IEnumerator rotateMenus(Vector3 start, Vector3 end)
     {
@@ -86,7 +98,7 @@ public class MainMenu : MonoBehaviour {
                 case 4:
                     //no button pressing allowed during this time
                     transitioning = true;
-                    
+
                     currentState = menuState.readyUpScreen;
                     GameStateManager.instance.ChangeState(GameStates.STATE_READYUP);
 
@@ -98,6 +110,14 @@ public class MainMenu : MonoBehaviour {
                     //Turn some off/on to help aid visibility
                     menuScreens[3].GetComponent<Canvas>().enabled = false;
                     menuScreens[4].SetActive(true);
+
+                    //Reset return text;
+                    returnTimer = 0;
+                    returnImage.fillAmount = 0;
+
+                    //Tween in character images
+                    StartCoroutine(CharacterImageTransition(true, 0));
+                    StartCoroutine(CharacterImageTransition(true, 1));
 
                     //Display the correct menu
                     StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(-90, 0, 0)));
@@ -134,18 +154,123 @@ public class MainMenu : MonoBehaviour {
         }
         if (GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
         {
-            if (Input.GetButtonDown("Fly0") && !PlayerManager.instance.GetPlayer(0).gameObject.activeSelf)
-            {
-                PlayerManager.instance.SetupPlayer(0);
-                readyTextPrompts[1].text = "Press _ to change thing \n Press _ to ready up";
-            }
-            if (Input.GetButtonDown("Fly1") && !PlayerManager.instance.GetPlayer(1).gameObject.activeSelf)
-            {
-                PlayerManager.instance.SetupPlayer(1);
-                readyTextPrompts[1].text = "Press _ to change thing \n Press _ to ready up";
-            }
+            ReadyUpScreen();
+        }
+    }
 
+    float returnTimer;
+    [SerializeField]
+    bool[] ready;
+    bool[] pressingReady;
+    void ReadyUpScreen()
+    {
+        #region spawn geese
+        if (Input.GetButtonDown("Fly0") && !PlayerManager.instance.GetPlayer(0).gameObject.activeSelf)
+        {
+            StartCoroutine(CharacterImageTransition(false, 0));
+            PlayerManager.instance.SetupPlayer(0);
+            readyTextPrompts[0].text = "Press Dash and Fly\n buttons to ready up";
+        }
+        if (Input.GetButtonDown("Fly1") && !PlayerManager.instance.GetPlayer(1).gameObject.activeSelf)
+        {
+            StartCoroutine(CharacterImageTransition(false, 1));
+            PlayerManager.instance.SetupPlayer(1);
+            readyTextPrompts[1].text = "Press Dash and Fly\n buttons to ready up";
+        }
+        #endregion
 
+        #region ready up
+        //Player 1
+        if (Input.GetButton("Fly0") && Input.GetButton("Interact0") && !pressingReady[0])
+        {
+            pressingReady[0] = true;
+            ready[0] = !ready[0];
+            readyIndicator[0].color = ready[0] ? Color.yellow : Color.white;
+            readyTextPrompts[0].text = "Press Dash and Fly\n again to cancel";
+            //Mb play a sound?
+        }
+        else if (!Input.GetButton("Fly0") && !Input.GetButton("Interact0"))
+            pressingReady[0] = false;
+
+        //Player 2
+        if (Input.GetButton("Fly1") && Input.GetButton("Interact1") && !pressingReady[1])
+        {
+            ready[1] = !ready[1];
+            readyIndicator[1].color = ready[1] ? Color.yellow : Color.white;
+            readyTextPrompts[1].text = "Press Dash and Fly\n again to cancel";
+            //Mb play a sound?
+        }
+        else if(!Input.GetButton("Fly1") && !Input.GetButton("Interact1"))
+            pressingReady[1] = false;
+        #endregion
+
+        if (ready[0] & ready[1])
+        {
+            GameStateManager.instance.ChangeState(GameStates.STATE_TRANSITIONING);
+            currentState = menuState.mainMenu;
+
+            //Reset ready up booleans
+            ready[0] = false;
+            ready[1] = false;
+
+            //Let the geese fall down
+            readyUpBounds.gameObject.SetActive(false);
+
+            PlayerManager.instance.GetPlayer(0).TakeOffFromPlatform();
+            PlayerManager.instance.GetPlayer(1).TakeOffFromPlatform();
+
+            Physics2D.gravity = Vector2.down*9.81f * 2.5f;
+
+            //Pan camera towards ground
+            Camera.main.GetComponent<CameraController>().switchViews(false);
+        }
+
+        #region holding dash to quit
+        if (Input.GetButton("Interact1") || Input.GetButton("Interact0"))
+        {
+            returnTimer += Time.deltaTime;
+            returnImage.fillAmount = returnTimer;
+            if (returnTimer > 1)
+            {
+                switchMenus(0);
+                ready[0] = false;
+                ready[1] = false;
+                readyIndicator[0].color = Color.white;
+                readyIndicator[1].color = Color.white;
+                GameStateManager.instance.ChangeState(GameStates.STATE_MENU);
+                PlayerManager.instance.ResetPlayers();
+            }
+        }
+        else if (returnTimer > 0)
+        {
+            returnTimer -= Time.deltaTime * 2.5f;
+            returnImage.fillAmount = returnTimer;
+        }
+        #endregion
+    }
+
+    IEnumerator CharacterImageTransition(bool inOut, int index)
+    {
+        float lerpy = 0;
+        while (lerpy < 1)
+        {
+            if (inOut)
+            {
+                Color col = characterImg[index].color;
+                col.a = lerpy;
+                characterImg[index].color = col;
+                characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgEnd[index], characterImgStart[index], lerpy);
+            }
+            else
+            {
+                Color col = characterImg[index].color;
+                col.a = 1 - lerpy;
+                characterImg[index].color = col;
+                characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgStart[index], characterImgEnd[index], lerpy);
+                //characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImg[index].rectTransform.anchoredPosition, characterImgEnd[index], lerpy);
+            }
+            lerpy += Time.deltaTime * 1.5f;
+            yield return new WaitForEndOfFrame();
         }
     }
 
@@ -192,7 +317,7 @@ public class MainMenu : MonoBehaviour {
 
         if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
         {
-            switch(mainMenuIndex)
+            switch (mainMenuIndex)
             {
                 case 0:
                     switchMenus(4);
@@ -253,5 +378,4 @@ public class MainMenu : MonoBehaviour {
     {
         scrolling = false;
     }
-
 }

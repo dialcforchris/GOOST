@@ -12,7 +12,9 @@ public class Actor : MonoBehaviour
     [SerializeField] protected Animator anim = null;
     [SerializeField] protected Collider2D col = null;
     public Collider2D actorCollider { get { return col; } }
-    [SerializeField] protected Rigidbody2D body = null;
+    [SerializeField]
+    protected Rigidbody2D body = null;
+    public Rigidbody2D GooseyBod { get { return body; } }
 
     public  ParticleSystem skidMark,landingParticle;
     private bool peckUp = true;
