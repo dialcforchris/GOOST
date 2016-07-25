@@ -133,14 +133,14 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                 
                 break;
             case EnemyBehaviour.AGGRESSIVE:
-                if (aggression > Random.Range(0.0f, 1.0f))
-                {
-                    viewTarget = Camera.main.WorldToViewportPoint(PlayerManager.instance.GetClosestPlayer(transform.position).transform.position);
-                }
-                else
-                {
-                    viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
-                }
+                //if (aggression > Random.Range(0.0f, 1.0f))
+                //{
+                //    viewTarget = Camera.main.WorldToViewportPoint(PlayerManager.instance.GetClosestPlayer(transform.position).transform.position);
+                //}
+                //else
+                //{
+                //    viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.2f, 0.8f), 10);
+                //}
                 break;
             case EnemyBehaviour.HUNTER:
               ////  Nest _nest = PlayerManager.instance.GetLargestNest();
@@ -154,7 +154,14 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
               //  }
                 break;
             case EnemyBehaviour.HIGH_FLYER:
-                viewTarget = new Vector3(Random.Range(0.01f, 0.99f), Random.Range(0.85f, 0.95f), 10);
+                if (transform.localScale.x > 0)
+                {
+                    viewTarget = new Vector3(1.05f, Random.Range(0.85f, 0.95f), 10);
+                }
+                else
+                {
+                    viewTarget = new Vector3(-0.05f, Random.Range(0.85f, 0.95f), 10);
+                }
                 break;
         }
         UpdateWorldFromView(false);
@@ -176,6 +183,10 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
             case EnemyBehaviour.HUNTER:
                 break;
             case EnemyBehaviour.HIGH_FLYER:
+                if (_wrap)
+                {
+                    FindTarget();
+                }
                 break;
                 //Vector3 _wrapTarget = Camera.main.ViewportToWorldPoint(new Vector3(viewTarget.x + (Camera.main.WorldToViewportPoint(transform.position).x > 0.5f ? 1 : -1), viewTarget.y, viewTarget.z));
                 //if(Vector3.SqrMagnitude(worldTarget - transform.position) > Vector3.SqrMagnitude(_wrapTarget - transform.position))
