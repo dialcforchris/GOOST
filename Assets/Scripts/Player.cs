@@ -120,10 +120,10 @@ public class Player : Actor, ISegmentable<Actor>
                     StatTracker.instance.stats.totalFlaps++;
                     applyFly = false;
                 }
-                DetermineAnimationState();
             }
         }
-	}
+        DetermineAnimationState();
+    }
 
     protected void Update()
     {
@@ -288,30 +288,33 @@ public class Player : Actor, ISegmentable<Actor>
 
     public override void Defeat()
     {
-        if (!invincible)
+        if (GameStateManager.instance.GetState() != GameStates.STATE_READYUP && GameStateManager.instance.GetState() != GameStates.STATE_TRANSITIONING)
         {
-            if (collectable > 0)
+            if (!invincible)
             {
-                for (int i = 0; i < collectable; i++)
+                if (collectable > 0)
                 {
-                    Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
-                    c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
-                }
-                _collectable = 0;
+                    for (int i = 0; i < collectable; i++)
+                    {
+                        Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                        c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
+                    }
+                    _collectable = 0;
 
-                Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
-                invinciblePermanence = true;
-                invincible = true;
-            }
-            else
-            {
-                applyFly = false;
-                Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
-                //c.OnPooled(playerType == PlayerType.GOODGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
-                c.transform.position = transform.position;
-                isDead = true;
-                base.Defeat();
-                PlayerManager.instance.RespawnPlayer(playerId);
+                    Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
+                    invinciblePermanence = true;
+                    invincible = true;
+                }
+                else
+                {
+                    applyFly = false;
+                    Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                    //c.OnPooled(playerType == PlayerType.GOODGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                    c.transform.position = transform.position;
+                    isDead = true;
+                    base.Defeat();
+                    PlayerManager.instance.RespawnPlayer(playerId);
+                }
             }
         }
     }
