@@ -13,9 +13,17 @@ public class MainMenu : MonoBehaviour
     Text[] mainMenuElements;
     [SerializeField]
     Image[] mainMenuCursor;
+    [SerializeField]
+    Animator TutorialAnimator;
 
     [SerializeField]
     GameObject[] menuScreens;
+    //Main menu
+    //Options
+    //Leaderboard
+    //Stats
+    //Ready up
+    //Level Select
 
     [Header("Options menu")]
     [SerializeField]
@@ -28,7 +36,6 @@ public class MainMenu : MonoBehaviour
     Image[] levelSelectionElements;
     [SerializeField]
     Image[] levelSelectionCursor;
-
 
     [Header("Ready up menu")]
     [SerializeField]
@@ -62,6 +69,7 @@ public class MainMenu : MonoBehaviour
         leaderboardsMenu,
         statsScreen,
         levelSelection,
+        tutorial,
     }
 
     public void Awake()
@@ -132,6 +140,7 @@ public class MainMenu : MonoBehaviour
                     currentState = menuState.optionsMenu;
                     menuScreens[2].SetActive(false);
                     menuScreens[1].SetActive(true);
+                    menuScreens[4].SetActive(false);
                     StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(0, -90, 0)));
                     break;
                 case 2:
@@ -139,6 +148,7 @@ public class MainMenu : MonoBehaviour
                     currentState = menuState.leaderboardsMenu;
                     menuScreens[2].SetActive(true);
                     menuScreens[1].SetActive(false);
+                    menuScreens[4].SetActive(false);
                     StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(0, 90, 0)));
                     break;
                 case 3:
@@ -146,16 +156,17 @@ public class MainMenu : MonoBehaviour
                     currentState = menuState.statsScreen;
                     menuScreens[3].GetComponent<Canvas>().enabled = true;
                     menuScreens[4].SetActive(false);
+                    menuScreens[5].SetActive(false);
                     StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(90, 0, 0)));
                     break;
                 case 4:
-                    #region a lot of nonsense
                     //no button pressing allowed during this time
                     transitioning = true;
 
                     currentState = menuState.readyUpScreen;
                     GameStateManager.instance.ChangeState(GameStates.STATE_READYUP);
-
+                    
+                    #region a lot of nonsense
                     //Make sure the players can't escape the screen
                     readyUpBounds.SetActive(true);
 
@@ -191,6 +202,8 @@ public class MainMenu : MonoBehaviour
                 case 5:
                     transitioning = true;
                     currentState = menuState.levelSelection;
+                    menuScreens[3].GetComponent<Canvas>().enabled = false;
+                    menuScreens[5].SetActive(true);
                     StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(-90, 0, 0)));
                     break;
 
@@ -201,6 +214,13 @@ public class MainMenu : MonoBehaviour
     bool[] scrolling;
     void Update()
     {
+        if (TutorialAnimator.GetCurrentAnimatorStateInfo(0).IsName("tutorial_idle") && transitioning)
+            transitioning = false;
+        if (TutorialAnimator.GetCurrentAnimatorStateInfo(0).IsName("tutorial_out_idle") && currentState == menuState.tutorial)
+        {
+            transitioning = false;
+            currentState = menuState.mainMenu;
+        }
         if (GameStateManager.instance.GetState() == GameStates.STATE_MENU)
         {
             if (!transitioning)
@@ -217,6 +237,13 @@ public class MainMenu : MonoBehaviour
                         break;
                     case menuState.levelSelection:
                         LevelSelectionMenu();
+                        break;
+                    case menuState.tutorial:
+                        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
+                        {
+                            TutorialAnimator.Play("tutorial_out");
+                            transitioning = true;
+                        }
                         break;
                     default:
                         if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
@@ -575,19 +602,22 @@ public class MainMenu : MonoBehaviour
                     //Start game
                     break;
                 case 1:
+                    //Tutorial
+                    transitioning = true;
+                    currentState = menuState.tutorial;
+                    TutorialAnimator.Play("tutorial_in");
+                    break;
+                case 2:
                     //View leaderboards
                     switchMenus(2);
                     break;
-                case 2:
+                case 3:
                     //View stats
                     switchMenus(3);
                     break;
-                case 3:
+                case 4:
                     //View options
                     switchMenus(1);
-                    break;
-                case 4:
-                    //Credits sequence
                     break;
                 case 5:
                     //Quit game
