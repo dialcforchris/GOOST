@@ -88,7 +88,10 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     {
         if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            aggression = Mathf.Min(1.0f, aggression + 1 +(aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
+            if (currentBehaviour == EnemyBehaviour.AGGRESSIVE)
+            {
+                aggression = Mathf.Min(1.0f, aggression + (aggressionSpeed * (Time.deltaTime * aggressionSpeed)));
+            }
 
             if (onPlatform)
             {
@@ -120,21 +123,27 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                 {
                     closestPlayer = PlayerManager.instance.GetClosestPlayer(transform.position);
                     RaycastHit2D _hit = Physics2D.Raycast(transform.position, closestPlayer.transform.position - transform.position, Mathf.Infinity, RayLayerMask.value);
-                    if(_hit.transform.tag == "Player")
+                    if (_hit)
                     {
-                        viewTarget = Camera.main.WorldToViewportPoint(_hit.point);
-                    }
-                    else
-                    {
-                        Vector3 _view = Camera.main.WorldToViewportPoint(transform.position);
-                        if (_view.x > 1.0f || _view.x < 0.0f)
+                        if (_hit.transform.tag == "Player")
                         {
-                            viewTarget = new Vector3(transform.localScale.x > 0 ? 1.05f : -0.05f, Camera.main.WorldToViewportPoint(closestPlayer.transform.position).y, 10);
+                            viewTarget = Camera.main.WorldToViewportPoint(_hit.point);
                         }
                         else
                         {
-                            viewTarget = new Vector3(transform.localScale.x > 0 ? 1.05f : -0.05f, _view.y, 10);
+                            if (closestPlayer.transform.position.y > transform.position.y)
+                            {
+                                viewTarget = new Vector3(transform.localScale.x > 0 ? 1.05f : -0.05f, Camera.main.WorldToViewportPoint(closestPlayer.transform.position).y + 0.2f, 10);
+                            }
+                            else
+                            {
+                                viewTarget = new Vector3(transform.localScale.x > 0 ? 1.05f : -0.05f, Camera.main.WorldToViewportPoint(closestPlayer.transform.position).y, 10);
+                            }
                         }
+                    }
+                    else
+                    {
+                        RandomTarget();
                     }
                 }
                 else
@@ -218,17 +227,13 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                     FindTarget();
                 }
                 break;
-                //Vector3 _wrapTarget = Camera.main.ViewportToWorldPoint(new Vector3(viewTarget.x + (Camera.main.WorldToViewportPoint(transform.position).x > 0.5f ? 1 : -1), viewTarget.y, viewTarget.z));
-                //if(Vector3.SqrMagnitude(worldTarget - transform.position) > Vector3.SqrMagnitude(_wrapTarget - transform.position))
-                //{
-                //    worldTarget = _wrapTarget;
-                //}
+                
         }
     }
 
     private void MovementToTarget()
     {
-        body.AddForce(((worldTarget - transform.position).normalized) * speed);
+        body.AddForce(((worldTarget - transform.position).normalized) * (speed + aggression));
         VelocityCap();
 
         if ((worldTarget - transform.position).x > 0) transform.localScale = Vector3.one;
@@ -310,6 +315,10 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                 //FindTarget();
             }
         }
+        if (currentBehaviour == EnemyBehaviour.AGGRESSIVE)
+        {
+            FindTarget();
+        }
     }
 
     protected override void OnCollisionStay2D(Collision2D _col)
@@ -328,6 +337,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                 PlatformSideCollision(_col);
             }
         }
+
+        
 
 
         //if (_col.collider.tag == "Enemy")
