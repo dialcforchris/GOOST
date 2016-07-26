@@ -36,6 +36,7 @@ public class FloatingText : MonoBehaviour, IPoolable<FloatingText>
 
     public void ReturnPool()
     {
+        score.color = new Color(1, 1, 1, 1);
         poolData.ReturnPool(this);
         gameObject.SetActive(false);
     }

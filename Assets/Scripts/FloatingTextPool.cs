@@ -22,7 +22,6 @@ public class FloatingTextPool : MonoBehaviour
 
     public FloatingText PoolText(int _score, Vector2 _position, Color _colour)
     {
-        Debug.Log("pooled Text");
         FloatingText _floatingText = objectPool.GetPooledObject();
         _floatingText.OnPooled(_score,_position,_colour);
         return _floatingText;

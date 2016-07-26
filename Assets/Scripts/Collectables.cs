@@ -67,18 +67,22 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
                 ISegmentable<Actor> rigSegment = col.gameObject.GetComponent<ISegmentable<Actor>>();
                 if (rigSegment != null)
                 {
+                    int tempScore = 0;
                     Player p = (Player)rigSegment.rigBase;
 
                     if (p.playerType == PlayerType.BADGUY)
                     {
                         p.collectable += type == PickUpType.MONEY ? 1 : 0;
-                        p.ChangeScore(type == PickUpType.MONEY ? score : altScore);
+                        tempScore = type == PickUpType.MONEY ? score : altScore;
+                        p.ChangeScore(tempScore);
                     }
                     else
                     {
                         p.collectable += type == PickUpType.HARDDRIVE ? 1 : 0;
-                        p.ChangeScore(type == PickUpType.HARDDRIVE ? score : altScore);
+                        tempScore = type == PickUpType.HARDDRIVE ? score : altScore;
+                        p.ChangeScore(tempScore);
                     }
+                    FloatingTextPool.instance.PoolText(tempScore, transform.position, type == PickUpType.HARDDRIVE ? Color.blue : Color.grey);
                     ReturnPool();
                 }
             }

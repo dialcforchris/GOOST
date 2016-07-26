@@ -20,6 +20,7 @@ public class Player : Actor, ISegmentable<Actor>
     SpriteRenderer spRend = null;
     [SerializeField]
     private int _playerId = 0;
+    [SerializeField]
     private int score = 0;
     private SpriteRenderer[] allsprites;
    
@@ -294,6 +295,11 @@ public class Player : Actor, ISegmentable<Actor>
             }
             else
             {
+                FloatingTextPool.instance.PoolText(score, transform.position, Color.red);
+                if (_type != PlayerType.ENEMY)
+                {
+                    PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(score);
+                }
                 applyFly = false;
                 Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
                 c.transform.position = transform.position;

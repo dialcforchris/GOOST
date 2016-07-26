@@ -84,6 +84,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
                 {
                     Player p = (Player)rigSegment.rigBase;
                     p.ChangeScore(score);
+                    FloatingTextPool.instance.PoolText(score, transform.position, Color.white);
                     ReturnPool();
                 }
             }

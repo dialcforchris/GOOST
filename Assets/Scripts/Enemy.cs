@@ -52,6 +52,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     private Player closestPlayer = null;
 
     [SerializeField] private LayerMask RayLayerMask;
+    [SerializeField]
+    private int score;
 
     protected override void Start()
     {
@@ -69,7 +71,6 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         speed = _speed;
         FindTarget();
         gameObject.SetActive(true);
-
         takeOffTime = 0.0f;
         eggTime = 0.0f;
         onPlatform = false;
@@ -263,7 +264,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         ////_coin.transform.position = transform.position;
         //Egg e = EggPool.instance.PoolEgg(behaviour, speed);
         //  e.transform.position = transform.position;
-
+        FloatingTextPool.instance.PoolText(score,transform.position,Color.green);
+        PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).ChangeScore(score);
         --numActive;
         anim.Stop();
         poolData.ReturnPool(this);
