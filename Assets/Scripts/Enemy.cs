@@ -69,6 +69,11 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         ++numActive;
         behaviour = _behaviour;
         currentBehaviour = behaviour;
+        if(currentBehaviour == EnemyBehaviour.HUNTER)
+        {
+            currentBehaviour = EnemyBehaviour.AGGRESSIVE;
+            aggression = 1.0f;
+        }
         speed = _speed;
         FindTarget();
         gameObject.SetActive(true);

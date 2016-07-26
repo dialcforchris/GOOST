@@ -71,6 +71,7 @@ public class EnemyManager : MonoBehaviour
                     {
                         nextWaveTime = 0.0f;
                         ++currentWave;
+                        Debug.Log("Wave:" + currentWave);
                         spawnIndex = 0;
                         if (currentWave == waves.Length)
                         {
