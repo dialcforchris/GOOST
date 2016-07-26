@@ -56,10 +56,9 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     [SerializeField]
     private int score;
 
-    protected override void Start()
+    protected void Start()
     {
         screenWrap.AddScreenWrapCall(UpdateWorldFromView);
-        base.Start();
     }
 
     public void Spawn(EnemyBehaviour _behaviour, float _speed)

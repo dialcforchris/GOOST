@@ -25,38 +25,16 @@ public class Actor : MonoBehaviour
     {
         get { return _playerType; }
     }
-    private bool peckUp = true;
 
     [SerializeField] protected Lance lance = null;
     [SerializeField] protected Legs legs = null;
 
-    [SerializeField] protected ActorSegment[] segments = null;
-
-    protected Vector3 worldMaxY;
-    [SerializeField] protected float viewportMaxY = 1.01f;
+    public static Vector3 worldMaxY;
 
     protected bool onPlatform = false;
 
-    private bool extending = false;
-
-    protected virtual void Start()
-    {
-        worldMaxY = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, viewportMaxY));
-    }
-
     protected virtual void OnEnable()
     {
-        //Ignore collisions with child objects
-        for (int i = 0; i < segments.Length; ++i)
-        {
-            Physics2D.IgnoreCollision(col, segments[i].segmentCollider);
-            for(int j = i + 1; j < segments.Length; ++j)
-            {
-                Physics2D.IgnoreCollision(segments[i].segmentCollider, segments[j].segmentCollider);
-            }
-            Physics2D.IgnoreCollision(segments[i].segmentCollider, lance.lanceCollider);
-            Physics2D.IgnoreCollision(segments[i].segmentCollider, legs.legsCollider);
-        }
         Physics2D.IgnoreCollision(col, lance.lanceCollider);
         Physics2D.IgnoreCollision(col, legs.legsCollider);
     }
@@ -73,10 +51,6 @@ public class Actor : MonoBehaviour
         body.velocity = Vector2.zero;
         lance.ActorDefeated();
         legs.ActorDefeated();
-        foreach(ActorSegment _seg in segments)
-        {
-            _seg.ActorDefeated();
-        }
         StartCoroutine(DeathAnimation());
     }
 
@@ -93,10 +67,6 @@ public class Actor : MonoBehaviour
         col.enabled = true;
         lance.ActorSpawned();
         legs.ActorSpawned();
-        foreach (ActorSegment _seg in segments)
-        {
-            _seg.ActorSpawned();
-        }
         gameObject.SetActive(true);
     }
 
@@ -113,6 +83,23 @@ public class Actor : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D _col)
     {
+        if (tag == "Player")
+        {
+            if (_col.collider.tag == "Enemy")
+            {
+                ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+                if (_rigSegment != null)
+                {
+                    if (_col.contacts[0].normal.y > 0.0f)
+                    {
+                        if (_col.contacts[0].otherCollider == col)
+                        {
+                            _rigSegment.rigBase.Defeat(_playerType);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     protected virtual void OnCollisionStay2D(Collision2D _col)

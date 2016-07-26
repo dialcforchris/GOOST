@@ -30,6 +30,7 @@ public class CameraController : MonoBehaviour
         }
         if (end == up)
             GameStateManager.instance.ChangeState(GameStates.STATE_MENU);
+        Actor.worldMaxY = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 1.01f));
     }
 }
 

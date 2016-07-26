@@ -70,9 +70,8 @@ public class Player : Actor, ISegmentable<Actor>
         base.OnEnable();
         SwitchGuys(_playerType);
     }
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
         allsprites = transform.GetComponentsInChildren<SpriteRenderer>();
         dashcool = maxDashCool;
     }
