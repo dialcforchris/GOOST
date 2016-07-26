@@ -9,14 +9,26 @@ public class MainMenu : MonoBehaviour
     public static MainMenu instance;
 
     [Header("Main menu")]
-    public Text[] mainMenuElements;
-    public Image[] mainMenuCursor;
+    [SerializeField]
+    Text[] mainMenuElements;
+    [SerializeField]
+    Image[] mainMenuCursor;
 
-    public GameObject[] menuScreens;
+    [SerializeField]
+    GameObject[] menuScreens;
 
     [Header("Options menu")]
-    public Text[] optionsElements;
-    public Image[] optionsCursor;
+    [SerializeField]
+    Text[] optionsElements;
+    [SerializeField]
+    Image[] optionsCursor;
+
+    [Header("Level Selection")]
+    [SerializeField]
+    Image[] levelSelectionElements;
+    [SerializeField]
+    Image[] levelSelectionCursor;
+
 
     [Header("Ready up menu")]
     [SerializeField]
@@ -38,7 +50,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     GameObject[] CustomGeese;
 
-    int mainMenuIndex, optionsIndex;
+    int mainMenuIndex, optionsIndex,levelSelectionIndex;
     bool transitioning;
 
     public menuState currentState;
@@ -49,6 +61,7 @@ public class MainMenu : MonoBehaviour
         optionsMenu,
         leaderboardsMenu,
         statsScreen,
+        levelSelection,
     }
 
     public void Awake()
@@ -79,24 +92,24 @@ public class MainMenu : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
         }
-        else if (start.y != 180)
+        else if (start.y != 180 )//|| start.y != 270)
         {
             Debug.Log("b");
 
-            while (lerpy < 90)
+            while (lerpy < 18)
             {
                 lerpy++;
-                transform.Rotate(Vector3.left, 2);
+                transform.Rotate(Vector3.left, 5);
                 yield return new WaitForEndOfFrame();
             }
         }
         else
         {
             Debug.Log("C");
-            while (lerpy < 90)
+            while (lerpy < 18)
             {
-                lerpy++;
-                transform.Rotate(Vector3.right, 2);
+                lerpy++;    
+                transform.Rotate(Vector3.right, 5);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -175,6 +188,12 @@ public class MainMenu : MonoBehaviour
                     //Display the correct menu
                     StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(-180, 0, 0)));
                     break;
+                case 5:
+                    transitioning = true;
+                    currentState = menuState.levelSelection;
+                    StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(-90, 0, 0)));
+                    break;
+
             }
         }
     }
@@ -195,6 +214,9 @@ public class MainMenu : MonoBehaviour
                         break;
                     case menuState.optionsMenu:
                         optionsMenu();
+                        break;
+                    case menuState.levelSelection:
+                        LevelSelectionMenu();
                         break;
                     default:
                         if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
@@ -362,7 +384,7 @@ public class MainMenu : MonoBehaviour
             returnImage.fillAmount = returnTimer;
             if (returnTimer > 1)
             {
-                switchMenus(0);
+                switchMenus(5);
                 ready[0] = false;
                 ready[1] = false;
                 readyIndicator[0].color = Color.white;
@@ -482,7 +504,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    void changeSelection(Image[] cursors, Text[] menuElements, ref int menuIndex)
+    void changeSelection(Image[] cursors, RectTransform[] menuElements, ref int menuIndex,float yOffset = 0)
     {
         if (((Input.GetAxis("Vertical0") < 0 && !scrolling[0]) || (Input.GetAxis("Vertical1") < 0) && !scrolling[1]))
         {
@@ -502,8 +524,8 @@ public class MainMenu : MonoBehaviour
                 menuIndex = 0;
 
             //move cursor
-            cursors[0].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition + new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 75, 42);
-            cursors[1].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition - new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 75, -42);
+            cursors[0].rectTransform.anchoredPosition = menuElements[menuIndex].anchoredPosition + new Vector2(menuElements[menuIndex].sizeDelta.x / 2 + 75, yOffset);
+            cursors[1].rectTransform.anchoredPosition = menuElements[menuIndex].anchoredPosition - new Vector2(menuElements[menuIndex].sizeDelta.x / 2 + 75, -yOffset);
 
         }
         else if (((Input.GetAxis("Vertical0") > 0 && !scrolling[0])|| (Input.GetAxis("Vertical1") > 0) && !scrolling[1]))
@@ -524,8 +546,8 @@ public class MainMenu : MonoBehaviour
                 menuIndex = menuElements.Length - 1;
 
             //move cursor
-            cursors[0].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition + new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 75, 42);
-            cursors[1].rectTransform.anchoredPosition = menuElements[menuIndex].rectTransform.anchoredPosition - new Vector2(menuElements[menuIndex].rectTransform.sizeDelta.x / 2 + 75, -42);
+            cursors[0].rectTransform.anchoredPosition = menuElements[menuIndex].anchoredPosition + new Vector2(menuElements[menuIndex].sizeDelta.x / 2 + 75, yOffset);
+            cursors[1].rectTransform.anchoredPosition = menuElements[menuIndex].anchoredPosition - new Vector2(menuElements[menuIndex].sizeDelta.x / 2 + 75, -yOffset);
         }
         else if (Input.GetAxis("Vertical0") == 0 && scrolling[0])
         {
@@ -540,15 +562,15 @@ public class MainMenu : MonoBehaviour
     }
 
     void mainMenu()
-    {
-        changeSelection(mainMenuCursor, mainMenuElements, ref mainMenuIndex);
+    {         
+        changeSelection(mainMenuCursor, GetRectTransforms(mainMenuElements), ref mainMenuIndex,42);
 
         if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
         {
             switch (mainMenuIndex)
             {
                 case 0:
-                    switchMenus(4);
+                    switchMenus(5);
                     //Camera.main.GetComponent<CameraController>().switchViews(false);
                     //Start game
                     break;
@@ -575,9 +597,34 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    RectTransform[] GetRectTransforms(Text[] textElements)
+    {
+        RectTransform[] RTs = new RectTransform[textElements.Length];
+
+        int i = 0;
+        foreach (Text t in textElements)
+        {
+            RTs[i] = t.rectTransform;
+            i++;
+        }
+        return RTs;
+    }
+    RectTransform[] GetRectTransforms(Image[] textElements)
+    {
+        RectTransform[] RTs = new RectTransform[textElements.Length];
+
+        int i = 0;
+        foreach (Image t in textElements)
+        {
+            RTs[i] = t.rectTransform;
+            i++;
+        }
+        return RTs;
+    }
+
     void optionsMenu()
     {
-        changeSelection(optionsCursor, optionsElements, ref optionsIndex);
+        changeSelection(optionsCursor, GetRectTransforms(optionsElements), ref optionsIndex,42);
 
         if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
         {
@@ -605,24 +652,22 @@ public class MainMenu : MonoBehaviour
     void LevelSelectionMenu()
     {
         //Select level
+        changeSelection(levelSelectionCursor, GetRectTransforms(levelSelectionElements), ref levelSelectionIndex);
 
-        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
+        if (Input.GetButtonDown("Interact0") || Input.GetButtonDown("Interact1"))
         {
-            switch (optionsIndex)
+            switch (levelSelectionIndex)
             {
                 case 0:
-                    //do a thing
+                    switchMenus(4);
+                    //Select woodland level
                     break;
                 case 1:
-                    //do a thing
+                    switchMenus(4);
+                    //City level
                     break;
                 case 2:
-                    //do a thing
-                    break;
-                case 3:
-                    //do a thing
-                    break;
-                case 4:
+                    //Back to main menu
                     switchMenus(0);
                     break;
             }
