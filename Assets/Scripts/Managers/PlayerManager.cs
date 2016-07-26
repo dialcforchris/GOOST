@@ -179,8 +179,8 @@ public class PlayerManager : MonoBehaviour
             scores[i].text = players[i].GetScore().ToString();
             lives[i].text = "X"+players[i].eggLives.ToString();
             coll[i].text = "X"+players[i].collectable.ToString();
-            lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
-            collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+            lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
+            collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
             boosts[i].fillAmount = players[i].dashcool;
         }
        

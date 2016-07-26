@@ -20,10 +20,10 @@ public class CollectablePool : MonoBehaviour
         objectPool = new ObjectPool<Collectables>(collectablesPrefab, 10, transform);
     }
 
-    public Collectables PoolCollectables(PickUpType _type)
+    public Collectables PoolCollectables(PickUpType _type, int _playerId = 3)
     {
         Collectables _collectables = objectPool.GetPooledObject();
-        _collectables.OnPooled(_type);
+        _collectables.OnPooled(_type,_playerId);
         return _collectables;
     }
 }

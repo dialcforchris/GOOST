@@ -33,6 +33,7 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
     float invincibleDuration = 0.1f;
     bool canFlash = false;
     bool visible = true;
+    private int owningPlayer = 3;
     
     void Update()
     {
@@ -73,16 +74,25 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
                     if (p.playerType == PlayerType.BADGUY)
                     {
                         p.collectable += type == PickUpType.MONEY ? 1 : 0;
+                    if (owningPlayer != p.playerId)
+                    {
                         tempScore = type == PickUpType.MONEY ? score : altScore;
                         p.ChangeScore(tempScore);
+                    }
                     }
                     else
                     {
                         p.collectable += type == PickUpType.HARDDRIVE ? 1 : 0;
+                    if (owningPlayer != p.playerId)
+                    {
                         tempScore = type == PickUpType.HARDDRIVE ? score : altScore;
                         p.ChangeScore(tempScore);
                     }
+                    }
+                if (tempScore != 0)
+                {
                     FloatingTextPool.instance.PoolText(tempScore, transform.position, type == PickUpType.HARDDRIVE ? Color.blue : Color.grey);
+                }
                     ReturnPool();
                 }
             }
@@ -91,14 +101,15 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
 
     public void ReturnPool()
     {
-        
+        owningPlayer = 3;
         poolData.ReturnPool(this);
         gameObject.SetActive(false);
     }
 
-    public void OnPooled(PickUpType _type)
+    public void OnPooled(PickUpType _type,int _owningPlayer =3)
     {
        life = 0;
+        owningPlayer = _owningPlayer;
        flash = 0;
        canFlash = false;
        visible = true;

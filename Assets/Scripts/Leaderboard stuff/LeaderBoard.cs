@@ -99,12 +99,12 @@ public class LeaderBoard : MonoBehaviour
     /// </summary>
     void CreateScoreFile()
     {
-        StreamWriter makeFile = File.CreateText(gameName + "Scores.dat");
+     //   StreamWriter makeFile = File.CreateText(gameName + "Scores.dat");
         foreach(KeyValuePair<string,int> k in scores)
         {
-            makeFile.WriteLine(k.Key + " " + k.Value);
+            //makeFile.WriteLine(k.Key + " " + k.Value);
         }
-        makeFile.Close();
+       // makeFile.Close();
     } 
 
     void WriteToFile()

@@ -21,8 +21,10 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     private int _playerId = 0;
     [SerializeField]
+    private int deathScore = 0;
     private int score = 0;
     private SpriteRenderer[] allsprites;
+
    
     #region egg stuff [old shit]
     private int _eggLives = 3;
@@ -284,7 +286,7 @@ public class Player : Actor, ISegmentable<Actor>
             {
                 for (int i = 0; i < collectable; i++)
                 {
-                    Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                    Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE,playerId);
                     c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
                 }
                 _collectable = 0;
@@ -295,9 +297,9 @@ public class Player : Actor, ISegmentable<Actor>
             }
             else
             {
-                FloatingTextPool.instance.PoolText(score, transform.position, Color.red);
                 if (_type != PlayerType.ENEMY)
                 {
+                    FloatingTextPool.instance.PoolText(score, transform.position, Color.red);
                     PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(score);
                 }
                 applyFly = false;
