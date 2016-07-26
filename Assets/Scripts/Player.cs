@@ -25,12 +25,9 @@ public class Player : Actor, ISegmentable<Actor>
     private int score = 0;
     private SpriteRenderer[] allsprites;
 
-<<<<<<< HEAD
    
-=======
     [SerializeField]
     Canvas PlayerCanvas;
->>>>>>> origin/master
     #region egg stuff [old shit]
     private int _eggLives = 3;
     public int eggMash = 0;
