@@ -56,23 +56,27 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
         }
         else
         {
-            ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-            if (rigSegment != null)
+            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+            if (_rigSegment != null)
             {
                 foreach (string _s in affectTags)
                 {
                     if (_s == _col.gameObject.tag)
                     {
-                        if (rigSegment.segmentName == "Player" || rigSegment.segmentName == "Enemy")
+                        if (_rigSegment.segmentName == "Body")
                         {
-                            rigSegment.rigBase.Defeat(actor.playerType);
+                            //if (_col.contacts[0].normal.x != 0.0f)
+                            //{
+                            _rigSegment.rigBase.Defeat(actor.playerType);
+                            return;
+                            //}
                         }
                         break;
                     }
                 }
+                ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
             }
         }
-        OnCollisionStay2D(_col);
     }
 
     private void OnCollisionStay2D(Collision2D _col)
@@ -82,9 +86,10 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
             return;
         }
 
-        ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        if (rigSegment != null)
+        ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+        if (_rigSegment != null)
         {
+<<<<<<< HEAD
             if (rigSegment.segmentName == "Lance")
             {
                 rigSegment.rigBase.ApplyKnockback(new Vector2(_col.collider.transform.position.x - transform.position.x, -1.0f), knockPower);
@@ -94,17 +99,25 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
             {
                 rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -1.0f), knockPower); 
             }
+=======
+            ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
+>>>>>>> origin/master
         }
+    }
+
+    private void ApplyOppositeForce(ISegmentable<Actor> _segment, Vector2 _direction)
+    {
+        if (_direction.y == 0.0f)
+        {
+            _direction += Vector2.down * 0.5f;
+        }
+
+        _segment.rigBase.ApplyKnockback(_direction, knockPower);
     }
 
 
     private void OnCollisionExit2D(Collision2D _col)
     {
-        if(_col.contacts[0].otherCollider != col)
-        {
-            Debug.Log("issue");
-        }
-
         if (_col.collider.tag == "Platform")
         {
             actor.TakeOffFromPlatform();

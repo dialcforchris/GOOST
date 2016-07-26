@@ -61,22 +61,9 @@ public class Actor : MonoBehaviour
         Physics2D.IgnoreCollision(col, legs.legsCollider);
     }
 
-    protected bool Extend()
-    {
-        if(extending)
-        {
-            return false;
-        }
-        else
-        {
-            extending = true;
-            return true;
-        }
-    }
-
     public virtual void ApplyKnockback(Vector2 _direction, float _power)
     {
-        body.velocity = new Vector2(0.0f, body.velocity.y);
+        body.velocity = Vector2.zero;// new Vector2(0.0f, body.velocity.y);
         body.AddForce(_direction.normalized * _power, ForceMode2D.Impulse);
     }
 
@@ -124,57 +111,34 @@ public class Actor : MonoBehaviour
         }
     }
 
-    protected void Peck()
-    {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("goose_neck_up_idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("goose_neck_down_idle"))
-        {
-            if(peckUp)
-            {
-                anim.Play("goose_neck_up_extend");
-            }
-            else
-            {
-                anim.Play("goose_neck_down_extend");
-            }
-        }
-    }
-
-    protected void TogglePeckLocation()
-    {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("goose_neck_up_idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("goose_neck_down_idle"))
-        {
-            anim.SetBool("mirror", peckUp ? false : true);
-            peckUp = !peckUp;
-            anim.Play("goose_neck_up_to_down");
-        }
-    }
-
     protected virtual void OnCollisionEnter2D(Collision2D _col)
     {
     }
 
     protected virtual void OnCollisionStay2D(Collision2D _col)
     {
-        
-        if (_col.collider.tag == "Platform")
+        if (_col.contacts[0].otherCollider == col)
         {
-            if (_col.contacts[0].otherCollider == col)
+            if (_col.collider.tag == "Platform")
             {
+
                 if (_col.contacts[0].normal.y > 0.0f)
                 {
                     body.AddForce(new Vector2(_col.transform.position.x > transform.position.x ? -0.05f : 0.05f, 0.0f), ForceMode2D.Impulse);
                 }
+
+            }
+
+
+            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+            if (_rigSegment != null)
+            {
+                if (_rigSegment.segmentName == "Body")
+                {
+                    _rigSegment.rigBase.ApplyKnockback(_col.contacts[0].normal, -0.5f);
+                }        
             }
         }
-
-        //if (_col.collider.tag == "Enemy")
-        //{
-        //    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        //    if (rigSegment != null)
-        //    {
-        //        ((Enemy)rigSegment.rigBase).FindTarget();
-        //    }
-        //}
     }
 
     public virtual void LandedOnPlatform(Collider2D col)
@@ -196,7 +160,7 @@ public class Actor : MonoBehaviour
             if (body.velocity.x > 5 || body.velocity.x < -5)
             {
                 skidMark.Emit(1);
-                skidMark.transform.position = transform.position;
+                //skidMark.transform.position = transform.position;
             }
         }
     }

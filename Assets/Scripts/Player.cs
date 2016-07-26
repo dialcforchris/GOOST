@@ -25,7 +25,12 @@ public class Player : Actor, ISegmentable<Actor>
     private int score = 0;
     private SpriteRenderer[] allsprites;
 
+<<<<<<< HEAD
    
+=======
+    [SerializeField]
+    Canvas PlayerCanvas;
+>>>>>>> origin/master
     #region egg stuff [old shit]
     private int _eggLives = 3;
     public int eggMash = 0;
@@ -41,7 +46,7 @@ public class Player : Actor, ISegmentable<Actor>
 
 
     public float dashcool = 0;
-    float maxDashCool = 5.0f;
+    public float maxDashCool = 5.0f;
    
     float flashTime = 0;
     bool flashBool = false;
@@ -61,7 +66,7 @@ public class Player : Actor, ISegmentable<Actor>
 
     #region ISegmentable
     public Actor rigBase { get { return this; } }
-    public string segmentName { get { return "Player"; } }
+    public string segmentName { get { return "Body"; } }
     #endregion
 
     public int playerId
@@ -98,14 +103,6 @@ public class Player : Actor, ISegmentable<Actor>
                 Movement();
                 base.FixedUpdate();
 
-                if (Input.GetButtonDown("Peck" + playerId.ToString()) || Input.GetKeyDown(KeyCode.P))
-                {
-                    Peck();
-                }
-                if (Input.GetButtonDown("BeakHeight" + playerId.ToString()) || Input.GetKeyDown(KeyCode.L))
-                {
-                    TogglePeckLocation();
-                }
                 if (applyFly)
                 {
                     body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
@@ -156,10 +153,16 @@ public class Player : Actor, ISegmentable<Actor>
         VelocityCheck();
         body.AddForce(new Vector2(Input.GetAxis("Horizontal"+playerId) * (speed),0));
 
-        if (Input.GetAxis("Horizontal"+playerId) < 0)
+        if (Input.GetAxis("Horizontal" + playerId) < 0)
+        {
             transform.localScale = new Vector3(-1, 1, 1);
-        if (Input.GetAxis("Horizontal"+playerId) > 0)
+            PlayerCanvas.transform.localScale = new Vector3(-0.01f, 0.01f, 0.01f);
+        }
+        if (Input.GetAxis("Horizontal" + playerId) > 0)
+        {
             transform.localScale = Vector3.one;
+            PlayerCanvas.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+        }
     }
   
     void VelocityCheck()

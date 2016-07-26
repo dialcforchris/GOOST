@@ -18,7 +18,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
     #region ISegmentable
     public Actor rigBase { get { return this; } }
-    public string segmentName { get { return "Enemy"; } }
+    public string segmentName { get { return "Body"; } }
     #endregion
 
     [SerializeField] private ScreenWrap screenWrap = null;
@@ -105,6 +105,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
             }
 
             MovementToTarget();
+
             base.FixedUpdate();
 
             DetermineAnimationState();
@@ -300,14 +301,14 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                     }
                 }
 
-                if (_col.contacts[0].otherCollider == col)
-                {
-                    Actor _actor = _col.collider.GetComponent<Actor>();
-                    if (_actor)
-                    {
-                        _actor.ApplyKnockback(_col.contacts[0].normal, platformBounceX);
-                    }
-                }
+                //if (_col.contacts[0].otherCollider == col)
+                //{
+                //    Actor _actor = _col.collider.GetComponent<Actor>();
+                //    if (_actor)
+                //    {
+                //        _actor.ApplyKnockback(_col.contacts[0].normal, platformBounceX);
+                //    }
+                //}
                 //body.velocity = new Vector2(0.0f, body.velocity.y);
                 //transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
                 //Vector2 _force = _col.contacts[0].normal * platformBounceX;
