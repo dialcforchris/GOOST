@@ -25,21 +25,10 @@ public class Player : Actor, ISegmentable<Actor>
     private int score = 0;
     private SpriteRenderer[] allsprites;
 
-   
+    private int _eggLives = 3;
     [SerializeField]
     Canvas PlayerCanvas;
-    #region egg stuff [old shit]
-    private int _eggLives = 3;
-    public int eggMash = 0;
-    private int maxEggMash = 17;
-    float eggtimer = 0;
-    float maxEggTimer = 1.5f;
-    float mashTime = 0;
-    float maxMashTime = 0.15f;
-    public GameObject eggTrans;
-    public bool inNest = false;
-    public bool carryingEgg = false;
-    #endregion
+  
 
 
     public float dashcool = 0;
@@ -81,9 +70,8 @@ public class Player : Actor, ISegmentable<Actor>
         base.OnEnable();
         SwitchGuys(_playerType);
     }
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
         allsprites = transform.GetComponentsInChildren<SpriteRenderer>();
         dashcool = maxDashCool;
     }
@@ -95,8 +83,6 @@ public class Player : Actor, ISegmentable<Actor>
         {
             if (!isDead)
             {
-                //Debug.Log(collectable);
-                MashTimer();
                 Movement();
                 base.FixedUpdate();
 
@@ -172,61 +158,7 @@ public class Player : Actor, ISegmentable<Actor>
     #endregion
 
 
-    //kind of redundant
-    #region egg stuff
-    void LayAnEgg()
-    {
-        if (Input.GetButtonDown("Interact"+playerId.ToString())&&inNest)
-        {
-            eggMash++;
-            mashTime = 0;
-        }
-      
-        if (eggMash >= maxEggMash)
-        {
-            eggMash = 0;
-            eggtimer = 0;
-            //Egg e = EggPool.instance.PoolEgg();
-            //e.DisablePhysics(true);
-        }
-    }
-
-    bool EggTimer()
-    {
-        if (eggtimer < maxEggTimer)
-        {
-            eggtimer += Time.deltaTime;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    bool MashTimer()
-    {
-        if (eggMash > 0)
-        {
-            if (mashTime < maxMashTime)
-            {
-                mashTime += Time.deltaTime;
-                return true;
-            }
-            else
-            {
-                mashTime = 0;
-                eggMash--;
-                return false;
-            }
-        }
-        else
-        {
-            eggtimer = 0;
-        }
-        return true;
-    }
-    #endregion
-
+ 
     #region score
     public void ChangeScore(int _change)
     {
@@ -280,15 +212,17 @@ public class Player : Actor, ISegmentable<Actor>
 
     public override void Defeat(PlayerType _type)
     {
+       
         if (!invincible)
         {
             if (collectable > 0)
             {
                 for (int i = 0; i < collectable; i++)
                 {
-                    Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE,playerId);
+                    Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE, playerId);
                     c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
                 }
+                if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
                 _collectable = 0;
 
                 Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
@@ -299,8 +233,8 @@ public class Player : Actor, ISegmentable<Actor>
             {
                 if (_type != PlayerType.ENEMY)
                 {
-                    FloatingTextPool.instance.PoolText(score, transform.position, Color.red);
-                    PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(score);
+                    FloatingTextPool.instance.PoolText(deathScore, transform.position, Color.red);
+                    PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(deathScore);
                 }
                 applyFly = false;
                 Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.HARDDRIVE : PickUpType.MONEY,playerId);

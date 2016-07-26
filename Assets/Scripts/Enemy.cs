@@ -31,7 +31,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
     public Vector3 worldTarget;
     public Vector3 viewTarget;
-
+    [SerializeField]
+    private Transform eggTrans;
     [SerializeField] private float speed = 1.0f;
     [SerializeField] private float maxSpeed = 5.0f;
     [SerializeField] private float targetThreshold = 0.5f;
@@ -55,10 +56,9 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     [SerializeField]
     private int score;
 
-    protected override void Start()
+    protected void Start()
     {
         screenWrap.AddScreenWrapCall(UpdateWorldFromView);
-        base.Start();
     }
 
     public void Spawn(EnemyBehaviour _behaviour, float _speed)
@@ -68,6 +68,11 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         ++numActive;
         behaviour = _behaviour;
         currentBehaviour = behaviour;
+        if(currentBehaviour == EnemyBehaviour.HUNTER)
+        {
+            currentBehaviour = EnemyBehaviour.AGGRESSIVE;
+            aggression = 1.0f;
+        }
         speed = _speed;
         FindTarget();
         gameObject.SetActive(true);
@@ -266,10 +271,6 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
         Collectables c = CollectablePool.instance.PoolCollectables(_type == PlayerType.BADGUY? PickUpType.MONEY:PickUpType.HARDDRIVE);
         c.transform.position = transform.position;
-        ////SilverCoin _coin = CoinPool.instance.PoolCoin();
-        ////_coin.transform.position = transform.position;
-        //Egg e = EggPool.instance.PoolEgg(behaviour, speed);
-        //  e.transform.position = transform.position;
         FloatingTextPool.instance.PoolText(score,transform.position,Color.green);
         PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).ChangeScore(score);
         --numActive;
@@ -300,20 +301,6 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                         FindTarget();
                     }
                 }
-
-                //if (_col.contacts[0].otherCollider == col)
-                //{
-                //    Actor _actor = _col.collider.GetComponent<Actor>();
-                //    if (_actor)
-                //    {
-                //        _actor.ApplyKnockback(_col.contacts[0].normal, platformBounceX);
-                //    }
-                //}
-                //body.velocity = new Vector2(0.0f, body.velocity.y);
-                //transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
-                //Vector2 _force = _col.contacts[0].normal * platformBounceX;
-                //body.AddForce(_force, ForceMode2D.Impulse);
-                //FindTarget();
             }
         }
         if (currentBehaviour == EnemyBehaviour.AGGRESSIVE)
@@ -382,7 +369,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                 if (Random.value < eggChance)
                 {
                     Egg e = EggPool.instance.PoolEgg(behaviour, speed);
-                    e.transform.position = new Vector2(transform.position.x + 0.5f, transform.position.y - 1f);
+                    e.transform.position = eggTrans.position;// new Vector2(transform.position.x + 0.5f, transform.position.y);
                     //e.OnPooled();
                 }
             }

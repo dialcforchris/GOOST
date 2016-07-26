@@ -97,7 +97,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
         {
             ani.Play("Laid");
         }
-        col.isTrigger = false;
+      //  col.isTrigger = false;
         body.gravityScale = 1;
         body.AddForce(new Vector2(Random.Range(-0.8f,0.8f),Random.Range(1, 3)));
         body.constraints = RigidbodyConstraints2D.None;
