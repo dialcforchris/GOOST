@@ -68,7 +68,11 @@ public class MainMenu : MonoBehaviour
         while (lerpy < 1)
         {
             start = transform.rotation.eulerAngles;
+            //transform.rotation = Quaternion.Euler(Vector3.Slerp(start, end, lerpy));
             transform.rotation = Quaternion.Euler(new Vector3(Mathf.LerpAngle(start.x, end.x, lerpy), Mathf.LerpAngle(start.y, end.y, lerpy), Mathf.LerpAngle(start.z, end.z, lerpy)));
+
+            transform.Rotate();
+
             lerpy += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
@@ -108,6 +112,7 @@ public class MainMenu : MonoBehaviour
                     StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(90, 0, 0)));
                     break;
                 case 4:
+                    #region a lot of nonsense
                     //no button pressing allowed during this time
                     transitioning = true;
 
@@ -142,9 +147,9 @@ public class MainMenu : MonoBehaviour
                     //Tween in character images
                     StartCoroutine(CharacterImageTransition(true, 0));
                     StartCoroutine(CharacterImageTransition(true, 1));
-
+                    #endregion
                     //Display the correct menu
-                    StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(-90, 0, 0)));
+                    StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(-180, 0, 0)));
                     break;
             }
         }
