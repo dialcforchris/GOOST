@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class EnterName : MonoBehaviour
 {
     public Text[] box;
-    public Text playerName;
+   // public Text playerName;
     int[] currentCharacter;
     public Text score;
     int selectBox = 0;
@@ -32,14 +32,21 @@ public class EnterName : MonoBehaviour
     {
         for (int i = 0; i < PlayerManager.instance.NumberOfPlayers();)
         {
-            playerNumber = i;
-            MenuInput();
-            box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
-            ChangeTextColour();
-            score.text = "Player " + playerNumber + 1 + " Score: " + PlayerManager.instance.GetPlayer(playerNumber).GetScore().ToString();
-            if (Input.GetButtonDown("Fire" + playerNumber))
+            if (LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(i).GetScore()))
             {
-                SelectName();
+                playerNumber = i;
+                MenuInput();
+                box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
+                ChangeTextColour();
+                score.text = "Player " + playerNumber + 1 + " Score: " + PlayerManager.instance.GetPlayer(playerNumber).GetScore().ToString();
+                if (Input.GetButtonDown("Fire" + playerNumber))
+                {
+                    SelectName();
+                    i++;
+                }
+            }
+            else
+            {
                 i++;
             }
         }

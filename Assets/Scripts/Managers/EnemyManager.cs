@@ -75,6 +75,13 @@ public class EnemyManager : MonoBehaviour
                         spawnIndex = 0;
                         if (currentWave == waves.Length)
                         {
+
+                            //////////////////////////////////////
+                            //////////////END THE GAME
+                            //////////////////////////////////////
+                            GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
+                           
+
                             --currentWave;
                         }
                     }

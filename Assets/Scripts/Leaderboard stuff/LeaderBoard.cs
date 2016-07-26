@@ -196,4 +196,20 @@ public class LeaderBoard : MonoBehaviour
     {
         return scores;
     }
+
+
+    public void EndGame()
+    {
+        for (int i = 0; i < 2;)
+        {
+            if (CheckIfHighScore(PlayerManager.instance.GetPlayer(i).GetScore()))
+            {
+                enterName.SetActive(true);
+            }
+            else
+            {
+                i++;
+            }
+        }
+    }
 }

@@ -170,7 +170,7 @@ public class PlayerManager : MonoBehaviour
         }
         return players[0];
     }
-   
+
 
     void UpdateUI()
     {
@@ -182,7 +182,7 @@ public class PlayerManager : MonoBehaviour
             lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
             collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
             boosts[i].fillAmount = players[i].dashcool;
-            
+
 
             //lives[i].text = "X" + players[i].eggLives.ToString();
             //coll[i].text = "X" + players[i].collectable.ToString();
@@ -205,5 +205,5 @@ public class PlayerManager : MonoBehaviour
                 boosts[i].transform.parent.GetComponent<Image>().color = colC;
             }
         }
-        }  
+    }  
 }
