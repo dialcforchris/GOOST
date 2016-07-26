@@ -129,13 +129,7 @@ public class PlayerManager : MonoBehaviour
         }
         if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY || GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
         {
-            Debug.Log("I'm in update");
-            if (Input.GetKey(KeyCode.Q))
-            {
-                lives[0].text = "lives";
-                coll[0].text = "coll";
-            }
-           UpdateUI();
+          UpdateUI();
         }
     }
     public Player GetPlayer(int _playerIndex)
@@ -188,7 +182,6 @@ public class PlayerManager : MonoBehaviour
             lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
             collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
             boosts[i].fillAmount = players[i].dashcool;
-            Debug.Log("collectables "+players[0].collectable.ToString() + "Lives "+ players[0].eggLives.ToString()) ;
             
 
             //lives[i].text = "X" + players[i].eggLives.ToString();

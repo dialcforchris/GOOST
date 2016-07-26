@@ -29,7 +29,7 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     Canvas PlayerCanvas;
     #region egg stuff [old shit]
-    private int _eggLives = 25;
+    private int _eggLives = 3;
     public int eggMash = 0;
     private int maxEggMash = 17;
     float eggtimer = 0;
@@ -303,7 +303,7 @@ public class Player : Actor, ISegmentable<Actor>
                     PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(score);
                 }
                 applyFly = false;
-                Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.HARDDRIVE : PickUpType.MONEY,playerId);
                 c.transform.position = transform.position;
                 isDead = true;
                 base.Defeat(_type);
