@@ -85,10 +85,10 @@ public class Actor : MonoBehaviour
     {
         if (tag == "Player")
         {
-            if (_col.collider.tag == "Enemy")
+            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+            if (_rigSegment != null)
             {
-                ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-                if (_rigSegment != null)
+                if (_rigSegment.segmentName == "Body" || _col.collider.tag == "Enemy")
                 {
                     if (_col.contacts[0].normal.y > 0.0f)
                     {
@@ -98,7 +98,7 @@ public class Actor : MonoBehaviour
                         }
                     }
                 }
-            }
+            }    
         }
     }
 

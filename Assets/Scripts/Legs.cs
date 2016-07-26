@@ -63,7 +63,7 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
                 {
                     if (_s == _col.gameObject.tag)
                     {
-                        if (_rigSegment.segmentName == "Body")
+                        if (_rigSegment.segmentName == "Body" || _col.collider.tag == "Enemy")
                         {
                             //if (_col.contacts[0].normal.x != 0.0f)
                             //{
