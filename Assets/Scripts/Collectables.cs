@@ -71,24 +71,24 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
                     int tempScore = 0;
                     Player p = (Player)rigSegment.rigBase;
 
-                    if (p.playerType == PlayerType.BADGUY)
-                    {
-                        p.collectable += type == PickUpType.MONEY ? 1 : 0;
+                if (p.playerType == PlayerType.BADGUY)
+                {
+                    p.collectable += type == PickUpType.MONEY ? 1 : 0;
                     if (owningPlayer != p.playerId)
                     {
                         tempScore = type == PickUpType.MONEY ? score : altScore;
                         p.ChangeScore(tempScore);
                     }
-                    }
-                    else
-                    {
-                        p.collectable += type == PickUpType.HARDDRIVE ? 1 : 0;
+                }
+                else if (p.playerType == PlayerType.GOODGUY)
+                {
+                    p.collectable += type == PickUpType.HARDDRIVE ? 1 : 0;
                     if (owningPlayer != p.playerId)
                     {
                         tempScore = type == PickUpType.HARDDRIVE ? score : altScore;
                         p.ChangeScore(tempScore);
                     }
-                    }
+                }
                 if (tempScore != 0)
                 {
                     FloatingTextPool.instance.PoolText(tempScore, transform.position, type == PickUpType.HARDDRIVE ? Color.blue : Color.grey);

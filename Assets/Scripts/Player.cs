@@ -303,7 +303,7 @@ public class Player : Actor, ISegmentable<Actor>
                     PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(score);
                 }
                 applyFly = false;
-                Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
+                Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.HARDDRIVE : PickUpType.MONEY,playerId);
                 c.transform.position = transform.position;
                 isDead = true;
                 base.Defeat(_type);
