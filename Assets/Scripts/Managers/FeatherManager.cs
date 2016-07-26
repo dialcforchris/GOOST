@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FeatherManager : MonoBehaviour {
-
+public class FeatherManager : MonoBehaviour
+{
     private static FeatherManager featherManager =null;
     public static FeatherManager instance
     {
@@ -10,7 +10,6 @@ public class FeatherManager : MonoBehaviour {
     }
     [SerializeField]
     ParticleSystem feathers;
-    [SerializeField] ParticleSystem skid;
 	// Use this for initialization
 	void Start()
     {
