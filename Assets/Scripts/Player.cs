@@ -213,15 +213,17 @@ public class Player : Actor, ISegmentable<Actor>
 
     public override void Defeat(PlayerType _type)
     {
+       
         if (!invincible)
         {
             if (collectable > 0)
             {
                 for (int i = 0; i < collectable; i++)
                 {
-                    Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE,playerId);
+                    Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE, playerId);
                     c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
                 }
+                if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
                 _collectable = 0;
 
                 Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
@@ -232,8 +234,8 @@ public class Player : Actor, ISegmentable<Actor>
             {
                 if (_type != PlayerType.ENEMY)
                 {
-                    FloatingTextPool.instance.PoolText(score, transform.position, Color.red);
-                    PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(score);
+                    FloatingTextPool.instance.PoolText(deathScore, transform.position, Color.red);
+                    PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(deathScore);
                 }
                 applyFly = false;
                 Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.HARDDRIVE : PickUpType.MONEY,playerId);
