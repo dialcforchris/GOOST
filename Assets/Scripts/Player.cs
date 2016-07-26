@@ -29,7 +29,7 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     Canvas PlayerCanvas;
     #region egg stuff [old shit]
-    private int _eggLives = 3;
+    private int _eggLives = 25;
     public int eggMash = 0;
     private int maxEggMash = 17;
     float eggtimer = 0;
