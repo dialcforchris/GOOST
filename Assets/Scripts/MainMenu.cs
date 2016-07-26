@@ -64,17 +64,41 @@ public class MainMenu : MonoBehaviour
 
     IEnumerator rotateMenus(Vector3 start, Vector3 end)
     {
+        Vector3 difference = end - start;
         float lerpy = 0;
-        while (lerpy < 1)
+        if (end.x != -180 && start.y != 180)
         {
-            start = transform.rotation.eulerAngles;
-            //transform.rotation = Quaternion.Euler(Vector3.Slerp(start, end, lerpy));
-            transform.rotation = Quaternion.Euler(new Vector3(Mathf.LerpAngle(start.x, end.x, lerpy), Mathf.LerpAngle(start.y, end.y, lerpy), Mathf.LerpAngle(start.z, end.z, lerpy)));
+            Debug.Log("A");
+            while (lerpy < 1 && start.y != 180)
+            {
+                start = transform.rotation.eulerAngles;
+                //transform.rotation = Quaternion.Euler(Vector3.Slerp(start, end, lerpy));
+                transform.rotation = Quaternion.Euler(new Vector3(Mathf.LerpAngle(start.x, end.x, lerpy), Mathf.LerpAngle(start.y, end.y, lerpy), Mathf.LerpAngle(start.z, end.z, lerpy)));
 
-            transform.Rotate();
+                lerpy += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        else if (start.y != 180)
+        {
+            Debug.Log("b");
 
-            lerpy += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
+            while (lerpy < 90)
+            {
+                lerpy++;
+                transform.Rotate(Vector3.left, 2);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        else
+        {
+            Debug.Log("C");
+            while (lerpy < 90)
+            {
+                lerpy++;
+                transform.Rotate(Vector3.right, 2);
+                yield return new WaitForEndOfFrame();
+            }
         }
         transitioning = false;
     }
@@ -554,6 +578,33 @@ public class MainMenu : MonoBehaviour
     void optionsMenu()
     {
         changeSelection(optionsCursor, optionsElements, ref optionsIndex);
+
+        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
+        {
+            switch (optionsIndex)
+            {
+                case 0:
+                    //do a thing
+                    break;
+                case 1:
+                    //do a thing
+                    break;
+                case 2:
+                    //do a thing
+                    break;
+                case 3:
+                    //do a thing
+                    break;
+                case 4:
+                    switchMenus(0);
+                    break;
+            }
+        }
+    }
+
+    void LevelSelectionMenu()
+    {
+        //Select level
 
         if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
         {
