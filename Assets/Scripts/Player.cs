@@ -25,21 +25,10 @@ public class Player : Actor, ISegmentable<Actor>
     private int score = 0;
     private SpriteRenderer[] allsprites;
 
-   
+    private int _eggLives = 3;
     [SerializeField]
     Canvas PlayerCanvas;
-    #region egg stuff [old shit]
-    private int _eggLives = 3;
-    public int eggMash = 0;
-    private int maxEggMash = 17;
-    float eggtimer = 0;
-    float maxEggTimer = 1.5f;
-    float mashTime = 0;
-    float maxMashTime = 0.15f;
-    public GameObject eggTrans;
-    public bool inNest = false;
-    public bool carryingEgg = false;
-    #endregion
+  
 
 
     public float dashcool = 0;
@@ -95,8 +84,6 @@ public class Player : Actor, ISegmentable<Actor>
         {
             if (!isDead)
             {
-                //Debug.Log(collectable);
-                MashTimer();
                 Movement();
                 base.FixedUpdate();
 
@@ -172,61 +159,7 @@ public class Player : Actor, ISegmentable<Actor>
     #endregion
 
 
-    //kind of redundant
-    #region egg stuff
-    void LayAnEgg()
-    {
-        if (Input.GetButtonDown("Interact"+playerId.ToString())&&inNest)
-        {
-            eggMash++;
-            mashTime = 0;
-        }
-      
-        if (eggMash >= maxEggMash)
-        {
-            eggMash = 0;
-            eggtimer = 0;
-            //Egg e = EggPool.instance.PoolEgg();
-            //e.DisablePhysics(true);
-        }
-    }
-
-    bool EggTimer()
-    {
-        if (eggtimer < maxEggTimer)
-        {
-            eggtimer += Time.deltaTime;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    bool MashTimer()
-    {
-        if (eggMash > 0)
-        {
-            if (mashTime < maxMashTime)
-            {
-                mashTime += Time.deltaTime;
-                return true;
-            }
-            else
-            {
-                mashTime = 0;
-                eggMash--;
-                return false;
-            }
-        }
-        else
-        {
-            eggtimer = 0;
-        }
-        return true;
-    }
-    #endregion
-
+ 
     #region score
     public void ChangeScore(int _change)
     {

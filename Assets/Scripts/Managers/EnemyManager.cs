@@ -50,7 +50,6 @@ public class EnemyManager : MonoBehaviour
     {
         if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            Debug.Log("Enemies Active:" + Enemy.numActive);
             if (spawnIndex < waves[currentWave].settings.Length)
             {
                 spawnTime += Time.deltaTime;

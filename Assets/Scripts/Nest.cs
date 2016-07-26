@@ -33,69 +33,8 @@ public class Nest : MonoBehaviour
         PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = numEggs;
     }
 
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.tag == "Player")
-        {
-            ISegmentable<Actor> rigSegment = col.GetComponent<ISegmentable<Actor>>();
-            if (rigSegment != null)
-            {
-                Player p = (Player)rigSegment.rigBase;
-                if (_owningPlayer == p.playerId)
-                {
-                    p.inNest = true;
-                    if (p.carryingEgg)
-                    {
-                        p.carryingEgg = false;
-                        AddEgg();
-                    }
-                }
-                else
-                {
-                    if (!p.carryingEgg)
-                    {
-                        EggStolen();
-                        p.carryingEgg = true;
-                    }
-                }
-            }
-        }
-        if (col.gameObject.tag == "Egg")
-        {
-            Egg e = col.gameObject.GetComponent<Egg>();
-            if (numEggs < maxEggs)
-            {
-                e.transform.position = eggTrans[numEggs-1].position;
-                e.inNest = true;
-                e.owningPlayer = owningPlayer;
-                anEggs.Add(e);
-                e.DisablePhysics(true);
-            }
-        }
-    }
-    void OnTriggerExit2D(Collider2D col)
-    {
-        if (col.gameObject.tag == "Player")
-        {
-            ISegmentable<Actor> rigSegment = col.GetComponent<ISegmentable<Actor>>();
-            if (rigSegment != null)
-            {
-                Player p = (Player)rigSegment.rigBase;
-                if (_owningPlayer == p.playerId)
-                {
-                    p.inNest = false;
-                }
-            }
-            if (col.gameObject.tag == "Egg")
-            {
-                if (numEggs>0)
-                {
-                    col.gameObject.GetComponent<Egg>().inNest = true;
-                    col.gameObject.GetComponent<Egg>().DisablePhysics(true);
-                }
-            }
-        }
-    }
+ 
+  
     //void UpdateEggs()
     //{
     //    for (int i=0;i<anEggs.Length;i++)

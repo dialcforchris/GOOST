@@ -74,6 +74,10 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
                         break;
                     }
                 }
+                if (_rigSegment.segmentName == "Lance"&&tag=="Player")
+                {
+                    Clash.instance.HaveClash(_col.transform.position);
+                }
                 ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
             }
         }
@@ -89,10 +93,7 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
         ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
         if (_rigSegment != null)
         {
-            if (_rigSegment.segmentName == "Lance")
-            {
-                Clash.instance.HaveClash(_col.transform.position);
-            }
+          
             ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
         }
     }
