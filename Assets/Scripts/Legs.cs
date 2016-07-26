@@ -89,19 +89,11 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
         ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
         if (_rigSegment != null)
         {
-<<<<<<< HEAD
-            if (rigSegment.segmentName == "Lance")
+            if (_rigSegment.segmentName == "Lance")
             {
-                rigSegment.rigBase.ApplyKnockback(new Vector2(_col.collider.transform.position.x - transform.position.x, -1.0f), knockPower);
                 Clash.instance.HaveClash(_col.transform.position);
             }
-            else if (rigSegment.segmentName == "Player" || rigSegment.segmentName == "Enemy")
-            {
-                rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -1.0f), knockPower); 
-            }
-=======
             ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
->>>>>>> origin/master
         }
     }
 

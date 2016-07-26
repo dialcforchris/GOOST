@@ -75,27 +75,15 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
         ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
         if (_rigSegment != null)
         {
-<<<<<<< HEAD
-            if (rigSegment.segmentName == "Lance")
+            if (_rigSegment.segmentName == "Lance")
             {
-                if(_col.contacts[0].normal.x != 0.0f)
-                { 
-                    rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), knockPower);
-                    Clash.instance.HaveClash(_col.transform.position);
-                }
-            }
-            else if (rigSegment.segmentName == "Legs")
-            {
-                rigSegment.rigBase.ApplyKnockback(_col.collider.transform.position - transform.position, knockPower);
                 Clash.instance.HaveClash(_col.transform.position);
             }
-            else if (rigSegment.segmentName == "Player" || rigSegment.segmentName == "Enemy")
+            else if (_rigSegment.segmentName == "Legs")
             {
-                rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), knockPower);
+                Clash.instance.HaveClash(_col.transform.position);
             }
-=======
             ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
->>>>>>> origin/master
         }
     }
 

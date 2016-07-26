@@ -177,19 +177,17 @@ public class PlayerManager : MonoBehaviour
         for (int i = 0; i < players.Length; i++)
         {
             scores[i].text = players[i].GetScore().ToString();
-<<<<<<< HEAD
-            lives[i].text = "X"+players[i].eggLives.ToString();
-            coll[i].text = "X"+players[i].collectable.ToString();
+            lives[i].text = "X" + players[i].eggLives.ToString();
+            coll[i].text = "X" + players[i].collectable.ToString();
             lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
             collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
             boosts[i].fillAmount = players[i].dashcool;
-        }
-       
-=======
-            lives[i].text = "X" + players[i].eggLives.ToString();
-            coll[i].text = "X" + players[i].collectable.ToString();
-            lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
-            collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+
+
+            //lives[i].text = "X" + players[i].eggLives.ToString();
+            //coll[i].text = "X" + players[i].collectable.ToString();
+            //lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+            //collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
             if (players[i].dashcool < players[i].maxDashCool)
             {
                 boosts[i].fillAmount = 1 - players[i].dashcool / players[i].maxDashCool;
@@ -207,7 +205,6 @@ public class PlayerManager : MonoBehaviour
                 boosts[i].transform.parent.GetComponent<Outline>().effectColor = colB;
                 boosts[i].transform.parent.GetComponent<Image>().color = colC;
             }
+        }
         }  
->>>>>>> origin/master
-    }
 }
