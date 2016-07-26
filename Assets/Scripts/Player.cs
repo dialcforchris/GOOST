@@ -61,7 +61,7 @@ public class Player : Actor, ISegmentable<Actor>
 
     #region ISegmentable
     public Actor rigBase { get { return this; } }
-    public string segmentName { get { return "Player"; } }
+    public string segmentName { get { return "Body"; } }
     #endregion
 
     public int playerId
@@ -98,14 +98,6 @@ public class Player : Actor, ISegmentable<Actor>
                 Movement();
                 base.FixedUpdate();
 
-                if (Input.GetButtonDown("Peck" + playerId.ToString()) || Input.GetKeyDown(KeyCode.P))
-                {
-                    Peck();
-                }
-                if (Input.GetButtonDown("BeakHeight" + playerId.ToString()) || Input.GetKeyDown(KeyCode.L))
-                {
-                    TogglePeckLocation();
-                }
                 if (applyFly)
                 {
                     body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;

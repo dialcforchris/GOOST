@@ -43,26 +43,26 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
             return;
         }
 
-        ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        if (rigSegment != null)
+        ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+        if (_rigSegment != null)
         {
             foreach (string _s in affectTags)
             {
                 if (_s == _col.gameObject.tag)
                 {
-                    if (rigSegment.segmentName == "Player" || rigSegment.segmentName == "Enemy")
+                    if (_rigSegment.segmentName == "Body")
                     {
-                        if (_col.contacts[0].normal.x != 0.0f)
-                        {
-                            rigSegment.rigBase.Defeat(actor.playerType);
-                        }
+                        //if (_col.contacts[0].normal.x != 0.0f)
+                        //{
+                        _rigSegment.rigBase.Defeat(actor.playerType);
+                        return;
+                        //}
                     }
                     break;
                 }
             }
+            ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
         }
-
-        OnCollisionStay2D(_col);
     }
 
     private void OnCollisionStay2D(Collision2D _col)
@@ -72,25 +72,21 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
             return;
         }
 
-        ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        if (rigSegment != null)
+        ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+        if (_rigSegment != null)
         {
-            if (rigSegment.segmentName == "Lance")
-            {
-                if(_col.contacts[0].normal.x != 0.0f)
-                { 
-                    rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, 0.0f), knockPower);
-                }
-            }
-            else if (rigSegment.segmentName == "Legs")
-            {
-                rigSegment.rigBase.ApplyKnockback(_col.collider.transform.position - transform.position, knockPower);
-            }
-            else if (rigSegment.segmentName == "Player" || rigSegment.segmentName == "Enemy")
-            {
-                rigSegment.rigBase.ApplyKnockback(new Vector2(_col.transform.position.x - transform.position.x, -0.2f), knockPower);
-            }
+            ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
         }
+    }
+
+    private void ApplyOppositeForce(ISegmentable<Actor> _segment, Vector2 _direction)
+    {
+        if(_direction.x == 0.0f)
+        {
+            _direction += Vector2.right * (transform.lossyScale.x > 0.0f ? 0.5f : -0.5f);
+        }
+
+        _segment.rigBase.ApplyKnockback(_direction, knockPower); 
     }
 }
 
