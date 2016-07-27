@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 public class EnterName : MonoBehaviour
 {
     public Text[] box;
-   // public Text playerName;
+
+    public Text playerName;
     int[] currentCharacter;
     public Text score;
     int selectBox = 0;
@@ -15,6 +16,7 @@ public class EnterName : MonoBehaviour
     float maxCool = 0.2f;
     string theName = string.Empty;
     public int playerNumber = 0;
+    public Canvas enterCan;
 	
     // Use this for initialization
 	void Awake () 
@@ -30,27 +32,31 @@ public class EnterName : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
-        for (int i = 0; i < PlayerManager.instance.NumberOfPlayers();)
+        for (int i = 0; i < PlayerManager.instance.NumberOfPlayers(); )
         {
-            if (LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(i).GetScore()))
+            int scre = PlayerManager.instance.GetPlayer(i).GetScore();
+            if (LeaderBoard.instance.CheckIfHighScore(scre)&&scre>0)
             {
+                playerName.text = "Player " + (i+ 1) + " Enter Name:";
                 playerNumber = i;
                 MenuInput();
                 box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
                 ChangeTextColour();
-                score.text = "Player " + playerNumber + 1 + " Score: " + PlayerManager.instance.GetPlayer(playerNumber).GetScore().ToString();
-                if (Input.GetButtonDown("Fire" + playerNumber))
+                score.text = "Player " + (i+ 1) + " Score: " + PlayerManager.instance.GetPlayer(playerNumber).GetScore().ToString();
+                if (Input.GetButton("Fly"+i))
                 {
                     SelectName();
-                    i++;
+                    //  
+                    Debug.Log(theName);
+                    //          i += SelectName();
+                    gameObject.SetActive(false);
                 }
             }
             else
             {
-                i++;
+               i++;
             }
         }
-        gameObject.SetActive(false);
     }
 
     void MenuInput()
@@ -138,17 +144,17 @@ public class EnterName : MonoBehaviour
            }
         }
     }
-    void SelectName()
+    int SelectName()
     {
         for (int i = 0; i < box.Length; i++)
         {
             theName = theName + box[i].text;
         }
        
-        theName =  theName.Insert(3, "&");
+        //theName =  theName.Insert(3, "&");
         LeaderBoard.instance.SetName(theName);
         LeaderBoard.instance.AddNewScoreToLB();
-     //   transform.parent.gameObject.SetActive(false);
+        return 1;
     }
 
     bool ConvertToPos()
@@ -172,4 +178,9 @@ public class EnterName : MonoBehaviour
             return false;
         }
     }
+    public void EnableIt()
+    {
+        enterCan.gameObject.SetActive(true);
+    }
+  
 }

@@ -15,7 +15,7 @@ public class GameOverMenu : MenuSelect
 	protected override void Update () 
     {
         base.Update();
-	if (Input.GetButton("Fire1"))
+	if (Input.GetButton("Fly0")||Input.GetButton("Fly1"))
         switch(selectBox)
         {
             case 0:
