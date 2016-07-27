@@ -162,6 +162,7 @@ public class Actor : MonoBehaviour
                 if (Mathf.Abs(col.transform.position.y - _col.transform.position.y) < 0.2f)
                 {
                     _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    Clash.instance.HaveClash(_col.contacts[0].point);
                 }
                 else
                 {
