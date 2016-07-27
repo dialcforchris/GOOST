@@ -73,7 +73,7 @@ public class EnemyManager : MonoBehaviour
                         ++currentWave;
                         Debug.Log("Wave:" + currentWave);
                         spawnIndex = 0;
-                        if (currentWave == waves.Length)
+                        if (currentWave == 1)//waves.Length)
                         {
 
                             //////////////////////////////////////

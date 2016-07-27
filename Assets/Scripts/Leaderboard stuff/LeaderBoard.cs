@@ -12,7 +12,7 @@ public class LeaderBoard : MonoBehaviour
     {
         get { return leader; }
     }
-    public GameObject enterName;
+    public EnterName enterName;
     string playerName;
     public string gameName = "GOOST";
     int playerScore;
@@ -87,7 +87,7 @@ public class LeaderBoard : MonoBehaviour
     /// </summary>
     void TrimList()
     {
-        for (int i = scores.Count - 1; i > 19; i--)
+        for (int i = scores.Count - 1; i > 29; i--)
         {
             scores.RemoveAt(i);
         }
@@ -99,12 +99,12 @@ public class LeaderBoard : MonoBehaviour
     /// </summary>
     void CreateScoreFile()
     {
-     //   StreamWriter makeFile = File.CreateText(gameName + "Scores.dat");
+        StreamWriter makeFile = File.CreateText(gameName + "Scores.dat");
         foreach(KeyValuePair<string,int> k in scores)
         {
-            //makeFile.WriteLine(k.Key + " " + k.Value);
+            makeFile.WriteLine(k.Key + " " + k.Value);
         }
-       // makeFile.Close();
+        makeFile.Close();
     } 
 
     void WriteToFile()
@@ -165,7 +165,7 @@ public class LeaderBoard : MonoBehaviour
         playerScore = _score;
         if (CheckIfHighScore(_score))
         {
-            enterName.SetActive(true);
+            enterName.enterCan.gameObject.SetActive(true);
         }
     }
 
@@ -200,16 +200,8 @@ public class LeaderBoard : MonoBehaviour
 
     public void EndGame()
     {
-        for (int i = 0; i < 2;)
-        {
-            if (CheckIfHighScore(PlayerManager.instance.GetPlayer(i).GetScore()))
-            {
-                enterName.SetActive(true);
-            }
-            else
-            {
-                i++;
-            }
-        }
+        enterName.enterCan.gameObject.SetActive(true);
+        Debug.Log("LeaderBoardEndGame");
+           
     }
 }
