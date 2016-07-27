@@ -42,6 +42,8 @@ public class Actor : MonoBehaviour
 
     public platformManager.platformTypes currentSurface;
 
+    public static bool originalJoustCollisions = true;
+
     protected virtual void OnEnable()
     {
         Physics2D.IgnoreCollision(col, lance.lanceCollider);
@@ -93,22 +95,83 @@ public class Actor : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D _col)
     {
-        if (tag == "Player")
+        if (originalJoustCollisions)
         {
-            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-            if (_rigSegment != null)
+            if (tag == "Player")
             {
-                if (_rigSegment.segmentName == "Body" || _col.collider.tag == "Enemy")
+                CollisionDetermineImpact(_col);
+            }
+            else
+            {
+                if (_col.transform.tag == "Player")
                 {
-                    if (_col.contacts[0].normal.y > 0.0f)
+                    CollisionDetermineImpact(_col);
+                }
+            }
+        }
+        else
+        {
+            if (tag == "Player")
+            {
+                ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+                if (_rigSegment != null)
+                {
+                    if (_rigSegment.segmentName == "Body" || _col.collider.tag == "Enemy")
                     {
-                        if (_col.contacts[0].otherCollider == col)
+                        if (_col.contacts[0].normal.y > 0.0f)
                         {
-                            _rigSegment.rigBase.Defeat(_playerType);
+                            if (_col.contacts[0].otherCollider == col)
+                            {
+                                _rigSegment.rigBase.Defeat(_playerType);
+                            }
                         }
                     }
                 }
-            }    
+            }
+        }
+    }
+
+    private void CollisionDetermineImpact(Collision2D _col)
+    {
+        ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+        if (_rigSegment != null)
+        {
+            Vector2 _normal = (Vector2)col.transform.position - _col.contacts[0].point;
+            //if(_normal.x == 0.5739126f)
+            //{
+            //    Debug.Log("col");
+            //}
+            //Attack from above
+            if (_col.contacts[0].normal.y > 0.0f && _normal.y > 0.1f)
+            {
+                _rigSegment.rigBase.ApplyKnockback(Vector3.down, 0.5f);
+                ApplyKnockback(Vector3.up, 1.0f);
+                _rigSegment.rigBase.Defeat(_playerType);
+            }
+            //Attack from behind
+            else if (col.transform.lossyScale.x == _col.transform.lossyScale.x)
+            {
+                if ((col.transform.lossyScale.x * -_col.contacts[0].normal.x) > 0.0f)
+                {
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    _rigSegment.rigBase.Defeat(_playerType);
+                }
+            }
+            else
+            {
+                if (Mathf.Abs(col.transform.position.y - _col.transform.position.y) < 0.2f)
+                {
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                }
+                else
+                {
+                    if (col.transform.position.y > _col.transform.position.y)
+                    {
+                        _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                        _rigSegment.rigBase.Defeat(_playerType);
+                    }
+                }
+            }
         }
     }
 
