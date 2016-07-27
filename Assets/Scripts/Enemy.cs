@@ -24,7 +24,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     [SerializeField] private ScreenWrap screenWrap = null;
 
     public static int numActive = 0;
-    public static int roughMaxActive = 10;
+    public static int roughMaxActive = 20;
 
     private EnemyBehaviour behaviour = EnemyBehaviour.RANDOM;
     private EnemyBehaviour currentBehaviour;

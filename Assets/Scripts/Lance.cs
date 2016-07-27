@@ -43,36 +43,39 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
             return;
         }
 
-        ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        if (_rigSegment != null)
+        if (!Actor.originalJoustCollisions)
         {
-            foreach (string _s in affectTags)
+            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+            if (_rigSegment != null)
             {
-                if (_s == _col.gameObject.tag)
+                foreach (string _s in affectTags)
                 {
-                    if (_rigSegment.segmentName == "Body")
+                    if (_s == _col.gameObject.tag)
                     {
-                        //if (_col.contacts[0].normal.x != 0.0f)
-                        //{
-                        _rigSegment.rigBase.Defeat(actor.playerType);
-                        return;
-                        //}
+                        if (_rigSegment.segmentName == "Body")
+                        {
+                            //if (_col.contacts[0].normal.x != 0.0f)
+                            //{
+                            _rigSegment.rigBase.Defeat(actor.playerType);
+                            return;
+                            //}
+                        }
+                        break;
                     }
-                    break;
                 }
-            }
-            if (tag == "Player")
-            {
-                if (_rigSegment.segmentName == "Lance")
+                if (tag == "Player")
                 {
-                    Clash.instance.HaveClash(_col.transform.position);
+                    if (_rigSegment.segmentName == "Lance")
+                    {
+                        Clash.instance.HaveClash(_col.transform.position);
+                    }
+                    else if (_rigSegment.segmentName == "Legs")
+                    {
+                        Clash.instance.HaveClash(_col.transform.position);
+                    }
                 }
-                else if (_rigSegment.segmentName == "Legs")
-                {
-                    Clash.instance.HaveClash(_col.transform.position);
-                }
+                ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
             }
-            ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
         }
     }
 
@@ -83,10 +86,13 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
             return;
         }
 
-        ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        if (_rigSegment != null)
+        if (!Actor.originalJoustCollisions)
         {
-           ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
+            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+            if (_rigSegment != null)
+            {
+                ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
+            }
         }
     }
 
