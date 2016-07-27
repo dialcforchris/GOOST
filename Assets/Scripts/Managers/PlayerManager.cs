@@ -208,11 +208,12 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void ResetInvincible()
+    public void ResetGameStart()
     {
         for (int i = 0; i < players.Length; i++)
         {
-            players[0].ResetInvincible();
+            players[0].ResetGameStart();
         }
+        UpdateUI();
     }
 }
