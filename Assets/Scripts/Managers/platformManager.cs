@@ -4,9 +4,35 @@ using System.Collections;
 public class platformManager : MonoBehaviour {
 
     private static platformManager PlatformManager = null;
-    public static platformManager instance {get{return PlatformManager;}}
+    public static platformManager instance { get { return PlatformManager; } }
+  
+    [SerializeField]
+    public platform[] allPlatforms = null;
 
-    [SerializeField] private Collider2D[] allPlatforms = null;
+    [System.Serializable]
+    public struct platform
+    {
+        public Collider2D collider;
+        public platformTypes type;
+    }
+
+    public enum platformTypes
+    {
+        grass,
+        wood,
+        concrete,
+        ERROR
+    }
+
+    public platformTypes whatPlatformIsThis(Collider2D col)
+    {
+        foreach(platform p in allPlatforms)
+        {
+            if (p.collider == col)
+                return p.type;
+        }
+        return platformTypes.ERROR;
+    }
 
 	void Awake ()
     {
@@ -15,16 +41,16 @@ public class platformManager : MonoBehaviour {
 	
     public void NoCollisionsPlease(Collider2D col)
     {
-        foreach(Collider2D p in allPlatforms)
+        foreach(platform p in allPlatforms)
         {
-            Physics2D.IgnoreCollision(col, p);
+            Physics2D.IgnoreCollision(col, p.collider);
         }
     }
     public void CollisionsPlease(Collider2D col)
     {
-        foreach (Collider2D p in allPlatforms)
+        foreach (platform p in allPlatforms)
         {
-            Physics2D.IgnoreCollision(col, p, false);
+            Physics2D.IgnoreCollision(col, p.collider, false);
         }
     }
 }

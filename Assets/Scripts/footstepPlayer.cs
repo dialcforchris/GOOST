@@ -10,12 +10,14 @@ public class footstepPlayer : MonoBehaviour {
     [SerializeField]
     List<AudioClip> woodSteps= new List<AudioClip>();
     AudioClip lastWoodStep;
+    [SerializeField]
+    Actor ActorComponent;
 
-    public void playFootstepSound(int type)
+    public void playFootstepSound()
     {
-        switch (type)
+        switch (ActorComponent.currentSurface)
         {
-            case 0:
+            case platformManager.platformTypes.grass:
                 //Play grass sounds
                 int thisGrass = Random.Range(0, grassSteps.Count);
                 SoundManager.instance.playSound(grassSteps[thisGrass], 0.25f);
@@ -25,7 +27,7 @@ public class footstepPlayer : MonoBehaviour {
                 grassSteps.Remove(mostRecentGrassSound);
                 lastGrassStep = mostRecentGrassSound;
                 break;
-            case 1:
+            case platformManager.platformTypes.wood:
                 //Play wood sounds
                 int thisWood = Random.Range(0, woodSteps.Count);
                 SoundManager.instance.playSound(woodSteps[thisWood],0.25f);
@@ -34,6 +36,8 @@ public class footstepPlayer : MonoBehaviour {
                     woodSteps.Add(lastWoodStep);
                 woodSteps.Remove(mostRecentWoodSound);
                 lastWoodStep = mostRecentWoodSound;
+                break;
+            default:
                 break;
         }
     }

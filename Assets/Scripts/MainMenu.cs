@@ -24,6 +24,8 @@ public class MainMenu : MonoBehaviour
     //Stats
     //Ready up
     //Level Select
+    [SerializeField]
+    AudioClip woodLandingSound;
 
     [SerializeField]
     AudioClip[] wooshNoises;
@@ -372,7 +374,7 @@ public class MainMenu : MonoBehaviour
             pressingReady[0] = false;
 
         //Player 2
-        if (Input.GetButton("Fly1") && Input.GetButton("Interact1") && !pressingReady[1] && customised[0])
+        if (Input.GetButton("Fly1") && Input.GetButton("Interact1") && !pressingReady[1] && customised[1])
         {
             pressingReady[1] = true;
             ready[1] = !ready[1];
@@ -441,6 +443,7 @@ public class MainMenu : MonoBehaviour
         //Don't allow any other forces to act on the goose, we're in control now.
         PlayerManager.instance.GetPlayer(index).GooseyBod.isKinematic = true;
 
+        SoundManager.instance.playSound(woodLandingSound);
         while (lerpy < 1)
         {
             Vector3 pos = PlayerManager.instance.GetPlayer(index).transform.position;

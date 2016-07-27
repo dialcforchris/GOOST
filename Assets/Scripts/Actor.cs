@@ -37,6 +37,10 @@ public class Actor : MonoBehaviour
     public List<AudioClip> flappingSounds = new List<AudioClip>();
     [HideInInspector]
     public AudioClip lastFlapSound;
+    [SerializeField]
+    AudioClip deathSound;
+
+    public platformManager.platformTypes currentSurface;
 
     protected virtual void OnEnable()
     {
@@ -61,6 +65,7 @@ public class Actor : MonoBehaviour
 
     protected virtual IEnumerator DeathAnimation()
     {
+        SoundManager.instance.playSound(deathSound);
         FeatherManager.instance.HaveSomeFeathers(transform.position);
         yield return new WaitForSeconds(0.01f);
         anim.Stop();
@@ -138,6 +143,8 @@ public class Actor : MonoBehaviour
             float landPosition = col.bounds.max.y;
             transform.position = new Vector3(transform.position.x, landPosition + 0.37f, transform.position.z);
 
+            currentSurface = platformManager.instance.whatPlatformIsThis(col);
+
             landingParticle.Play();
             onPlatform = true;
             body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
@@ -185,7 +192,7 @@ public class Actor : MonoBehaviour
                 {
                     //Play a flapping sound, but make sure we don't play the same one twice in a row
                     int thisOne = Random.Range(0, flappingSounds.Count);
-                    SoundManager.instance.playSound(flappingSounds[thisOne]);
+                    SoundManager.instance.playSound(flappingSounds[thisOne],0.25f);
                     AudioClip mostRecentSound = flappingSounds[thisOne];
                     if (lastFlapSound)
                         flappingSounds.Add(lastFlapSound);

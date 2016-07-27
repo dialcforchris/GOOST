@@ -29,8 +29,6 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     Canvas PlayerCanvas;
   
-
-
     public float dashcool = 0;
     public float maxDashCool = 5.0f;
    
