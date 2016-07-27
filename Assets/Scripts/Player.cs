@@ -153,9 +153,9 @@ public class Player : Actor, ISegmentable<Actor>
   
     void VelocityCheck()
     {
-        while (body.velocity.magnitude>7.5 )
+        if (body.velocity.magnitude>4 )
         {
-            body.velocity *= 0.95f;
+            body.velocity *= 0.9f;
         }
     }
     #endregion
