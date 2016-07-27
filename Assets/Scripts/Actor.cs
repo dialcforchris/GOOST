@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public interface ISegmentable<T> where T : Actor
 { 
@@ -32,6 +33,10 @@ public class Actor : MonoBehaviour
     public static Vector3 worldMaxY;
 
     protected bool onPlatform = false;
+    [SerializeField]
+    public List<AudioClip> flappingSounds = new List<AudioClip>();
+    [HideInInspector]
+    public AudioClip lastFlapSound;
 
     protected virtual void OnEnable()
     {
@@ -108,14 +113,11 @@ public class Actor : MonoBehaviour
         {
             if (_col.collider.tag == "Platform")
             {
-
                 if (_col.contacts[0].normal.y > 0.0f)
                 {
                     body.AddForce(new Vector2(_col.transform.position.x > transform.position.x ? -0.05f : 0.05f, 0.0f), ForceMode2D.Impulse);
                 }
-
             }
-
 
             ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
             if (_rigSegment != null)
@@ -181,6 +183,15 @@ public class Actor : MonoBehaviour
             {
                 if (anim.GetCurrentAnimatorStateInfo(0).IsName("newGoose_glide"))
                 {
+                    //Play a flapping sound, but make sure we don't play the same one twice in a row
+                    int thisOne = Random.Range(0, flappingSounds.Count);
+                    SoundManager.instance.playSound(flappingSounds[thisOne]);
+                    AudioClip mostRecentSound = flappingSounds[thisOne];
+                    if (lastFlapSound)
+                        flappingSounds.Add(lastFlapSound);
+                    flappingSounds.Remove(mostRecentSound);
+                    lastFlapSound = mostRecentSound;
+
                     anim.Play("newGoose_flap");
                 }
             }

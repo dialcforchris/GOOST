@@ -67,6 +67,10 @@ public class SoundManager : MonoBehaviour
                 audioSrcs[c].volume = volume * volumeMultiplayer;
                 break;
             }
+            if (audioSrcs[c].isPlaying && c == (audioSrcs.Count - 1))
+            {
+                audioSrcs.Add(gameObject.AddComponent<AudioSource>());
+            }
             else
             {
                 c++;

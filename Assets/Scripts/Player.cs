@@ -203,6 +203,15 @@ public class Player : Actor, ISegmentable<Actor>
             {
                 if (anim.GetCurrentAnimatorStateInfo(0).IsName("newGoose_glide"))
                 {
+                    //Play a flapping sound, but make sure we don't play the same one twice in a row
+                    int thisOne = Random.Range(0, flappingSounds.Count);
+                    SoundManager.instance.playSound(flappingSounds[thisOne]);
+                    AudioClip mostRecentSound = flappingSounds[thisOne];
+                    if (lastFlapSound)
+                        flappingSounds.Add(lastFlapSound);
+                    flappingSounds.Remove(mostRecentSound);
+                    lastFlapSound = mostRecentSound;
+
                     anim.Play("newGoose_flap");
                     riderAnimator.Play("cape_flap_b");
                 }

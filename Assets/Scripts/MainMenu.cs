@@ -25,6 +25,10 @@ public class MainMenu : MonoBehaviour
     //Ready up
     //Level Select
 
+    [SerializeField]
+    AudioClip[] wooshNoises;
+    bool whichWoosh;
+
     [Header("Options menu")]
     [SerializeField]
     Text[] optionsElements;
@@ -128,6 +132,8 @@ public class MainMenu : MonoBehaviour
     {
         if (!transitioning)
         {
+            SoundManager.instance.playSound(wooshNoises[whichWoosh ? 0 : 1]);
+            whichWoosh = !whichWoosh;
             switch (menu)
             {
                 case 0:
@@ -206,7 +212,6 @@ public class MainMenu : MonoBehaviour
                     menuScreens[5].SetActive(true);
                     StartCoroutine(rotateMenus(transform.rotation.eulerAngles, new Vector3(-90, 0, 0)));
                     break;
-
             }
         }
     }
