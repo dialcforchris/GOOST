@@ -33,8 +33,7 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField] private float nextWaveLength = 3.0f;
     private float nextWaveTime = 0.0f;
-
-
+    
     private void Awake()
     {
         enemyManager = this;
@@ -73,15 +72,14 @@ public class EnemyManager : MonoBehaviour
                         ++currentWave;
                         Debug.Log("Wave:" + currentWave);
                         spawnIndex = 0;
-                        if (currentWave == 1)//waves.Length)
+                        if (currentWave ==waves.Length)
                         {
 
                             //////////////////////////////////////
                             //////////////END THE GAME
                             //////////////////////////////////////
-                            GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
+                            //GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
                            
-
                             --currentWave;
                         }
                     }

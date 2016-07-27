@@ -56,6 +56,9 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     [SerializeField]
     private int score;
 
+    [SerializeField]
+    AudioClip eggLayingSound;
+
     protected void Start()
     {
         screenWrap.AddScreenWrapCall(UpdateWorldFromView);
@@ -325,10 +328,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                 PlatformSideCollision(_col);
             }
         }
-
         
-
-
         //if (_col.collider.tag == "Enemy")
         //{
         //    ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
@@ -351,6 +351,15 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public override void LandedOnPlatform(Collider2D col)
     {
         base.LandedOnPlatform(col);
+        switch (currentSurface)
+        {
+            case platformManager.platformTypes.wood:
+                SoundManager.instance.playSound(woodLand);
+                break;
+            case platformManager.platformTypes.grass:
+                SoundManager.instance.playSound(grassLand,0.35f);
+                break;
+        }
         VelocityCap();
         takeOffTime = 0.0f;
     }
@@ -368,6 +377,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
             {
                 if (Random.value < eggChance)
                 {
+                    SoundManager.instance.playSound(eggLayingSound);
                     Egg e = EggPool.instance.PoolEgg(behaviour, speed);
                     e.transform.position = eggTrans.position;// new Vector2(transform.position.x + 0.5f, transform.position.y);
                     //e.OnPooled();

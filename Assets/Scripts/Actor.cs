@@ -37,8 +37,7 @@ public class Actor : MonoBehaviour
     public List<AudioClip> flappingSounds = new List<AudioClip>();
     [HideInInspector]
     public AudioClip lastFlapSound;
-    [SerializeField]
-    AudioClip deathSound;
+    public AudioClip deathSound,woodLand, grassLand;
 
     public platformManager.platformTypes currentSurface;
 
@@ -207,7 +206,7 @@ public class Actor : MonoBehaviour
             transform.position = new Vector3(transform.position.x, landPosition + 0.37f, transform.position.z);
 
             currentSurface = platformManager.instance.whatPlatformIsThis(col);
-
+            
             landingParticle.Play();
             onPlatform = true;
             body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;

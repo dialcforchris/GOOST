@@ -28,6 +28,8 @@ public class Player : Actor, ISegmentable<Actor>
     private int _eggLives = 3;
     [SerializeField]
     Canvas PlayerCanvas;
+    [SerializeField]
+    AudioClip[] dashSounds,hurtSounds;
   
     public float dashcool = 0;
     public float maxDashCool = 5.0f;
@@ -154,8 +156,6 @@ public class Player : Actor, ISegmentable<Actor>
         }
     }
     #endregion
-
-
  
     #region score
     public void ChangeScore(int _change)
@@ -171,6 +171,15 @@ public class Player : Actor, ISegmentable<Actor>
     public override void LandedOnPlatform(Collider2D col)
     {
         base.LandedOnPlatform(col);
+        switch (currentSurface)
+        {
+            case platformManager.platformTypes.wood:
+                SoundManager.instance.playSound(woodLand);
+                break;
+            case platformManager.platformTypes.grass:
+                SoundManager.instance.playSound(grassLand);
+                break;
+        }
         riderAnimator.Play("cape_flap_a");
     }
 
@@ -219,36 +228,40 @@ public class Player : Actor, ISegmentable<Actor>
 
     public override void Defeat(PlayerType _type)
     {
-       
-        if (!invincible)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            if (collectable > 0)
+            if (!invincible)
             {
-                for (int i = 0; i < collectable; i++)
+                if (collectable > 0)
                 {
-                    Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE, playerId);
-                    c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
-                }
-                if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
-                _collectable = 0;
+                    for (int i = 0; i < collectable; i++)
+                    {
+                        Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE, playerId);
+                        c.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
+                    }
+                    if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+                        _collectable = 0;
 
-                Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
-                invinciblePermanence = true;
-                invincible = true;
-            }
-            else
-            {
-                if (_type != PlayerType.ENEMY)
-                {
-                    FloatingTextPool.instance.PoolText(deathScore, transform.position, Color.red);
-                    PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(deathScore);
+                    SoundManager.instance.playSound(hurtSounds[Random.Range(0, hurtSounds.Length)]);
+
+                    Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
+                    invinciblePermanence = true;
+                    invincible = true;
                 }
-                applyFly = false;
-                Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.HARDDRIVE : PickUpType.MONEY,playerId);
-                c.transform.position = transform.position;
-                isDead = true;
-                base.Defeat(_type);
-                PlayerManager.instance.RespawnPlayer(playerId);
+                else
+                {
+                    if (_type != PlayerType.ENEMY)
+                    {
+                        FloatingTextPool.instance.PoolText(deathScore, transform.position, Color.red);
+                        PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(deathScore);
+                    }
+                    applyFly = false;
+                    Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.HARDDRIVE : PickUpType.MONEY, playerId);
+                    c.transform.position = transform.position;
+                    isDead = true;
+                    base.Defeat(_type);
+                    PlayerManager.instance.RespawnPlayer(playerId);
+                }
             }
         }
     }
@@ -323,10 +336,14 @@ public class Player : Actor, ISegmentable<Actor>
         }
     }
 
+    bool dashSoundToggle;
+
     void Dash()
     {
         if (Input.GetButton("Interact"+playerId)&&DashCoolTime())
         {
+            SoundManager.instance.playSound(dashSounds[dashSoundToggle ? 0 : 1]);
+            dashSoundToggle = !dashSoundToggle;
             if (transform.localScale.x>0)
             {
                 body.AddForce(new Vector2(transform.right.x * (5), 0), ForceMode2D.Impulse);

@@ -20,7 +20,7 @@ public class footstepPlayer : MonoBehaviour {
             case platformManager.platformTypes.grass:
                 //Play grass sounds
                 int thisGrass = Random.Range(0, grassSteps.Count);
-                SoundManager.instance.playSound(grassSteps[thisGrass], 0.25f);
+                SoundManager.instance.playSound(grassSteps[thisGrass], ActorComponent.playerType == PlayerType.ENEMY ? 0.075f : 0.15f);
                 AudioClip mostRecentGrassSound = grassSteps[thisGrass];
                 if (lastGrassStep)
                     grassSteps.Add(lastGrassStep);
@@ -30,7 +30,7 @@ public class footstepPlayer : MonoBehaviour {
             case platformManager.platformTypes.wood:
                 //Play wood sounds
                 int thisWood = Random.Range(0, woodSteps.Count);
-                SoundManager.instance.playSound(woodSteps[thisWood],0.25f);
+                SoundManager.instance.playSound(woodSteps[thisWood], ActorComponent.playerType == PlayerType.ENEMY ? 0.15f : 0.3f);
                 AudioClip mostRecentWoodSound = woodSteps[thisWood];
                 if (lastWoodStep)
                     woodSteps.Add(lastWoodStep);

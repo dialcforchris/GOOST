@@ -95,7 +95,6 @@ public class MainMenu : MonoBehaviour
         float lerpy = 0;
         if (end.x != -180 && start.y != 180)
         {
-            Debug.Log("A");
             while (lerpy < 1 && start.y != 180)
             {
                 start = transform.rotation.eulerAngles;
@@ -108,8 +107,6 @@ public class MainMenu : MonoBehaviour
         }
         else if (start.y != 180 )//|| start.y != 270)
         {
-            Debug.Log("b");
-
             while (lerpy < 18)
             {
                 lerpy++;
@@ -119,7 +116,6 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            Debug.Log("C");
             while (lerpy < 18)
             {
                 lerpy++;    
@@ -485,58 +481,21 @@ public class MainMenu : MonoBehaviour
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgEnd[index], characterImgStart[index], lerpy);
 
                 CustomGeese[index].SetActive(false);
-
-                //something about ready state
-
-                /*
-                //Fade out clouds
-                //Also Text + indicator
-                Color Col_ = clouds[index].color;
-                Col_.a = 1 - lerpy;
-                clouds[index].color = Col_;
-                readyIndicator[index].color = Col_;
-                readyTextPrompts[index].color = Col_;
-
-                Color Col_black = readyTextPrompts[index].GetComponent<Outline>().effectColor;
-                Col_black.a = 1 - lerpy;
-                readyTextPrompts[index].GetComponent<Outline>().effectColor = Col_black;
-                */
             }
             else
             {
-                /*
-                if (index == 0)
-                    leftCloudPlatform.SetActive(true);
-                else
-                    rightCloudPlatform.SetActive(true);
-                */
-
-                //clouds[index].gameObject.SetActive(true);
-
                 Color col = characterImg[index].color;
                 col.a = 1 - lerpy;
                 characterImg[index].color = col;
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgStart[index], characterImgEnd[index], lerpy);
 
                 CustomGeese[index].SetActive(true);
-                bigHead[index] = false;
-                /*
-                //Fade in clouds
-                //Also Text + indicator
-                Color Col_ = clouds[index].color;
-                Col_.a = lerpy;
-                clouds[index].color = Col_;
-                readyIndicator[index].color = Col_;
-                readyTextPrompts[index].color = Col_;
-
-                Color Col_black = readyTextPrompts[index].GetComponent<Outline>().effectColor;
-                Col_black.a = lerpy;
-                readyTextPrompts[index].GetComponent<Outline>().effectColor = Col_black;
-                */
             }
             lerpy += Time.deltaTime * 1.5f;
             yield return new WaitForEndOfFrame();
         }
+        if (!inOut)
+            bigHead[index] = false;
     }
 
     void changeSelection(Image[] cursors, RectTransform[] menuElements, ref int menuIndex,float yOffset = 0)
