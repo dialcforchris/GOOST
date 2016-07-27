@@ -6,7 +6,10 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     Animator riderAnimator;
     [SerializeField]
-    private float speed;
+    private float speed = 3.0f;
+
+    [SerializeField] private float heightForce = 35.0f;
+
     [SerializeField]
     private SpriteRenderer cape;
     public SpriteRenderer backpack;
@@ -89,7 +92,7 @@ public class Player : Actor, ISegmentable<Actor>
                 if (applyFly)
                 {
                     body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-                    body.AddForce(new Vector2(0, 50));
+                    body.AddForce(new Vector2(0, heightForce));
                     StatTracker.instance.stats.totalFlaps++;
                     applyFly = false;
                 }
@@ -150,9 +153,9 @@ public class Player : Actor, ISegmentable<Actor>
   
     void VelocityCheck()
     {
-        if (body.velocity.magnitude>10 )
+        while (body.velocity.magnitude>7.5 )
         {
-            body.velocity *= 0.9f;
+            body.velocity *= 0.95f;
         }
     }
     #endregion
@@ -311,6 +314,28 @@ public class Player : Actor, ISegmentable<Actor>
                 s.enabled = true;
             }
             spRend.enabled = true;
+        }
+    }
+
+    public void ResetGameStart()
+    {
+        if(invincible)
+        {
+            invicibleTimer = 0;
+            invincible = false;
+            if (Physics2D.GetIgnoreLayerCollision(8 + playerId, 10))
+            {
+                Physics2D.IgnoreLayerCollision(8 + playerId, 10, false);
+            }
+            invinciblePermanence = false;
+            foreach (SpriteRenderer s in allsprites)
+            {
+                s.enabled = true;
+            }
+            spRend.enabled = true;
+            flashBool = true;
+            flashTime = 0.0f;
+            dashcool = maxDashCool;
         }
     }
 

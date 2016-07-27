@@ -396,6 +396,7 @@ public class MainMenu : MonoBehaviour
             //Let the geese fall down
             readyUpBounds.gameObject.SetActive(false);
 
+            PlayerManager.instance.ResetGameStart();
             PlayerManager.instance.GetPlayer(0).TakeOffFromPlatform();
             PlayerManager.instance.GetPlayer(1).TakeOffFromPlatform();
 
