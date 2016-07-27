@@ -97,6 +97,7 @@ public class PlayerManager : MonoBehaviour
                 break;
             case 1:
                 players[index].transform.position = new Vector3(3.5f, 29.5f, 0);
+                players[index].transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
                 break;
         }
     }
@@ -205,5 +206,13 @@ public class PlayerManager : MonoBehaviour
                 boosts[i].transform.parent.GetComponent<Image>().color = colC;
             }
         }
-    }  
+    }
+
+    public void ResetInvincible()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[0].ResetInvincible();
+        }
+    }
 }
