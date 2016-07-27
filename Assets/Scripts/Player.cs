@@ -301,6 +301,25 @@ public class Player : Actor, ISegmentable<Actor>
         }
     }
 
+    public void ResetInvincible()
+    {
+        if(invincible)
+        {
+            invicibleTimer = 0;
+            invincible = false;
+            if (Physics2D.GetIgnoreLayerCollision(8 + playerId, 10))
+            {
+                Physics2D.IgnoreLayerCollision(8 + playerId, 10, false);
+            }
+            invinciblePermanence = false;
+            foreach (SpriteRenderer s in allsprites)
+            {
+                s.enabled = true;
+            }
+            spRend.enabled = true;
+        }
+    }
+
     void FlashSprite()
     {
         if (flashTime<0.1f)
