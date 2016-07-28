@@ -9,25 +9,27 @@ public class DisplayLeaderboard : MonoBehaviour
     public Text[] scores;
     public Text[] names;
     public Text[] rank;
-    bool once;
+    bool once =false;
+
     public void update()
     {
-        if (once)
-        {
+        Debug.Log("called");
+       
+            Debug.Log("once = false");
+            
             List<KeyValuePair<string, int>> k = LeaderBoard.instance.ReturnLeaderBoard();
             for (int i = 0; i < k.Count; i++)
             {
-                Debug.Log(rank[i].name);
 
-                rank[i].text = (i+1).ToString();
+                rank[i].text = (i+1).ToString()+".";
                 scores[i].text = k[i].Value.ToString();
                 names[i].text = k[i].Key;
-                rank[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.05f));
-                scores[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.05f));
-                names[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.05f));
+                rank[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.03f));
+                scores[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.03f));
+                names[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.03f));
             }
             once = true;
-        }
+      
     }
 }
 
