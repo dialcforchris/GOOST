@@ -212,4 +212,26 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }  
+
+    public void ResetGameStart()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].ResetGameStart();
+
+            boosts[i].fillAmount = 0.0f;
+            Color colA = boosts[i].color;
+            Color colB = boosts[i].transform.parent.GetComponent<Outline>().effectColor;
+            Color colC = boosts[i].transform.parent.GetComponent<Image>().color;
+
+            colA.a = 0.0f;
+            colB.a = colA.a;
+            colC.a = colA.a;
+
+            boosts[i].color = colA;
+            boosts[i].transform.parent.GetComponent<Outline>().effectColor = colB;
+            boosts[i].transform.parent.GetComponent<Image>().color = colC;
+        }
+        UpdateUI();
+    }
 }
