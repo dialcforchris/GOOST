@@ -89,6 +89,8 @@ public class PauseMenu : MonoBehaviour
                     break;
                 case 3:
                     //Quit to menu
+                    MainMenu.instance.transform.rotation = Quaternion.Euler(Vector3.zero);
+                    MainMenu.instance.switchMenus(0);
                     CameraController.instance.switchViews(true);
                     GameStateManager.instance.ChangeState(GameStates.STATE_TRANSITIONING);
                     break;

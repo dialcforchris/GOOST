@@ -351,15 +351,6 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public override void LandedOnPlatform(Collider2D col)
     {
         base.LandedOnPlatform(col);
-        switch (currentSurface)
-        {
-            case platformManager.platformTypes.wood:
-                SoundManager.instance.playSound(woodLand);
-                break;
-            case platformManager.platformTypes.grass:
-                SoundManager.instance.playSound(grassLand,0.35f);
-                break;
-        }
         VelocityCap();
         takeOffTime = 0.0f;
     }

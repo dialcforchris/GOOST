@@ -33,31 +33,42 @@ public class Timer : MonoBehaviour
     {
         if (counting)
         {
-            if (upDown)
-                currentTime += Time.deltaTime;
-            else
-            {   
-                currentTime -= Time.deltaTime;
-                if (currentTime < 6 && !countdown)
-                    StartCoroutine(TextInOut(false));
-
-                if (currentTime < 0)
+            if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+            {
+                if (upDown)
+                    currentTime += Time.deltaTime;
+                else
                 {
-                    counting = false;
-                    currentTime = 0;
+                    currentTime -= Time.deltaTime;
+                    if (currentTime < 6 && !countdown)
+                        StartCoroutine(TextInOut(false));
+
+                    if (currentTime < 0)
+                    {
+                        counting = false;
+                        currentTime = 0;
+                    }
                 }
             }
-
             //Seconds + minutes interface
-            /*if (currentTime % 60 > 10)
+            if (currentTime % 60 > 10)
             TimerText.text = "0"+(int)(currentTime / 60) + ":" + (int)(currentTime % 60);
             else
-                TimerText.text = "0"+(int)(currentTime / 60) + ":0" + (int)(currentTime % 60);*/
+                TimerText.text = "0"+(int)(currentTime / 60) + ":0" + (int)(currentTime % 60);
 
             //Just seconds
-            TimerText.text = ""+(int)(currentTime);
+            //TimerText.text = ""+(int)(currentTime);
         }
     }
+
+    public void Reset()
+    {
+        counting = false;
+        currentTime = maxSeconds;
+        StopAllCoroutines();
+        countdownTextAnimator.gameObject.SetActive(false);
+    }
+
     public IEnumerator TextInOut(bool InOut)
     {
         countdown = true;
@@ -81,9 +92,7 @@ public class Timer : MonoBehaviour
                 if (Time.timeScale < 0.01f)
                     Time.timeScale = 0;
             }
-
             counting = false;
-            countdownTextAnimator.gameObject.SetActive(false);
             Time.timeScale = 1;
         }
         else
@@ -100,9 +109,9 @@ public class Timer : MonoBehaviour
             GameStateManager.instance.ChangeState(GameStates.STATE_GAMEPLAY);
 
             yield return new WaitForSeconds(.95f);
-            countdownTextAnimator.gameObject.SetActive(false);
             counting = true;
         }
+        countdownTextAnimator.gameObject.SetActive(false);
         countdown = false;
     }
 }

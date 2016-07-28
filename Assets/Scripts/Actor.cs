@@ -34,10 +34,12 @@ public class Actor : MonoBehaviour
 
     protected bool onPlatform = false;
     [SerializeField]
+    footstepPlayer footStepComponent;
+    [SerializeField]
     public List<AudioClip> flappingSounds = new List<AudioClip>();
     [HideInInspector]
     public AudioClip lastFlapSound;
-    public AudioClip deathSound,woodLand, grassLand;
+    public AudioClip deathSound;
 
     public platformManager.platformTypes currentSurface;
 
@@ -207,7 +209,11 @@ public class Actor : MonoBehaviour
             transform.position = new Vector3(transform.position.x, landPosition + 0.37f, transform.position.z);
 
             currentSurface = platformManager.instance.whatPlatformIsThis(col);
-            
+
+            if (!footStepComponent)
+                footStepComponent = GetComponentInChildren<footstepPlayer>();
+            footStepComponent.playFootstepSound();
+
             landingParticle.Play();
             onPlatform = true;
             body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
