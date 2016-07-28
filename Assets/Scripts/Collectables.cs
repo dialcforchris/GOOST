@@ -87,18 +87,18 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
 
         //if (InvincibilityTimer())
         //{
-            if (col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Player")
+        {
+            ISegmentable<Actor> rigSegment = col.gameObject.GetComponent<ISegmentable<Actor>>();
+            if (rigSegment != null)
             {
-                ISegmentable<Actor> rigSegment = col.gameObject.GetComponent<ISegmentable<Actor>>();
-                if (rigSegment != null)
-                {
-                    int tempScore = 0;
-                    Player p = (Player)rigSegment.rigBase;
+                int tempScore = 0;
+                Player p = (Player)rigSegment.rigBase;
                 if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
                 {
                     if (p.playerType == PlayerType.BADGUY)
                     {
-                        SoundManager.instance.playSound(collectionSound[0], 0.35f);
+                        SoundManager.instance.playSound(collectionSound[type == PickUpType.HARDDRIVE ? 0 : 1], 0.35f);
                         p.collectable += type == PickUpType.MONEY ? 1 : 0;
                         if (owningPlayer != p.playerId)
                         {
@@ -108,7 +108,7 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
                     }
                     else if (p.playerType == PlayerType.GOODGUY)
                     {
-                        SoundManager.instance.playSound(collectionSound[1], 0.35f);
+                        SoundManager.instance.playSound(collectionSound[type == PickUpType.HARDDRIVE ?  0:1], 0.35f);
                         p.collectable += type == PickUpType.HARDDRIVE ? 1 : 0;
                         if (owningPlayer != p.playerId)
                         {
@@ -121,9 +121,9 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
                         FloatingTextPool.instance.PoolText(tempScore, transform.position, type == PickUpType.HARDDRIVE ? Color.blue : Color.grey);
                     }
                 }
-                    ReturnPool();
-                }
+                ReturnPool();
             }
+        }
         //}
     }
 
@@ -134,25 +134,25 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
         gameObject.SetActive(false);
     }
 
-    public void OnPooled(PickUpType _type,int _owningPlayer =3)
+    public void OnPooled(PickUpType _type, int _owningPlayer = 3)
     {
-       life = 0;
+        life = 0;
         owningPlayer = _owningPlayer;
-       flash = 0;
-       canFlash = false;
-       visible = true;
-       gameObject.SetActive(true);
-       type = _type;
-       invincible = 0;
-      // spRend.sprite = sprites[type == PickUpType.HARDDRIVE ? 0 : 1];
-       ///spRendBack.sprite = backSprites[type == PickUpType.HARDDRIVE ? 0 : 1];
-          
+        flash = 0;
+        canFlash = false;
+        visible = true;
+        gameObject.SetActive(true);
+        type = _type;
+        invincible = 0;
+        // spRend.sprite = sprites[type == PickUpType.HARDDRIVE ? 0 : 1];
+        ///spRendBack.sprite = backSprites[type == PickUpType.HARDDRIVE ? 0 : 1];
+
         gameObject.SetActive(true);
 
         body.drag = 1.0f;
         body.gravityScale = 1.0f;
-       
-      
+
+
         Physics2D.IgnoreLayerCollision(8, 11, true);
         Physics2D.IgnoreLayerCollision(9, 11, true);
 
@@ -161,11 +161,11 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
 
     void Life()
     {
-        if (life<maxLife)
+        if (life < maxLife)
         {
             life += Time.deltaTime;
         }
-        
+
         else
         {
             if (!canFlash)

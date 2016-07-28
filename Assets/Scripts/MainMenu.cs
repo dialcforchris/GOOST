@@ -285,10 +285,12 @@ public class MainMenu : MonoBehaviour
 
         if (Input.GetButtonDown("Fly0") && bigHead[0] && !charTransitionP1)
         {
+            charTransitionP1 = true;
             StartCoroutine(CharacterImageTransition(false, 0));
         }
         if (Input.GetButtonDown("Fly1") && bigHead[1] && !charTransitionP2)
         {
+            charTransitionP2 = true;
             StartCoroutine(CharacterImageTransition(false, 1));
         }
 
@@ -358,7 +360,7 @@ public class MainMenu : MonoBehaviour
             PlayerManager.instance.GetPlayer(1).backpack.sprite = backpacks[cosmeticIndex[1]];
 
             //readyTextPrompts[1].text = "Press Dash and Fly\n buttons to ready up";
-            readyTextPrompts[0].text = "Waiting for\nother player...";
+            readyTextPrompts[1].text = "Waiting for\nother player...";
             clouds[1].gameObject.SetActive(true);
             rightCloudPlatform.SetActive(true);
 
@@ -431,11 +433,11 @@ public class MainMenu : MonoBehaviour
 
     IEnumerator GameStart()
     {
-        Timer.instance.Reset();
-        StartCoroutine(Timer.instance.TextInOut(true));
-        yield return new WaitForSeconds(2);
         readyTextPrompts[1].text = "Game starting!";
         readyTextPrompts[0].text = "Game starting!";
+        yield return new WaitForSeconds(1);
+        Timer.instance.Reset();
+        StartCoroutine(Timer.instance.TextInOut(true));
         GameStateManager.instance.ChangeState(GameStates.STATE_TRANSITIONING);
         currentState = menuState.mainMenu;
 
@@ -497,14 +499,6 @@ public class MainMenu : MonoBehaviour
     //Moves big character images out of screen, sets custom geese to active
     IEnumerator CharacterImageTransition(bool inOut, int index)
     {
-        if (index == 0 && !inOut)
-        {
-            charTransitionP1 = true;
-        }
-        else if (index == 1 && !inOut)
-        {
-            charTransitionP1 = true;
-        }
         float lerpy = 0;
         while (lerpy < 1)
         {
@@ -540,13 +534,13 @@ public class MainMenu : MonoBehaviour
         if (!inOut)
             bigHead[index] = false;
 
-        if (index == 0 && !inOut)
+        if (index == 0)
         {
             charTransitionP1 = false;
         }
-        else if (index == 1 && !inOut)
+        else if (index == 1)
         {
-            charTransitionP1 = false;
+            charTransitionP2 = false;
         }
     }
 
