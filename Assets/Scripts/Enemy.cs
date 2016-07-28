@@ -366,8 +366,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         {
             if (_col.contacts[0].normal.y < 0)
             {
-                body.velocity = new Vector2(body.velocity.x, 0.0f);
-                body.AddForce(Vector2.down * platformBounceY, ForceMode2D.Impulse);
+                ApplyKnockback(Vector2.down, platformBounceY);
             }
             else if (_col.contacts[0].normal.x != 0.0f)
             {
