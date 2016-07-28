@@ -91,6 +91,12 @@ public class Actor : MonoBehaviour
             {
                 body.velocity = new Vector2(body.velocity.x, -0.5f);
             }
+            else if (transform.position.y < -5.5f)
+            {
+                if (GetComponent<Player>())
+                    GetComponent<Player>().collectable = 0;
+                Defeat(_playerType);
+            }
         }
     }
 
