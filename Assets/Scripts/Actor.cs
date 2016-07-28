@@ -98,13 +98,15 @@ public class Actor : MonoBehaviour
         {
             if (tag == "Player")
             {
-                CollisionDetermineImpact(_col);
+                CollisionEnterDetermineImpact(_col);
+                CollisionStayDetermineImpact(_col);
             }
             else
             {
                 if (_col.transform.tag == "Player")
                 {
-                    CollisionDetermineImpact(_col);
+                    CollisionEnterDetermineImpact(_col);
+                    CollisionStayDetermineImpact(_col);
                 }
             }
         }
@@ -130,53 +132,104 @@ public class Actor : MonoBehaviour
         }
     }
 
-    private void CollisionDetermineImpact(Collision2D _col)
+    private void CollisionEnterDetermineImpact(Collision2D _col)
     {
         ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
         if (_rigSegment != null)
         {
-            Vector2 _normal = (Vector2)col.transform.position - _col.contacts[0].point;
-            //if(_normal.x == 0.5739126f)
-            //{
-            //    Debug.Log("col");
-            //}
-            //Attack from above
-            if (_col.contacts[0].normal.y > 0.0f && _normal.y > 0.1f)
+            switch (CollisionDetermineImpact(_rigSegment, _col))
             {
-                _rigSegment.rigBase.ApplyKnockback(Vector3.down, 0.5f);
-                ApplyKnockback(Vector3.up, 1.0f);
-                _rigSegment.rigBase.Defeat(_playerType);
-            }
-            //Attack from behind
-            else if (col.transform.lossyScale.x == _col.transform.lossyScale.x)
-            {
-                if ((col.transform.lossyScale.x * -_col.contacts[0].normal.x) > 0.0f)
-                {
-                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                case 1:
                     _rigSegment.rigBase.Defeat(_playerType);
-                }
-            }
-            else
-            {
-                if (Mathf.Abs(col.transform.position.y - _col.transform.position.y) < 0.2f)
-                {
-                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    break;
+                case 2:
+                    _rigSegment.rigBase.Defeat(_playerType);
+                    break;
+                case 3:
                     Clash.instance.HaveClash(_col.contacts[0].point);
-                }
-                else
-                {
-                    if (col.transform.position.y > _col.transform.position.y)
-                    {
-                        _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
-                        _rigSegment.rigBase.Defeat(_playerType);
-                    }
-                }
+                    break;
+                case 4:
+                    _rigSegment.rigBase.Defeat(_playerType);
+                    break;
+                case 5:
+                    break;
+                default:
+                    break;
             }
         }
     }
 
+    private void CollisionStayDetermineImpact(Collision2D _col)
+    {
+        ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+        if (_rigSegment != null)
+        {
+            switch (CollisionDetermineImpact(_rigSegment, _col))
+            {
+                case 1:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.down, 0.5f);
+                    ApplyKnockback(Vector3.up, 1.0f);
+                    break;
+                case 2:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    break;
+                case 3:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    break;
+                case 4:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    break;
+                case 5:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    protected int CollisionDetermineImpact(ISegmentable<Actor> _rigSegment, Collision2D _col)
+    {
+        //Attack from above
+        if (_col.contacts[0].normal.y > 0.0f && transform.position.y > _col.transform.position.y + 0.1f)
+        {
+            return 1;
+        }
+        //Attack from behind
+        else if (col.transform.lossyScale.x == _col.transform.lossyScale.x)
+        {
+            if ((col.transform.lossyScale.x * -_col.contacts[0].normal.x) > 0.0f)
+            {
+                return 2;
+            }
+        }
+        //Attack from front
+        else
+        {
+            //Frontal clash
+            if (Mathf.Abs(col.transform.position.y - _col.transform.position.y) < 0.2f)
+            {
+                return 3;
+            }
+            else
+            {
+                //Frontal win
+                if (col.transform.position.y > _col.transform.position.y)
+                {
+                    return 4;
+                }
+                //Frontal loss
+                else
+                {
+                    return 5;
+                }
+            }
+        }
+        return 0;
+    }
+
     protected virtual void OnCollisionStay2D(Collision2D _col)
     {
+        //Head hit platform
         if (_col.contacts[0].otherCollider == col)
         {
             if (_col.collider.tag == "Platform")
@@ -186,16 +239,31 @@ public class Actor : MonoBehaviour
                     body.AddForce(new Vector2(_col.transform.position.x > transform.position.x ? -0.05f : 0.05f, 0.0f), ForceMode2D.Impulse);
                 }
             }
+        }
 
-            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-            if (_rigSegment != null)
+        if (originalJoustCollisions)
+        {
+            if (tag == "Player")
             {
-                if (_rigSegment.segmentName == "Body")
+                CollisionStayDetermineImpact(_col);
+            }
+            else
+            {
+                if (_col.transform.tag == "Player")
                 {
-                    _rigSegment.rigBase.ApplyKnockback(_col.contacts[0].normal, -0.5f);
-                }        
+                    CollisionStayDetermineImpact(_col);
+                }
             }
         }
+
+        //ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+        //if (_rigSegment != null)
+        //{
+        //    //if (_rigSegment.segmentName == "Body")
+        //    // {
+        //    _rigSegment.rigBase.ApplyKnockback(_col.contacts[0].normal, 0.5f);
+        //    // }        
+        //}
     }
 
     public virtual void LandedOnPlatform(Collider2D col)

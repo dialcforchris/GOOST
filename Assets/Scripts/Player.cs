@@ -337,6 +337,7 @@ public class Player : Actor, ISegmentable<Actor>
             flashTime = 0.0f;
         }
         dashcool = maxDashCool;
+        score = 0;
     }
 
     void FlashSprite()
@@ -413,4 +414,17 @@ public class Player : Actor, ISegmentable<Actor>
                 }
         }
     }
+    protected override void OnCollisionStay2D(Collision2D _col)
+    {
+        base.OnCollisionStay2D(_col);
+
+        //if (_col.collider.tag == "Platform")
+        //{
+        //    if (_col.contacts[0].normal.x != 0.0f)
+        //    {
+        //        ApplyKnockback(_col.contacts[0].normal, 0.45f);
+        //    }
+        //}
+    }
+
 }
