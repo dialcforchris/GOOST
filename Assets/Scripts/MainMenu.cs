@@ -281,6 +281,11 @@ public class MainMenu : MonoBehaviour
         //Comfirm to spawn goose
         //Then standard ready up bs
 
+        if (Input.GetJoystickNames().Length<PlayerManager.instance.NumberOfPlayers())
+        {
+            ready[1] = true;
+        }
+
         if (Input.GetButtonDown("Fly0") && bigHead[0])
         {
             StartCoroutine(CharacterImageTransition(false, 0));

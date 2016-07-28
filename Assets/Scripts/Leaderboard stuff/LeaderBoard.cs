@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LeaderBoard : MonoBehaviour 
 {
@@ -12,14 +13,13 @@ public class LeaderBoard : MonoBehaviour
     {
         get { return leader; }
     }
-    public EnterName enterName;
     string playerName;
     public string gameName = "GOOST";
     int playerScore;
     public int stringLength;
     [SerializeField]
     public List<KeyValuePair<string, int>> scores = new List<KeyValuePair<string,int>>();
-
+  
 	// Use this for initialization
 	void Awake () 
     {
@@ -165,7 +165,7 @@ public class LeaderBoard : MonoBehaviour
         playerScore = _score;
         if (CheckIfHighScore(_score))
         {
-            enterName.enterCan.gameObject.SetActive(true);
+          //  enterName.gameObject.SetActive(true);
         }
     }
 
@@ -184,7 +184,7 @@ public class LeaderBoard : MonoBehaviour
                 return true;
             }
         }
-        if (scores.Count <20)
+        if (scores.Count <30)
         {
             return true;
         }
@@ -198,10 +198,5 @@ public class LeaderBoard : MonoBehaviour
     }
 
 
-    public void EndGame()
-    {
-        enterName.enterCan.gameObject.SetActive(true);
-        Debug.Log("LeaderBoardEndGame");
-           
-    }
+   
 }
