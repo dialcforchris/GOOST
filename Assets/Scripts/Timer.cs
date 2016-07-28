@@ -31,7 +31,7 @@ public class Timer : MonoBehaviour
         //StartCoroutine(TextInOut(true));
     }
 
-    bool countdown;
+    public bool countdown;
 
     void Update()
     {
@@ -111,7 +111,7 @@ public class Timer : MonoBehaviour
         }
         else
         {
-            for (int i = 3; i > 0; i--)
+            for (int i = 6; i > 0; i--)
             {
                 countdownText.text = "" + i;
 

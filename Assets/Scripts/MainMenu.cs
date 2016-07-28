@@ -408,7 +408,7 @@ public class MainMenu : MonoBehaviour
         #endregion
 
         #region holding dash to quit
-        if (Input.GetButton("Interact1") || Input.GetButton("Interact0"))
+        if ((Input.GetButton("Interact1") || Input.GetButton("Interact0")) && !Timer.instance.countdown)
         {
             returnTimer += Time.deltaTime * .5f;
             returnImage.fillAmount = returnTimer;
@@ -433,11 +433,11 @@ public class MainMenu : MonoBehaviour
 
     IEnumerator GameStart()
     {
-        readyTextPrompts[1].text = "Game starting!";
-        readyTextPrompts[0].text = "Game starting!";
-        yield return new WaitForSeconds(1);
         Timer.instance.Reset();
         StartCoroutine(Timer.instance.TextInOut(true));
+        readyTextPrompts[1].text = "Game starting!";
+        readyTextPrompts[0].text = "Game starting!";
+        yield return new WaitForSeconds(2.5f);
         GameStateManager.instance.ChangeState(GameStates.STATE_TRANSITIONING);
         currentState = menuState.mainMenu;
 
@@ -500,6 +500,7 @@ public class MainMenu : MonoBehaviour
     IEnumerator CharacterImageTransition(bool inOut, int index)
     {
         float lerpy = 0;
+        CustomGeese[index].SetActive(!inOut);
         while (lerpy < 1)
         {
             if (inOut)
@@ -517,7 +518,6 @@ public class MainMenu : MonoBehaviour
                 //Move character image out of screen
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgEnd[index], characterImgStart[index], lerpy);
 
-                CustomGeese[index].SetActive(false);
             }
             else
             {
@@ -525,8 +525,6 @@ public class MainMenu : MonoBehaviour
                 col.a = 1 - lerpy;
                 characterImg[index].color = col;
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgStart[index], characterImgEnd[index], lerpy);
-
-                CustomGeese[index].SetActive(true);
             }
             lerpy += Time.deltaTime * 1.5f;
             yield return new WaitForEndOfFrame();
