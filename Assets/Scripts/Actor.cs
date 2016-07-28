@@ -8,6 +8,19 @@ public interface ISegmentable<T> where T : Actor
     string segmentName { get; }
 }
 
+public enum CollisionEffect
+{
+    LAND = 0,
+    CRUSHED,
+    BACKSTABBER,
+    BACKSTABBED,
+    CLASH,
+    CLASH_WIN,
+    CLASH_LOSE,
+    REVERSE_BUMP,
+    COUNT
+}
+
 public class Actor : MonoBehaviour
 {
     public SpriteRenderer headSprite;
@@ -43,8 +56,6 @@ public class Actor : MonoBehaviour
 
     public platformManager.platformTypes currentSurface;
 
-    public static bool originalJoustCollisions = true;
-
     protected virtual void OnEnable()
     {
         Physics2D.IgnoreCollision(col, lance.lanceCollider);
@@ -53,7 +64,16 @@ public class Actor : MonoBehaviour
 
     public virtual void ApplyKnockback(Vector2 _direction, float _power)
     {
-        body.velocity = Vector2.zero;// new Vector2(0.0f, body.velocity.y);
+        Vector2 _velClear = body.velocity;
+        if(body.velocity.x * _direction.x < 0)
+        {
+            _velClear.x = 0.0f;
+        }
+        if (body.velocity.y * _direction.y < 0)
+        {
+            _velClear.y = 0.0f;
+        }
+        body.velocity = _velClear;// new Vector2(0.0f, body.velocity.y);
         body.AddForce(_direction.normalized * _power, ForceMode2D.Impulse);
     }
 
@@ -108,40 +128,17 @@ public class Actor : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D _col)
     {
-        if (originalJoustCollisions)
+        if (tag == "Player")
         {
-            if (tag == "Player")
-            {
-                CollisionEnterDetermineImpact(_col);
-                CollisionStayDetermineImpact(_col);
-            }
-            else
-            {
-                if (_col.transform.tag == "Player")
-                {
-                    CollisionEnterDetermineImpact(_col);
-                    CollisionStayDetermineImpact(_col);
-                }
-            }
+            CollisionEnterDetermineImpact(_col);
+            CollisionStayDetermineImpact(_col);
         }
         else
         {
-            if (tag == "Player")
+            if (_col.transform.tag == "Player")
             {
-                ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-                if (_rigSegment != null)
-                {
-                    if (_rigSegment.segmentName == "Body" || _col.collider.tag == "Enemy")
-                    {
-                        if (_col.contacts[0].normal.y > 0.0f)
-                        {
-                            if (_col.contacts[0].otherCollider == col)
-                            {
-                                _rigSegment.rigBase.Defeat(_playerType);
-                            }
-                        }
-                    }
-                }
+                CollisionEnterDetermineImpact(_col);
+                CollisionStayDetermineImpact(_col);
             }
         }
     }
@@ -153,19 +150,17 @@ public class Actor : MonoBehaviour
         {
             switch (CollisionDetermineImpact(_rigSegment, _col))
             {
-                case 1:
+                case CollisionEffect.LAND:
                     _rigSegment.rigBase.Defeat(_playerType);
                     break;
-                case 2:
+                case CollisionEffect.BACKSTABBER:
                     _rigSegment.rigBase.Defeat(_playerType);
                     break;
-                case 3:
+                case CollisionEffect.CLASH:
                     Clash.instance.HaveClash(_col.contacts[0].point);
                     break;
-                case 4:
+                case CollisionEffect.CLASH_WIN:
                     _rigSegment.rigBase.Defeat(_playerType);
-                    break;
-                case 5:
                     break;
                 default:
                     break;
@@ -180,20 +175,20 @@ public class Actor : MonoBehaviour
         {
             switch (CollisionDetermineImpact(_rigSegment, _col))
             {
-                case 1:
+                case CollisionEffect.LAND:
                     _rigSegment.rigBase.ApplyKnockback(Vector3.down, 0.5f);
-                    ApplyKnockback(Vector3.up, 1.0f);
                     break;
-                case 2:
+                case CollisionEffect.CRUSHED:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.up, 1.0f);
+                    break;
+                case CollisionEffect.BACKSTABBER:
                     _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
                     break;
-                case 3:
+                case CollisionEffect.CLASH:
                     _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
                     break;
-                case 4:
+                case CollisionEffect.CLASH_WIN:
                     _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
-                    break;
-                case 5:
                     break;
                 default:
                     break;
@@ -201,44 +196,57 @@ public class Actor : MonoBehaviour
         }
     }
 
-    protected int CollisionDetermineImpact(ISegmentable<Actor> _rigSegment, Collision2D _col)
+    protected CollisionEffect CollisionDetermineImpact(ISegmentable<Actor> _rigSegment, Collision2D _col)
     {
         //Attack from above
         if (_col.contacts[0].normal.y > 0.0f && transform.position.y > _col.transform.position.y + 0.1f)
         {
-            return 1;
+            return CollisionEffect.LAND;
         }
-        //Attack from behind
+        else if(_col.contacts[0].normal.y < 0.0f && transform.position.y - 0.1f < _col.transform.position.y)
+        {
+            return CollisionEffect.CRUSHED;
+        }
+        //Attack from same direction
         else if (col.transform.lossyScale.x == _col.transform.lossyScale.x)
         {
             if ((col.transform.lossyScale.x * -_col.contacts[0].normal.x) > 0.0f)
             {
-                return 2;
+                return CollisionEffect.BACKSTABBER;
+            }
+            else
+            {
+                return CollisionEffect.BACKSTABBED;
             }
         }
-        //Attack from front
+        //Attack from different direction
         else
         {
+            //Back clash
+            if(_col.contacts[0].normal.x * transform.lossyScale.x > 0.0f)
+            {
+                return CollisionEffect.REVERSE_BUMP;
+            }
             //Frontal clash
             if (Mathf.Abs(col.transform.position.y - _col.transform.position.y) < 0.2f)
             {
-                return 3;
+                return CollisionEffect.CLASH;
             }
             else
             {
                 //Frontal win
                 if (col.transform.position.y > _col.transform.position.y)
                 {
-                    return 4;
+                    return CollisionEffect.CLASH_WIN;
                 }
                 //Frontal loss
                 else
                 {
-                    return 5;
+                    return CollisionEffect.CLASH_LOSE;
                 }
             }
         }
-        return 0;
+        //return CollisionEffect.COUNT;
     }
 
     protected virtual void OnCollisionStay2D(Collision2D _col)
@@ -255,29 +263,22 @@ public class Actor : MonoBehaviour
             }
         }
 
-        if (originalJoustCollisions)
+        if (tag == "Player")
         {
-            if (tag == "Player")
+            CollisionStayDetermineImpact(_col);
+        }
+        else
+        {
+            if (_col.transform.tag == "Player")
             {
                 CollisionStayDetermineImpact(_col);
             }
-            else
-            {
-                if (_col.transform.tag == "Player")
-                {
-                    CollisionStayDetermineImpact(_col);
-                }
-            }
         }
 
-        //ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        //if (_rigSegment != null)
-        //{
-        //    //if (_rigSegment.segmentName == "Body")
-        //    // {
-        //    _rigSegment.rigBase.ApplyKnockback(_col.contacts[0].normal, 0.5f);
-        //    // }        
-        //}
+        if (_col.transform.tag == "Player" || _col.transform.tag == "Enemy")
+        {
+            ApplyKnockback(_col.contacts[0].normal, 0.1f);
+        }
     }
 
     public virtual void LandedOnPlatform(Collider2D col)

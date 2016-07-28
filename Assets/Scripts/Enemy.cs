@@ -12,6 +12,10 @@ public enum EnemyBehaviour
 
 public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 {
+
+    public static int total = 0;
+    public int eid = 0;
+
     #region IPoolable
     public PoolData<Enemy> poolData { get; set; }
     #endregion
@@ -66,6 +70,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
     public void Spawn(EnemyBehaviour _behaviour, float _speed)
     {
+        total++;
+        eid = total;
         Respawn();
         aggression = 0.0f;
         ++numActive;
@@ -283,8 +289,6 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
     protected override void OnCollisionEnter2D(Collision2D _col)
     {
-        base.OnCollisionEnter2D(_col);
-
         if (_col.transform.tag == "Enemy")
         {
             ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
@@ -292,26 +296,19 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
             {
                 switch (CollisionDetermineImpact(_rigSegment, _col))
                 {
-                    case 1:
-                        //_rigSegment.rigBase.ApplyKnockback(Vector3.down, 0.5f);
-                        //ApplyKnockback(Vector3.up, 1.0f);
-                        break;
-                    case 2:
-                        //_rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    case CollisionEffect.BACKSTABBER:
                         transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
                         FindTarget();
                         break;
-                    case 3:
-                       // _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    case CollisionEffect.CLASH:
                         transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
                         FindTarget();
                         break;
-                    case 4:
-                        //_rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    case CollisionEffect.CLASH_WIN:
                         transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
                         FindTarget();
                         break;
-                    case 5:
+                    case CollisionEffect.CLASH_LOSE:
                         transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
                         FindTarget();
                         break;
@@ -319,49 +316,20 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                         break;
                 }
             }
+            EnemyStayDetermineForces(_col);
         }
-        //if (_col.collider.tag == "Enemy")
-        //{
-        //    if (_col.contacts[0].normal.x != 0.0f)
-        //    {
-                //if(transform.localScale.x > 0)
-                //{
-                //    if(_col.contacts[0].point.x > transform.position.x)
-                //    {
-                //        transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
-                //        FindTarget();
-                //    }
-                //    else
-                //    {
-                //        ApplyKnockback(_col.contacts[0].normal, 0.5f);
-                //    }
-                //}
-                //else
-                //{
-                //    if (_col.contacts[0].point.x < transform.position.x)
-                //    {
-                //        transform.localScale = new Vector3(-transform.localScale.x, 1.0f, 1.0f);
-                //        FindTarget();
-                //    }
-                //    else
-                //    {
-                //        ApplyKnockback(_col.contacts[0].normal, 0.5f);
-                //    }
-                //}
-        //    }
-        //}
+
         if (currentBehaviour == EnemyBehaviour.AGGRESSIVE)
         {
             FindTarget();
         }
 
-        OnCollisionStay2D(_col);
+        base.OnCollisionEnter2D(_col);
+        
     }
 
     protected override void OnCollisionStay2D(Collision2D _col)
     {
-        base.OnCollisionStay2D(_col);
-
         if (_col.collider.tag == "Platform")
         {
             if (_col.contacts[0].normal.y < 0)
@@ -375,34 +343,49 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         }
         else if (_col.transform.tag == "Enemy")
         {
-            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-            if (_rigSegment != null)
+            EnemyStayDetermineForces(_col);
+        }
+        base.OnCollisionStay2D(_col);
+    }
+
+    private void EnemyStayDetermineForces(Collision2D _col)
+    {
+        ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+        if (_rigSegment != null)
+        {
+            switch (CollisionDetermineImpact(_rigSegment, _col))
             {
-                switch (CollisionDetermineImpact(_rigSegment, _col))
-                {
-                    case 1:
-                        _rigSegment.rigBase.ApplyKnockback(Vector3.down, 0.5f);
-                        ApplyKnockback(Vector3.up, 1.0f);
-                        break;
-                    case 2:
-                        _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
-                        ApplyKnockback(Vector3.left * col.transform.lossyScale.x, 0.75f);
-                        break;
-                    case 3:
-                        _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
-                        break;
-                    case 4:
-                        _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
-                        ApplyKnockback(Vector3.left * col.transform.lossyScale.x, 0.75f);
-                        break;
-                    case 5:
-                        break;
-                    default:
-                        break;
-                }
+                case CollisionEffect.LAND:
+                    int a = eid;
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.down, 0.5f);
+                    break;
+                case CollisionEffect.CRUSHED:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.up, 1.0f);
+                    break;
+                case CollisionEffect.CLASH:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    break;
+                case CollisionEffect.CLASH_WIN:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    break;
+                case CollisionEffect.CLASH_LOSE:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    break;
+                case CollisionEffect.BACKSTABBER:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                    break;
+                case CollisionEffect.BACKSTABBED:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.left * col.transform.lossyScale.x, 0.75f);
+                    break;
+                case CollisionEffect.REVERSE_BUMP:
+                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * -col.transform.lossyScale.x, 0.75f);
+                    break;
+                default:
+                    break;
             }
         }
     }
+
 
     public void PlatformSideCollision(Collision2D _col)
     {
