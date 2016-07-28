@@ -335,8 +335,8 @@ public class Player : Actor, ISegmentable<Actor>
             spRend.enabled = true;
             flashBool = true;
             flashTime = 0.0f;
-            dashcool = maxDashCool;
         }
+        dashcool = maxDashCool;
     }
 
     void FlashSprite()
