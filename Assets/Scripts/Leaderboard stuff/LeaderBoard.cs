@@ -195,10 +195,6 @@ public class LeaderBoard : MonoBehaviour
 
     public List<KeyValuePair<string,int>> ReturnLeaderBoard()
     {
-        foreach (KeyValuePair<string,int> k in scores)
-        {
-            Debug.Log(k.Key + " " + k.Value);
-        }
         return scores;
     }
 
