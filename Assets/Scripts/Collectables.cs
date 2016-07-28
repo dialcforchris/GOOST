@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Collectables : MonoBehaviour, IPoolable<Collectables>
 {
@@ -16,9 +17,19 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
     Vector2 boost = Vector2.zero;
     
     [SerializeField]
-    Sprite[] sprites;
+    Sprite[] frontSprites1;
     [SerializeField]
-    Sprite[] backSprites;
+    Sprite[] frontSprites2;
+    [SerializeField]
+    Sprite[] frontSprites3;
+    [SerializeField]
+    Sprite[] backSprites1;
+    [SerializeField]
+    Sprite[] backSprites2;
+    [SerializeField]
+    Sprite[] backSprites3;
+    List<Sprite[]> frontSprites = new List<Sprite[]>();
+    List<Sprite[]> backSprites = new List<Sprite[]>();
     [SerializeField]
     Rigidbody2D body;
     [SerializeField]
@@ -33,20 +44,31 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
     float flash = 0;
     float invincible = 0;
     float invincibleDuration = 0.1f;
+    int currentSprite = 0;
     bool canFlash = false;
     bool visible = true;
     private int owningPlayer = 3;
     
+    void Start()
+    {
+        frontSprites.Add(frontSprites1);
+        frontSprites.Add(frontSprites2);
+        frontSprites.Add( frontSprites3);
+        backSprites.Add(backSprites1);
+        backSprites.Add(backSprites2);
+        backSprites.Add(backSprites3);
+        currentSprite = Random.Range(0, 3);
+    }
     void Update()
     {
 
         if (transform.eulerAngles.y>90&&transform.eulerAngles.y<270)
         {
-           spRend.sprite = backSprites[type == PickUpType.HARDDRIVE ? 0 : 1];
+           spRend.sprite = backSprites[currentSprite][type == PickUpType.HARDDRIVE ? 1 : 0];
         }
         else
         {
-            spRend.sprite = sprites[type == PickUpType.HARDDRIVE ? 0 : 1];
+            spRend.sprite = frontSprites[currentSprite][type == PickUpType.HARDDRIVE ? 1 : 0];
         }
         Life();
         FlashTime(canFlash);

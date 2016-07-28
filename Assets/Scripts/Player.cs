@@ -174,15 +174,6 @@ public class Player : Actor, ISegmentable<Actor>
     public override void LandedOnPlatform(Collider2D col)
     {
         base.LandedOnPlatform(col);
-        switch (currentSurface)
-        {
-            case platformManager.platformTypes.wood:
-                SoundManager.instance.playSound(woodLand);
-                break;
-            case platformManager.platformTypes.grass:
-                SoundManager.instance.playSound(grassLand);
-                break;
-        }
         riderAnimator.Play("cape_flap_a");
     }
 
@@ -337,6 +328,7 @@ public class Player : Actor, ISegmentable<Actor>
             flashTime = 0.0f;
         }
         dashcool = maxDashCool;
+        score = 0;
     }
 
     void FlashSprite()
@@ -413,4 +405,17 @@ public class Player : Actor, ISegmentable<Actor>
                 }
         }
     }
+    protected override void OnCollisionStay2D(Collision2D _col)
+    {
+        base.OnCollisionStay2D(_col);
+
+        //if (_col.collider.tag == "Platform")
+        //{
+        //    if (_col.contacts[0].normal.x != 0.0f)
+        //    {
+        //        ApplyKnockback(_col.contacts[0].normal, 0.45f);
+        //    }
+        //}
+    }
+
 }

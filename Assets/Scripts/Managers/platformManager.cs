@@ -21,6 +21,7 @@ public class platformManager : MonoBehaviour {
         grass,
         wood,
         concrete,
+        metal,
         ERROR
     }
 

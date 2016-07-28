@@ -5,7 +5,6 @@ using System.Collections;
 
 public class MainMenu : MonoBehaviour
 {
-
     public static MainMenu instance;
 
     [Header("Main menu")]
@@ -42,16 +41,18 @@ public class MainMenu : MonoBehaviour
     Image[] levelSelectionElements;
     [SerializeField]
     Image[] levelSelectionCursor;
+    [SerializeField]
+    GameObject LevelSelector;
 
     [Header("Ready up menu")]
     [SerializeField]
     Text[] readyTextPrompts;
     [SerializeField]
-    GameObject readyUpBounds,leftCloudPlatform,rightCloudPlatform;
+    GameObject readyUpBounds, leftCloudPlatform, rightCloudPlatform;
     [SerializeField]
     Image returnImage;
     [SerializeField]
-    Image[] readyIndicator, characterImg,clouds;
+    Image[] readyIndicator, characterImg, clouds;
     [SerializeField]
     Vector2[] characterImgStart, characterImgEnd;
 
@@ -63,7 +64,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     GameObject[] CustomGeese;
 
-    int mainMenuIndex, optionsIndex,levelSelectionIndex;
+    int mainMenuIndex, optionsIndex, levelSelectionIndex;
     bool transitioning;
 
     public menuState currentState;
@@ -105,7 +106,7 @@ public class MainMenu : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
         }
-        else if (start.y != 180 )//|| start.y != 270)
+        else if (start.y != 180)//|| start.y != 270)
         {
             while (lerpy < 18)
             {
@@ -118,7 +119,7 @@ public class MainMenu : MonoBehaviour
         {
             while (lerpy < 18)
             {
-                lerpy++;    
+                lerpy++;
                 transform.Rotate(Vector3.right, 5);
                 yield return new WaitForEndOfFrame();
             }
@@ -150,6 +151,7 @@ public class MainMenu : MonoBehaviour
                 case 2:
                     transitioning = true;
                     currentState = menuState.leaderboardsMenu;
+                    LeaderBoard.instance.display.update();
                     menuScreens[2].SetActive(true);
                     menuScreens[1].SetActive(false);
                     menuScreens[4].SetActive(false);
@@ -169,7 +171,7 @@ public class MainMenu : MonoBehaviour
 
                     currentState = menuState.readyUpScreen;
                     GameStateManager.instance.ChangeState(GameStates.STATE_READYUP);
-                    
+
                     #region a lot of nonsense
                     //Make sure the players can't escape the screen
                     readyUpBounds.SetActive(true);
@@ -180,7 +182,9 @@ public class MainMenu : MonoBehaviour
                     customised[0] = false;
                     customised[1] = false;
                     cosmeticIndex[0] = 0;
+                    CustomisableSlots[0].sprite = hats[0];
                     cosmeticIndex[1] = 0;
+                    CustomisableSlots[1].sprite = backpacks[0];
                     bigHead[0] = true;
                     bigHead[1] = true;
                     CustomGeese[0].SetActive(false);
@@ -279,16 +283,11 @@ public class MainMenu : MonoBehaviour
         //Comfirm to spawn goose
         //Then standard ready up bs
 
-        if (Input.GetJoystickNames().Length<PlayerManager.instance.NumberOfPlayers())
-        {
-            ready[1] = true;
-        }
-
-        if (Input.GetButtonDown("Fly0") && bigHead[0])
+        if (Input.GetButtonDown("Fly0") && bigHead[0] && !charTransitionP1)
         {
             StartCoroutine(CharacterImageTransition(false, 0));
         }
-        if (Input.GetButtonDown("Fly1") && bigHead[1])
+        if (Input.GetButtonDown("Fly1") && bigHead[1] && !charTransitionP2)
         {
             StartCoroutine(CharacterImageTransition(false, 1));
         }
@@ -405,8 +404,8 @@ public class MainMenu : MonoBehaviour
             PlayerManager.instance.GetPlayer(0).TakeOffFromPlatform();
             PlayerManager.instance.GetPlayer(1).TakeOffFromPlatform();
 
-            StartCoroutine(BounceyGeese(0));
-            StartCoroutine(BounceyGeese(1));
+            StartCoroutine(BounceyGeese(0, level));
+            StartCoroutine(BounceyGeese(1, level));
 
             //Pan camera towards ground
             Camera.main.GetComponent<CameraController>().switchViews(false);
@@ -437,7 +436,7 @@ public class MainMenu : MonoBehaviour
         #endregion
     }
 
-    public IEnumerator BounceyGeese(int index)
+    public IEnumerator BounceyGeese(int index, int level)
     {
         yield return new WaitForSeconds(2);
         float lerpy = 0;
@@ -449,7 +448,17 @@ public class MainMenu : MonoBehaviour
         while (lerpy < 1)
         {
             Vector3 pos = PlayerManager.instance.GetPlayer(index).transform.position;
-            PlayerManager.instance.GetPlayer(index).transform.position = new Vector3(index > 0 ? 6 : -6, bounceNess.Evaluate(lerpy) + 2.15f, pos.z);
+            if (level == 0)
+            {
+                PlayerManager.instance.GetPlayer(index).transform.position = new Vector3(index > 0 ? 6 : -6, bounceNess.Evaluate(lerpy) + 2.15f, pos.z);
+            }
+            else
+            {
+                if (index == 0)
+                    PlayerManager.instance.GetPlayer(index).transform.position = new Vector3(index > 0 ? 6 : -6, bounceNess.Evaluate(lerpy) + 0.75f, pos.z);
+                else
+                    PlayerManager.instance.GetPlayer(index).transform.position = new Vector3(index > 0 ? 6 : -6, (bounceNess.Evaluate(lerpy) * 1.25f) - 1, pos.z);
+            }
             lerpy += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
@@ -457,17 +466,28 @@ public class MainMenu : MonoBehaviour
         //Give control back to the goose, since he's been so good.
         PlayerManager.instance.GetPlayer(index).GooseyBod.isKinematic = false;
 
-        yield return new WaitForSeconds(0);
         //Make sure the countdown text is only triggered once
         if (index == 0)
+        {
+            Timer.instance.Reset();
             StartCoroutine(Timer.instance.TextInOut(true));
+        }
     }
 
     public AnimationCurve bounceNess;
 
+    bool charTransitionP1, charTransitionP2;
     //Moves big character images out of screen, sets custom geese to active
     IEnumerator CharacterImageTransition(bool inOut, int index)
     {
+        if (index == 0 && !inOut)
+        {
+            charTransitionP1 = true;
+        }
+        else if (index == 1 && !inOut)
+        {
+            charTransitionP1 = true;
+        }
         float lerpy = 0;
         while (lerpy < 1)
         {
@@ -502,9 +522,18 @@ public class MainMenu : MonoBehaviour
         }
         if (!inOut)
             bigHead[index] = false;
+
+        if (index == 0 && !inOut)
+        {
+            charTransitionP1 = false;
+        }
+        else if (index == 1 && !inOut)
+        {
+            charTransitionP1 = false;
+        }
     }
 
-    void changeSelection(Image[] cursors, RectTransform[] menuElements, ref int menuIndex,float yOffset = 0)
+    void changeSelection(Image[] cursors, RectTransform[] menuElements, ref int menuIndex, float yOffset = 0)
     {
         if (((Input.GetAxis("Vertical0") < 0 && !scrolling[0]) || (Input.GetAxis("Vertical1") < 0) && !scrolling[1]))
         {
@@ -528,7 +557,7 @@ public class MainMenu : MonoBehaviour
             cursors[1].rectTransform.anchoredPosition = menuElements[menuIndex].anchoredPosition - new Vector2(menuElements[menuIndex].sizeDelta.x / 2 + 75, -yOffset);
 
         }
-        else if (((Input.GetAxis("Vertical0") > 0 && !scrolling[0])|| (Input.GetAxis("Vertical1") > 0) && !scrolling[1]))
+        else if (((Input.GetAxis("Vertical0") > 0 && !scrolling[0]) || (Input.GetAxis("Vertical1") > 0) && !scrolling[1]))
         {
             if (Input.GetAxis("Vertical0") > 0)
             {
@@ -554,7 +583,7 @@ public class MainMenu : MonoBehaviour
             StopCoroutine(allowMove(1));
             scrolling[0] = false;
         }
-        else if (Input.GetAxis("Vertical1") ==0 && scrolling[1])
+        else if (Input.GetAxis("Vertical1") == 0 && scrolling[1])
         {
             StopCoroutine(allowMove(1));
             scrolling[1] = false;
@@ -562,8 +591,8 @@ public class MainMenu : MonoBehaviour
     }
 
     void mainMenu()
-    {         
-        changeSelection(mainMenuCursor, GetRectTransforms(mainMenuElements), ref mainMenuIndex,42);
+    {
+        changeSelection(mainMenuCursor, GetRectTransforms(mainMenuElements), ref mainMenuIndex, 42);
 
         if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
         {
@@ -627,7 +656,7 @@ public class MainMenu : MonoBehaviour
 
     void optionsMenu()
     {
-        changeSelection(optionsCursor, GetRectTransforms(optionsElements), ref optionsIndex,42);
+        changeSelection(optionsCursor, GetRectTransforms(optionsElements), ref optionsIndex, 42);
 
         if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
         {
@@ -652,6 +681,8 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    int level;
+
     void LevelSelectionMenu()
     {
         //Select level
@@ -664,10 +695,14 @@ public class MainMenu : MonoBehaviour
                 case 0:
                     switchMenus(4);
                     //Select woodland level
+                    level = 0;
+                    LevelSelector.transform.position = new Vector3(-50, 0, 0);
                     break;
                 case 1:
                     switchMenus(4);
                     //City level
+                    level = 1;
+                    LevelSelector.transform.position = Vector3.zero;
                     break;
                 case 2:
                     //Back to main menu
@@ -693,7 +728,8 @@ public class MainMenuTester : Editor
         MainMenu scriptToControl = (MainMenu)target;
         if (GUILayout.Button("bounce"))
         {
-            scriptToControl.StartCoroutine(scriptToControl.BounceyGeese(0));
+            scriptToControl.StartCoroutine(scriptToControl.BounceyGeese(0, 1));
+            scriptToControl.StartCoroutine(scriptToControl.BounceyGeese(1, 1));
         }
 
     }

@@ -116,7 +116,6 @@ public class PlayerManager : MonoBehaviour
     void Update()
     {
 
-        Debug.Log(players.Length);
         for (int i = 0; i < playerRespawn.Length; ++i)
         {
             if (playerRespawn[i])

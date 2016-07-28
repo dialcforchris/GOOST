@@ -19,7 +19,8 @@ public class LeaderBoard : MonoBehaviour
     public int stringLength;
     [SerializeField]
     public List<KeyValuePair<string, int>> scores = new List<KeyValuePair<string,int>>();
-  
+    [SerializeField]
+    public DisplayLeaderboard display;
 	// Use this for initialization
 	void Awake () 
     {
@@ -184,7 +185,7 @@ public class LeaderBoard : MonoBehaviour
                 return true;
             }
         }
-        if (scores.Count <30)
+        if (scores.Count <40)
         {
             return true;
         }
