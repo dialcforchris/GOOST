@@ -174,15 +174,6 @@ public class Player : Actor, ISegmentable<Actor>
     public override void LandedOnPlatform(Collider2D col)
     {
         base.LandedOnPlatform(col);
-        switch (currentSurface)
-        {
-            case platformManager.platformTypes.wood:
-                SoundManager.instance.playSound(woodLand);
-                break;
-            case platformManager.platformTypes.grass:
-                SoundManager.instance.playSound(grassLand);
-                break;
-        }
         riderAnimator.Play("cape_flap_a");
     }
 
