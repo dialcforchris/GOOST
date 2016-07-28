@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,45 +9,73 @@ public class CameraShake : MonoBehaviour
 
 	// Transform of the camera to shake. Grabs the gameObject's transform
 	// if null.
-	public Transform[] camTransforms;
-	
+    public AudioClip[] stomps,screaming;
 	// How long the object should shake for.
 	public float shakeDuration = 0f;
 	
 	// Amplitude of the shake. A larger value shakes the camera harder.
 	public float shakeAmount = 0.7f;
 	public float decreaseFactor = 1.0f;
-	
-	List<Vector3> originalPos = new List<Vector3>();
+
+    Vector3 originalPos;
 	
 	void OnEnable()
 	{
         instance = this;
-        originalPos.Clear();
-        foreach(Transform v in camTransforms)
-        {
-            originalPos.Add(v.localPosition);
-        }
-	}
+        originalPos = new Vector3(0, 0, -10);
+    }
+    
+    public void GetGoosed()
+    {
+        GetComponent<Animator>().Play("gooseZilla");
+    }
+
+    public void PlayScreamingSound()
+    {
+        SoundManager.instance.playSound(screaming[0],0.25f);
+    }
+
+    int stompIndex = 0;
+    public void PlayStompSound()
+    {
+        SoundManager.instance.playSound(stomps[stompIndex]);
+        stompIndex++;
+        if (stompIndex > stomps.Length - 1)
+            stompIndex = 0;
+    }
+
+    public void Shake()
+    {
+        PlayStompSound();
+        shakeDuration += .5f;
+    }
 
     void Update()
     {
         if (shakeDuration > 0)
         {
-            for (int i = 0; i < camTransforms.Length; i++)
-            {
-                camTransforms[i].localPosition = originalPos[i] + Random.insideUnitSphere * shakeAmount;
-            }
+            Camera.main.transform.localPosition = (Vector3.up * shakeAmount) + originalPos + Random.insideUnitSphere * shakeAmount;
             shakeDuration -= Time.deltaTime * decreaseFactor;
-        }
-        else
-        {
-            shakeDuration = 0f;
 
-            for (int i = 0; i < camTransforms.Length; i++)
+            if (shakeDuration <= 0)
             {
-                camTransforms[i].localPosition = originalPos[i];
+                Camera.main.transform.position = new Vector3(0, 0, -10);
             }
         }
+    }
+}
+
+[CustomEditor(typeof(CameraShake))]
+public class GOOSEZILLA : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        CameraShake scriptToControl = (CameraShake)target;
+        if (GUILayout.Button("Get Goosed"))
+        {
+            scriptToControl.GetGoosed();
+        }
+
     }
 }

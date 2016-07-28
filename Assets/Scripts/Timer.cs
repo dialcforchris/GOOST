@@ -23,7 +23,7 @@ public class Timer : MonoBehaviour
 	void Start ()
     {
         instance = this;
-        TimerText.text = ""+currentTime;
+        TimerText.text = (int)(currentTime / 60) + ":" + (int)(currentTime % 60);
         //StartCoroutine(TextInOut(true));
     }
 
@@ -52,7 +52,7 @@ public class Timer : MonoBehaviour
             }
             //Seconds + minutes interface
             if (currentTime % 60 > 10)
-            TimerText.text = "0"+(int)(currentTime / 60) + ":" + (int)(currentTime % 60);
+            TimerText.text = (int)(currentTime / 60) + ":" + (int)(currentTime % 60);
             else
                 TimerText.text = "0"+(int)(currentTime / 60) + ":0" + (int)(currentTime % 60);
 
