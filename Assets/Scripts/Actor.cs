@@ -93,9 +93,15 @@ public class Actor : MonoBehaviour
             }
             else if (transform.position.y < -5.5f)
             {
-                if (GetComponent<Player>())
+                if (tag == "Player")
+                {
                     GetComponent<Player>().collectable = 0;
-                Defeat(_playerType);
+                    Defeat(PlayerType.OTHER);
+                }
+                else
+                {
+                    transform.position = new Vector2(transform.position.x, 5.5f);
+                }
             }
         }
     }
@@ -354,5 +360,6 @@ public enum PlayerType
     BADGUY,
     GOODGUY,
     ENEMY,
+    OTHER,
     COUNT
 };
