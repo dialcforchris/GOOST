@@ -4,7 +4,7 @@ using System.Collections;
 
 public class PauseMenu : MonoBehaviour
 {
-
+   public  Animator BigGoose;
     public static PauseMenu instance;
 
     int index = 0;
@@ -89,6 +89,8 @@ public class PauseMenu : MonoBehaviour
                     break;
                 case 3:
                     //Quit to menu
+                    BigGoose.Play("gooseZilla_idle");
+                    CameraShake.instance.shakeDuration = 0;
                     MainMenu.instance.transform.rotation = Quaternion.Euler(Vector3.zero);
                     MainMenu.instance.switchMenus(0);
                     CameraController.instance.switchViews(true);
