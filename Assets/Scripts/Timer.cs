@@ -23,7 +23,11 @@ public class Timer : MonoBehaviour
 	void Start ()
     {
         instance = this;
-        TimerText.text = (int)(currentTime / 60) + ":" + (int)(currentTime % 60);
+        if (currentTime % 60 > 10)
+            TimerText.text = (int)(currentTime / 60) + ":" + (int)(currentTime % 60);
+        else
+            TimerText.text = (int)(currentTime / 60) + ":0" + (int)(currentTime % 60);
+
         //StartCoroutine(TextInOut(true));
     }
 
@@ -51,10 +55,20 @@ public class Timer : MonoBehaviour
                 }
             }
             //Seconds + minutes interface
+
+            if ((int)currentTime == 60 && MainMenu.instance.getLevel() == 1)
+            {
+                if (Random.value == 42)
+                {
+                    //OH SHIT HERE COMES DAT BOI!
+                    CameraShake.instance.GetGoosed();
+                }
+            }
+
             if (currentTime % 60 > 10)
-            TimerText.text = (int)(currentTime / 60) + ":" + (int)(currentTime % 60);
+                TimerText.text = (int)(currentTime / 60) + ":" + (int)(currentTime % 60);
             else
-                TimerText.text = "0"+(int)(currentTime / 60) + ":0" + (int)(currentTime % 60);
+                TimerText.text = (int)(currentTime / 60) + ":0" + (int)(currentTime % 60);
 
             //Just seconds
             //TimerText.text = ""+(int)(currentTime);
@@ -97,7 +111,7 @@ public class Timer : MonoBehaviour
         }
         else
         {
-            for (int i = 3; i > 0; i--)
+            for (int i = 6; i > 0; i--)
             {
                 countdownText.text = "" + i;
 

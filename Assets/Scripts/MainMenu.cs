@@ -177,8 +177,8 @@ public class MainMenu : MonoBehaviour
                     readyUpBounds.SetActive(true);
 
                     //Reset the everything
-                    readyTextPrompts[0].text = "Press        \nto spawn";
-                    readyTextPrompts[1].text = "Press \n to spawn";
+                    //readyTextPrompts[0].text = "Press        \nto spawn";
+                    //readyTextPrompts[1].text = "Press \n to spawn";
                     customised[0] = false;
                     customised[1] = false;
                     cosmeticIndex[0] = 0;
@@ -342,9 +342,12 @@ public class MainMenu : MonoBehaviour
             CustomGeese[0].SetActive(false);
             PlayerManager.instance.SetupPlayer(0);
             PlayerManager.instance.GetPlayer(0).headSprite.sprite = hats[cosmeticIndex[0]];
-            readyTextPrompts[0].text = "Press Dash and Fly\n buttons to ready up";
+            //readyTextPrompts[0].text = "Press Dash and Fly\n buttons to ready up";
+            readyTextPrompts[0].text = "Waiting for\nother player...";
             clouds[0].gameObject.SetActive(true);
             leftCloudPlatform.SetActive(true);
+
+            ready[0] = true;
         }
         if (Input.GetButtonDown("Fly1") && characterImg[1].color.a < 0.1f && !customised[1])
         {
@@ -354,13 +357,18 @@ public class MainMenu : MonoBehaviour
             PlayerManager.instance.SetupPlayer(1);
             PlayerManager.instance.GetPlayer(1).backpack.sprite = backpacks[cosmeticIndex[1]];
 
-            readyTextPrompts[1].text = "Press Dash and Fly\n buttons to ready up";
+            //readyTextPrompts[1].text = "Press Dash and Fly\n buttons to ready up";
+            readyTextPrompts[0].text = "Waiting for\nother player...";
             clouds[1].gameObject.SetActive(true);
             rightCloudPlatform.SetActive(true);
+
+            ready[1] = true;
         }
         #endregion
 
         #region ready up
+        //Cool I'll just throw this all in the bin. 
+        /*
         //Player 1
         if (Input.GetButton("Fly0") && Input.GetButton("Interact0") && !pressingReady[0] && customised[0])
         {
@@ -384,31 +392,16 @@ public class MainMenu : MonoBehaviour
         }
         else if (!Input.GetButton("Fly1") && !Input.GetButton("Interact1") && customised[0])
             pressingReady[1] = false;
-
+         */
         #endregion
 
         #region start game when both players are ready
         if (ready[0] & ready[1])
         {
-            GameStateManager.instance.ChangeState(GameStates.STATE_TRANSITIONING);
-            currentState = menuState.mainMenu;
-
             //Reset ready up booleans
             ready[0] = false;
             ready[1] = false;
-
-            //Let the geese fall down
-            readyUpBounds.gameObject.SetActive(false);
-
-            PlayerManager.instance.ResetGameStart();
-            PlayerManager.instance.GetPlayer(0).TakeOffFromPlatform();
-            PlayerManager.instance.GetPlayer(1).TakeOffFromPlatform();
-
-            StartCoroutine(BounceyGeese(0, level));
-            StartCoroutine(BounceyGeese(1, level));
-
-            //Pan camera towards ground
-            Camera.main.GetComponent<CameraController>().switchViews(false);
+            StartCoroutine(GameStart());
         }
         #endregion
 
@@ -434,6 +427,30 @@ public class MainMenu : MonoBehaviour
             returnImage.fillAmount = returnTimer;
         }
         #endregion
+    }
+
+    IEnumerator GameStart()
+    {
+        Timer.instance.Reset();
+        StartCoroutine(Timer.instance.TextInOut(true));
+        yield return new WaitForSeconds(2);
+        readyTextPrompts[1].text = "Game starting!";
+        readyTextPrompts[0].text = "Game starting!";
+        GameStateManager.instance.ChangeState(GameStates.STATE_TRANSITIONING);
+        currentState = menuState.mainMenu;
+
+        //Let the geese fall down
+        readyUpBounds.gameObject.SetActive(false);
+
+        PlayerManager.instance.ResetGameStart();
+        PlayerManager.instance.GetPlayer(0).TakeOffFromPlatform();
+        PlayerManager.instance.GetPlayer(1).TakeOffFromPlatform();
+
+        StartCoroutine(BounceyGeese(0, level));
+        StartCoroutine(BounceyGeese(1, level));
+
+        //Pan camera towards ground
+        Camera.main.GetComponent<CameraController>().switchViews(false);
     }
 
     public IEnumerator BounceyGeese(int index, int level)
@@ -469,8 +486,8 @@ public class MainMenu : MonoBehaviour
         //Make sure the countdown text is only triggered once
         if (index == 0)
         {
-            Timer.instance.Reset();
-            StartCoroutine(Timer.instance.TextInOut(true));
+            //Timer.instance.Reset();
+            //StartCoroutine(Timer.instance.TextInOut(true));
         }
     }
 
@@ -682,7 +699,10 @@ public class MainMenu : MonoBehaviour
     }
 
     int level;
-
+    public int getLevel()
+    {
+        return level;
+    }
     void LevelSelectionMenu()
     {
         //Select level
