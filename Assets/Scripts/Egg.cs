@@ -24,6 +24,8 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     float invinsible = 0;
     public int score = 50;
     private int _owningPlayer = 0;
+    [SerializeField]
+    AudioClip eggHatch;
 
     private EnemyBehaviour parentType;
     private float parentSpeed;
@@ -56,20 +58,21 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     void Hatch()
     {
             if (hatchTime<maxHatchTime)
-            {
-                hatchTime += Time.deltaTime;
-            }
-            else
-            {
-               GameObject brokenEgg = (GameObject)Instantiate(broken);
-               brokenEgg.transform.position = transform.position;
-               brokenEgg.transform.rotation = transform.rotation;
-                hatchTime = 0;
-                Enemy e = EnemyManager.instance.EnemyPool();
-                e.transform.position = new Vector2(transform.position.x,transform.position.y+0.8f);
-                e.Spawn(parentType, parentSpeed);
-                ReturnPool();
-            }
+        {
+            hatchTime += Time.deltaTime;
+        }
+        else
+        {
+            SoundManager.instance.playSound(eggHatch);
+            GameObject brokenEgg = (GameObject)Instantiate(broken);
+            brokenEgg.transform.position = transform.position;
+            brokenEgg.transform.rotation = transform.rotation;
+            hatchTime = 0;
+            Enemy e = EnemyManager.instance.EnemyPool();
+            e.transform.position = new Vector2(transform.position.x, transform.position.y + 0.8f);
+            e.Spawn(parentType, parentSpeed);
+            ReturnPool();
+        }
     }
 
  

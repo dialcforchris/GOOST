@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Clash : MonoBehaviour//, IPoolable<Clash>
 {
-
+    [SerializeField]
+    AudioClip clashSound;
     [SerializeField]
     private ParticleSystem clash;
     static public Clash instance = null;
@@ -18,8 +19,9 @@ public class Clash : MonoBehaviour//, IPoolable<Clash>
 
     public void HaveClash(Vector2 _pos)
     {
+        SoundManager.instance.playSound(clashSound);
         clash.transform.position = _pos;
-        clash.Emit(1);
+        clash.Play();
     }
     //#region IPoolable
     //public PoolData<Clash> poolData { get; set; }

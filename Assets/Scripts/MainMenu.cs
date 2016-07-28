@@ -24,6 +24,8 @@ public class MainMenu : MonoBehaviour
     //Stats
     //Ready up
     //Level Select
+    [SerializeField]
+    AudioClip woodLandingSound;
 
     [SerializeField]
     AudioClip[] wooshNoises;
@@ -93,7 +95,6 @@ public class MainMenu : MonoBehaviour
         float lerpy = 0;
         if (end.x != -180 && start.y != 180)
         {
-            Debug.Log("A");
             while (lerpy < 1 && start.y != 180)
             {
                 start = transform.rotation.eulerAngles;
@@ -106,8 +107,6 @@ public class MainMenu : MonoBehaviour
         }
         else if (start.y != 180 )//|| start.y != 270)
         {
-            Debug.Log("b");
-
             while (lerpy < 18)
             {
                 lerpy++;
@@ -117,7 +116,6 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            Debug.Log("C");
             while (lerpy < 18)
             {
                 lerpy++;    
@@ -377,7 +375,7 @@ public class MainMenu : MonoBehaviour
             pressingReady[0] = false;
 
         //Player 2
-        if (Input.GetButton("Fly1") && Input.GetButton("Interact1") && !pressingReady[1] && customised[0])
+        if (Input.GetButton("Fly1") && Input.GetButton("Interact1") && !pressingReady[1] && customised[1])
         {
             pressingReady[1] = true;
             ready[1] = !ready[1];
@@ -403,6 +401,7 @@ public class MainMenu : MonoBehaviour
             //Let the geese fall down
             readyUpBounds.gameObject.SetActive(false);
 
+            PlayerManager.instance.ResetGameStart();
             PlayerManager.instance.GetPlayer(0).TakeOffFromPlatform();
             PlayerManager.instance.GetPlayer(1).TakeOffFromPlatform();
 
@@ -446,6 +445,7 @@ public class MainMenu : MonoBehaviour
         //Don't allow any other forces to act on the goose, we're in control now.
         PlayerManager.instance.GetPlayer(index).GooseyBod.isKinematic = true;
 
+        SoundManager.instance.playSound(woodLandingSound);
         while (lerpy < 1)
         {
             Vector3 pos = PlayerManager.instance.GetPlayer(index).transform.position;
@@ -487,58 +487,21 @@ public class MainMenu : MonoBehaviour
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgEnd[index], characterImgStart[index], lerpy);
 
                 CustomGeese[index].SetActive(false);
-
-                //something about ready state
-
-                /*
-                //Fade out clouds
-                //Also Text + indicator
-                Color Col_ = clouds[index].color;
-                Col_.a = 1 - lerpy;
-                clouds[index].color = Col_;
-                readyIndicator[index].color = Col_;
-                readyTextPrompts[index].color = Col_;
-
-                Color Col_black = readyTextPrompts[index].GetComponent<Outline>().effectColor;
-                Col_black.a = 1 - lerpy;
-                readyTextPrompts[index].GetComponent<Outline>().effectColor = Col_black;
-                */
             }
             else
             {
-                /*
-                if (index == 0)
-                    leftCloudPlatform.SetActive(true);
-                else
-                    rightCloudPlatform.SetActive(true);
-                */
-
-                //clouds[index].gameObject.SetActive(true);
-
                 Color col = characterImg[index].color;
                 col.a = 1 - lerpy;
                 characterImg[index].color = col;
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgStart[index], characterImgEnd[index], lerpy);
 
                 CustomGeese[index].SetActive(true);
-                bigHead[index] = false;
-                /*
-                //Fade in clouds
-                //Also Text + indicator
-                Color Col_ = clouds[index].color;
-                Col_.a = lerpy;
-                clouds[index].color = Col_;
-                readyIndicator[index].color = Col_;
-                readyTextPrompts[index].color = Col_;
-
-                Color Col_black = readyTextPrompts[index].GetComponent<Outline>().effectColor;
-                Col_black.a = lerpy;
-                readyTextPrompts[index].GetComponent<Outline>().effectColor = Col_black;
-                */
             }
             lerpy += Time.deltaTime * 1.5f;
             yield return new WaitForEndOfFrame();
         }
+        if (!inOut)
+            bigHead[index] = false;
     }
 
     void changeSelection(Image[] cursors, RectTransform[] menuElements, ref int menuIndex,float yOffset = 0)
