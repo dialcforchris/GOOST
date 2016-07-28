@@ -34,28 +34,29 @@ public class EnterName : MonoBehaviour
     {
         if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEOVER)
         {
-            
-
-            enterCan.enabled = true;
-            int scre = PlayerManager.instance.GetPlayer(playerNumber).GetScore();
-            if (LeaderBoard.instance.CheckIfHighScore(scre) && scre > 0)
+            if (!check)
             {
-                playerName.text = "Player " + (playerNumber + 1) + " Enter Name:";
-                MenuInput();
-                box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
-                ChangeTextColour();
-                score.text = "Player " + (playerNumber + 1) + " Score: " + PlayerManager.instance.GetPlayer(playerNumber).GetScore().ToString();
-                if (Input.GetButton("Fly" + playerNumber))
+                enterCan.enabled = true;
+                int scre = PlayerManager.instance.GetPlayer(playerNumber).GetScore();
+                if (LeaderBoard.instance.CheckIfHighScore(scre) && scre > 0)
                 {
-                    SelectName();
+                    playerName.text = "Player " + (playerNumber + 1) + " Enter Name:";
+                    MenuInput();
+                    box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
+                    ChangeTextColour();
+                    score.text = "Player " + (playerNumber + 1) + " Score: " + PlayerManager.instance.GetPlayer(playerNumber).GetScore().ToString();
+                    if (Input.GetButton("Fly" + playerNumber))
+                    {
+                        SelectName();
+                        check = true;
+                    }
+                }
+                else
+                {
                     check = true;
                 }
             }
             else
-            {
-                check = true;
-            }
-            if (check)
             {
                 EnterNameManager.instance.Done(playerNumber);
             }
