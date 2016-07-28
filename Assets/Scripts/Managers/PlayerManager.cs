@@ -97,7 +97,6 @@ public class PlayerManager : MonoBehaviour
                 break;
             case 1:
                 players[index].transform.position = new Vector3(3.5f, 29.5f, 0);
-                players[index].transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
                 break;
         }
     }
@@ -116,6 +115,7 @@ public class PlayerManager : MonoBehaviour
 
     void Update()
     {
+
         for (int i = 0; i < playerRespawn.Length; ++i)
         {
             if (playerRespawn[i])
@@ -175,44 +175,61 @@ public class PlayerManager : MonoBehaviour
 
     void UpdateUI()
     {
-        for (int i = 0; i < players.Length; i++)
+
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            scores[i].text = players[i].GetScore().ToString();
-            lives[i].text = "X" + players[i].eggLives.ToString();
-            coll[i].text = "X" + players[i].collectable.ToString();
-            lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
-            collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
-            boosts[i].fillAmount = players[i].dashcool;
-
-
-            //lives[i].text = "X" + players[i].eggLives.ToString();
-            //coll[i].text = "X" + players[i].collectable.ToString();
-            //lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
-            //collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
-            if (players[i].dashcool < players[i].maxDashCool)
+            for (int i = 0; i < players.Length; i++)
             {
-                boosts[i].fillAmount = 1 - players[i].dashcool / players[i].maxDashCool;
+                scores[i].text = players[i].GetScore().ToString();
+                lives[i].text = "X" + players[i].eggLives.ToString();
+                coll[i].text = "X" + players[i].collectable.ToString();
+                lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
+                collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
+                boosts[i].fillAmount = players[i].dashcool;
 
-                Color colA = boosts[i].color;
-                Color colB = boosts[i].transform.parent.GetComponent<Outline>().effectColor;
-                Color colC = boosts[i].transform.parent.GetComponent<Image>().color;
 
-                colA.a = 1 - players[i].dashcool / players[i].maxDashCool;
-                colB.a = colA.a;
-                colC.a = colA.a;
+                //lives[i].text = "X" + players[i].eggLives.ToString();
+                //coll[i].text = "X" + players[i].collectable.ToString();
+                //lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+                //collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+                if (players[i].dashcool < players[i].maxDashCool)
+                {
+                    boosts[i].fillAmount = 1 - players[i].dashcool / players[i].maxDashCool;
 
-                boosts[i].color = colA;
-                boosts[i].transform.parent.GetComponent<Outline>().effectColor = colB;
-                boosts[i].transform.parent.GetComponent<Image>().color = colC;
+                    Color colA = boosts[i].color;
+                    Color colB = boosts[i].transform.parent.GetComponent<Outline>().effectColor;
+                    Color colC = boosts[i].transform.parent.GetComponent<Image>().color;
+
+                    colA.a = 1 - players[i].dashcool / players[i].maxDashCool;
+                    colB.a = colA.a;
+                    colC.a = colA.a;
+
+                    boosts[i].color = colA;
+                    boosts[i].transform.parent.GetComponent<Outline>().effectColor = colB;
+                    boosts[i].transform.parent.GetComponent<Image>().color = colC;
+                }
             }
         }
-    }
+    }  
 
     public void ResetGameStart()
     {
         for (int i = 0; i < players.Length; i++)
         {
-            players[0].ResetGameStart();
+            players[i].ResetGameStart();
+
+            boosts[i].fillAmount = 0.0f;
+            Color colA = boosts[i].color;
+            Color colB = boosts[i].transform.parent.GetComponent<Outline>().effectColor;
+            Color colC = boosts[i].transform.parent.GetComponent<Image>().color;
+
+            colA.a = 0.0f;
+            colB.a = colA.a;
+            colC.a = colA.a;
+
+            boosts[i].color = colA;
+            boosts[i].transform.parent.GetComponent<Outline>().effectColor = colB;
+            boosts[i].transform.parent.GetComponent<Image>().color = colC;
         }
         UpdateUI();
     }
