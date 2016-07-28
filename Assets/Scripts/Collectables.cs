@@ -53,8 +53,11 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
     {
         frontSprites.Add(frontSprites1);
         frontSprites.Add(frontSprites2);
-        frontSprites.Add( frontSprites2);
-        currentSprite = Random.Range(0, 4);
+        frontSprites.Add( frontSprites3);
+        backSprites.Add(backSprites1);
+        backSprites.Add(backSprites2);
+        backSprites.Add(backSprites3);
+        currentSprite = Random.Range(0, 3);
     }
     void Update()
     {
