@@ -60,11 +60,11 @@ public class Timer : MonoBehaviour
 
             if ((int)currentTime == 60 && MainMenu.instance.getLevel() == 1 && !goosed)
             {
+                goosed = true;
                 if (Random.value > .9)
                 {
                     //OH SHIT HERE COMES DAT BOI!
                     CameraShake.instance.GetGoosed();
-                    goosed = true;
                 }
             }
 
