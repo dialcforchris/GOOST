@@ -10,8 +10,10 @@ public class TwitterPlane : MonoBehaviour
 
     [SerializeField]
     float moveSpeed=.05f;
+    //[SerializeField]
+    //TextMesh bannerText;
     [SerializeField]
-    TextMesh bannerText;
+    Text bannerText;
     bool currentDirection;
     public string consumerKey, consumerSecret, AcessToken;
 
@@ -42,14 +44,43 @@ public class TwitterPlane : MonoBehaviour
         transform.localScale = dir ? new Vector3(-1, 1, 1) : Vector3.one;
         transform.position = startPos;
 
-        bannerText.alignment = dir ? TextAlignment.Left : TextAlignment.Right;
-        bannerText.anchor = dir ? TextAnchor.UpperLeft : TextAnchor.UpperRight;
-        bannerText.transform.localScale = dir ? new Vector3(-1, 1, 1) : Vector3.one;
+        //Text Mesh things
+        //bannerText.alignment = dir ? TextAlignment.Left : TextAlignment.Right;
+        //bannerText.anchor = dir ? TextAnchor.UpperLeft : TextAnchor.UpperRight;
+
+        bannerText.alignment = dir ? TextAnchor.MiddleLeft : TextAnchor.MiddleRight;
+
+        bannerText.transform.localScale = dir ? new Vector3(-0.01f, 0.01f, 0.01f) : new Vector3(0.01f, 0.01f, 0.01f);
+        bannerText.rectTransform.pivot = !dir ? new Vector2(1, 0.5f) : new Vector2(0, 0.5f);
 
         int rand = Random.Range(0, availableTweets.Count);
-        moveSpeed = 0.03f + ((1-(availableTweets[rand].text.Length / 140f))* 0.03f);
-        bannerText.text = availableTweets[rand].text + "\n <color=blue>@"+availableTweets[rand].user.name+"</color>";
-        availableTweets.Remove(availableTweets[rand]);        
+        moveSpeed = 0.03f + ((1 - (availableTweets[rand].text.Length / 140f)) * 0.03f);
+
+        string text = availableTweets[rand].text;
+        
+        string[] words;
+        words = text.Split(" "[0]); //Split the string into separate words
+
+        for (int index = 0; index < words.Length; index++)
+        {
+            var word = words[index].Trim();
+
+            if (word.StartsWith("http:/") || word.StartsWith("https:/"))
+                word = "[LINK]";
+
+            if (index == 0)
+            {
+                text = words[0];
+            }
+
+            if (index > 0)
+            {
+                text += " " + word;
+            }
+        }
+
+        bannerText.text = text.Replace("&amp", "&") + " <color=blue>@" + availableTweets[rand].user.name + "</color>";
+        availableTweets.Remove(availableTweets[rand]);
     }
 
     public bool gettingTweets;

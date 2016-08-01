@@ -643,10 +643,17 @@ namespace Twitter
                 int i = callback.availableTweets.Count;
                 foreach (Tweet t in newResults.statuses)
                 {
+                    char[] c = new char[1] { '\n' };
+                    string[] s = t.text.Split(c);
                     i++;
                     t.TweetName = i + ". " + query;
                     //Add tweet to a list of available tweets
-                    callback.availableTweets.Add(t);
+                    if (s.Length < 3)
+                        callback.availableTweets.Add(t);
+                    else
+                    {
+                        //FUCK OFF, I DON'T WANT YOUR SHIT TWEET WITH LOTS OF LINEBREAKS
+                    }
                 }
                 callback.gettingTweets = false;
             }
