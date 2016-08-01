@@ -12,8 +12,12 @@ public class GameStats : MonoBehaviour
     public int[] eggs = new int[2];
     public int[] attack = new int[2];
     public int[] flaps = new int[2];
-  
+
     //UI shit
+    [SerializeField]
+    GameObject flags;
+    [SerializeField]
+    SpriteRenderer[] winnerFlags;
     [SerializeField]
     private Text[] tScore = new Text[2];
     [SerializeField]
@@ -24,6 +28,9 @@ public class GameStats : MonoBehaviour
     private Text[] tAttack = new Text[2];
     [SerializeField]
     private GameObject theUIPart;
+    [SerializeField]
+    private Text press;
+    float fade = 1;
   
 
     void Start()
@@ -34,17 +41,33 @@ public class GameStats : MonoBehaviour
         }
     }
 
+  
     public void ShowStats()
     {
+        if (PlayerManager.instance.GetPlayer(0).GetScore() > PlayerManager.instance.GetPlayer(1).GetScore())
+            {
+          //  winnerFlags[0].enabled = false;
 
+        }
+        else
+        {
+            winnerFlags[0].enabled = false;
+        }
+            flags.SetActive(true);
         theUIPart.SetActive(true);
         for (int i=0;i<2;i++)
         {
+            string colour = i == 0 ?"orange": "green";
             score[i] = PlayerManager.instance.GetPlayer(i).GetScore();
-            tScore[i].text = "Player " + (i+1) + " Scored "+score[i].ToString();
-            tCollectables[i].text = "Player " + (i + 1) + " Collected " + collectables[i].ToString() + " Things";
-            tEggs[i].text = "Player " + (i + 1) + " Collected " + eggs[i].ToString() + " Eggs";
-            tAttack[i].text = "Player " + (i + 1) + "Viscously Attacked "+ "Player " + i + " "+attack[i].ToString()+" Times";
+            tScore[i].text = "<color="+colour+">P" + (i+1) + " "+score[i].ToString()+"</color>";
+         //   tScore[i].color = colour; 
+            tCollectables[i].text = "<color="+colour+">P" + (i + 1) + " " + collectables[i].ToString()+"</color>";
+           // tCollectables[i].color = colour; 
+            tEggs[i].text = "<color="+colour+">P" + (i + 1) + "  " + eggs[i].ToString()+"</color>";
+            //tEggs[i].color = colour;
+            tAttack[i].text = "<color="+colour+">P" + (i + 1) + " " + attack[i].ToString()+"</color>";// +" Times";
+            //tAttack[i].color = colour;
         }
     }
+
 }
