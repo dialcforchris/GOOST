@@ -121,11 +121,12 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
                     {
                         FloatingTextPool.instance.PoolText(tempScore, transform.position, type == PickUpType.HARDDRIVE ? Color.blue : Color.grey);
                     }
+        
+                    GameStats.instance.collectables[p.playerId]++;
                 }
                 ReturnPool();
             }
         }
-        //}
     }
 
     public void ReturnPool()

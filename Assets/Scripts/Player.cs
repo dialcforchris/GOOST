@@ -94,6 +94,7 @@ public class Player : Actor, ISegmentable<Actor>
                     body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
                     body.AddForce(new Vector2(0, heightForce));
                     StatTracker.instance.stats.totalFlaps++;
+                    GameStats.instance.flaps[playerId]++;
                     applyFly = false;
                 }
             }
