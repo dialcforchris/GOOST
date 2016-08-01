@@ -42,41 +42,6 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
         {
             return;
         }
-
-        if (!Actor.originalJoustCollisions)
-        {
-            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-            if (_rigSegment != null)
-            {
-                foreach (string _s in affectTags)
-                {
-                    if (_s == _col.gameObject.tag)
-                    {
-                        if (_rigSegment.segmentName == "Body")
-                        {
-                            //if (_col.contacts[0].normal.x != 0.0f)
-                            //{
-                            _rigSegment.rigBase.Defeat(actor.playerType);
-                            return;
-                            //}
-                        }
-                        break;
-                    }
-                }
-                if (tag == "Player")
-                {
-                    if (_rigSegment.segmentName == "Lance")
-                    {
-                        Clash.instance.HaveClash(_col.transform.position);
-                    }
-                    else if (_rigSegment.segmentName == "Legs")
-                    {
-                        Clash.instance.HaveClash(_col.transform.position);
-                    }
-                }
-                ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
-            }
-        }
     }
 
     private void OnCollisionStay2D(Collision2D _col)
@@ -85,25 +50,6 @@ public class Lance : MonoBehaviour, ISegmentable<Actor>
         {
             return;
         }
-
-        if (!Actor.originalJoustCollisions)
-        {
-            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-            if (_rigSegment != null)
-            {
-                ApplyOppositeForce(_rigSegment, -_col.contacts[0].normal);
-            }
-        }
-    }
-
-    private void ApplyOppositeForce(ISegmentable<Actor> _segment, Vector2 _direction)
-    {
-        if(_direction.x == 0.0f)
-        {
-            _direction += Vector2.right * (transform.lossyScale.x > 0.0f ? 0.5f : -0.5f);
-        }
-
-        _segment.rigBase.ApplyKnockback(_direction, knockPower); 
     }
 }
 
