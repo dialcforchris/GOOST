@@ -1,13 +1,23 @@
 fileFormatVersion: 2
 guid: 9e8823dbfe773fb4888ed33e7170edf4
-timeCreated: 1469714861
-licenseType: Free
+timeCreated: 1470044411
+licenseType: Pro
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Flag Spritesheet_0
+    21300002: Flag Spritesheet_1
+    21300004: Flag Spritesheet_2
+    21300006: Flag Spritesheet_3
+    21300008: Flag Spritesheet_4
+    21300010: Flag Spritesheet_5
+    21300012: Flag Spritesheet_6
+    21300014: Flag Spritesheet_7
+    21300016: Flag Spritesheet_8
+    21300018: Flag Spritesheet_9
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -29,8 +39,8 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: -1
-    aniso: -1
+    filterMode: 0
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -38,18 +48,216 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: Flag Spritesheet_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 324
+        width: 312
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 141, y: 33.5}
+        - {x: -144, y: 33.5}
+        - {x: -156, y: 31.5}
+        - {x: -156, y: -33.5}
+        - {x: -26, y: -33.5}
+        - {x: 45, y: -19.5}
+        - {x: 112, y: 1.5}
+        - {x: 141, y: 27.5}
+    - name: Flag Spritesheet_1
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 333
+        width: 314
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 140, y: 33.5}
+        - {x: -145, y: 33.5}
+        - {x: -157, y: 31.5}
+        - {x: -157, y: -33.5}
+        - {x: -27, y: -33.5}
+        - {x: 44, y: -19.5}
+        - {x: 111, y: 1.5}
+        - {x: 140, y: 27.5}
+    - name: Flag Spritesheet_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 246
+        width: 314
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 153, y: 30.5}
+        - {x: 153, y: 33.5}
+        - {x: -128, y: 33.5}
+        - {x: -154, y: 32.5}
+        - {x: -157, y: 23.5}
+        - {x: -157, y: -33.5}
+        - {x: -70, y: -33.5}
+        - {x: -37, y: -29.5}
+        - {x: 121, y: 4.5}
+        - {x: 149, y: 20.5}
+    - name: Flag Spritesheet_3
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 255
+        width: 314
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 153, y: 30.5}
+        - {x: 153, y: 33.5}
+        - {x: -128, y: 33.5}
+        - {x: -154, y: 32.5}
+        - {x: -157, y: 23.5}
+        - {x: -157, y: -33.5}
+        - {x: -70, y: -33.5}
+        - {x: -37, y: -29.5}
+        - {x: 121, y: 4.5}
+        - {x: 149, y: 20.5}
+    - name: Flag Spritesheet_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 168
+        width: 314
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 142, y: 21.5}
+        - {x: 122, y: 29.5}
+        - {x: 78, y: 33.5}
+        - {x: -79, y: 33.5}
+        - {x: -147, y: 28.5}
+        - {x: -157, y: 21.5}
+        - {x: -157, y: -33.5}
+        - {x: -111, y: -33.5}
+        - {x: -36, y: -27.5}
+        - {x: 157, y: -5.5}
+        - {x: 157, y: 9.5}
+        - {x: 150, y: 17.5}
+    - name: Flag Spritesheet_5
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 177
+        width: 314
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 142, y: 21.5}
+        - {x: 122, y: 29.5}
+        - {x: 78, y: 33.5}
+        - {x: -79, y: 33.5}
+        - {x: -147, y: 28.5}
+        - {x: -157, y: 21.5}
+        - {x: -157, y: -33.5}
+        - {x: -111, y: -33.5}
+        - {x: -36, y: -27.5}
+        - {x: 157, y: -5.5}
+        - {x: 157, y: 9.5}
+        - {x: 150, y: 17.5}
+    - name: Flag Spritesheet_6
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 91
+        width: 313
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 155.5, y: 19.5}
+        - {x: 148.5, y: 28.5}
+        - {x: -102.5, y: 28.5}
+        - {x: -156.5, y: 17.5}
+        - {x: -156.5, y: -33.5}
+        - {x: -23.5, y: -33.5}
+        - {x: 107.5, y: -21.5}
+        - {x: 155.5, y: 3.5}
+    - name: Flag Spritesheet_7
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 100
+        width: 314
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 155, y: 19.5}
+        - {x: 148, y: 28.5}
+        - {x: -103, y: 28.5}
+        - {x: -157, y: 17.5}
+        - {x: -157, y: -33.5}
+        - {x: -24, y: -33.5}
+        - {x: 107, y: -21.5}
+        - {x: 155, y: 3.5}
+    - name: Flag Spritesheet_8
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 4
+        width: 314
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -140, y: 32.5}
+        - {x: -157, y: 28.5}
+        - {x: -157, y: -33.5}
+        - {x: -16, y: -33.5}
+        - {x: 145, y: 4.5}
+        - {x: 145, y: 32.5}
+    - name: Flag Spritesheet_9
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 13
+        width: 314
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -140, y: 32.5}
+        - {x: -157, y: 28.5}
+        - {x: -157, y: -33.5}
+        - {x: -16, y: -33.5}
+        - {x: 145, y: 4.5}
+        - {x: 145, y: 32.5}
     outline: []
   spritePackingTag: 
   userData: 
