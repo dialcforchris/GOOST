@@ -66,7 +66,7 @@ public class CameraShake : MonoBehaviour
 }
 
 [CustomEditor(typeof(CameraShake))]
-public class GOOSEZILLA : Editor
+public class GOOSEZILLA  : Editor
 {
     public override void OnInspectorGUI()
     {

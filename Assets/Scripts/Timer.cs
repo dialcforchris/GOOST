@@ -20,6 +20,8 @@ public class Timer : MonoBehaviour
     [SerializeField]
     private Text TimerText;
 
+    bool goosed;
+
 	void Start ()
     {
         instance = this;
@@ -56,12 +58,13 @@ public class Timer : MonoBehaviour
             }
             //Seconds + minutes interface
 
-            if ((int)currentTime == 60 && MainMenu.instance.getLevel() == 1)
+            if ((int)currentTime == 60 && MainMenu.instance.getLevel() == 1 && !goosed)
             {
-                if (Random.value == 42)
+                if (Random.value > .9)
                 {
                     //OH SHIT HERE COMES DAT BOI!
                     CameraShake.instance.GetGoosed();
+                    goosed = true;
                 }
             }
 
@@ -85,6 +88,7 @@ public class Timer : MonoBehaviour
 
     public IEnumerator TextInOut(bool InOut)
     {
+        goosed = false;
         countdown = true;
         countdownTextAnimator.gameObject.SetActive(true);
         if (!InOut)
