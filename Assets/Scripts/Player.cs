@@ -226,6 +226,8 @@ public class Player : Actor, ISegmentable<Actor>
         {
             if (!invincible)
             {
+                GameStats.instance.attack[playerId == 0 ? 1 : 0]++;
+
                 if (collectable > 0)
                 {
                     for (int i = 0; i < collectable; i++)
@@ -256,6 +258,7 @@ public class Player : Actor, ISegmentable<Actor>
                     base.Defeat(_type);
                     PlayerManager.instance.RespawnPlayer(playerId);
                 }
+
             }
         }
     }

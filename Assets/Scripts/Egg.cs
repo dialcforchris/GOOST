@@ -26,6 +26,8 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     private int _owningPlayer = 0;
     [SerializeField]
     AudioClip eggHatch;
+    [SerializeField]
+    AudioClip eggGet;
 
     private EnemyBehaviour parentType;
     private float parentSpeed;
@@ -89,6 +91,8 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
                     p.ChangeScore(score);
                     FloatingTextPool.instance.PoolText(score, transform.position, Color.white);
                     ReturnPool();
+                    SoundManager.instance.playSound(eggGet);
+                    GameStats.instance.eggs[p.playerId]++;
                 }
             }
         }

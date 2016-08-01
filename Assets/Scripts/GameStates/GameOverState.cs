@@ -6,8 +6,9 @@ public class GameOverState : GameState
 {
     public override void OnStateActivate()
     {
-     //   SoundManager.instance.music.volume = 0;
+        //   SoundManager.instance.music.volume = 0;
         //EndGameLogic.instance.EndGame();
+        GameStats.instance.ShowStats();
     }
 
     public override void OnStateDeactivate()

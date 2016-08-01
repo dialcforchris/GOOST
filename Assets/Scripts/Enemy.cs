@@ -435,8 +435,8 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
                 {
                     SoundManager.instance.playSound(eggLayingSound);
                     Egg e = EggPool.instance.PoolEgg(behaviour, speed);
-                    e.transform.position = eggTrans.position;// new Vector2(transform.position.x + 0.5f, transform.position.y);
-                    //e.OnPooled();
+                    e.transform.position = eggTrans.position;
+                    GameStats.instance.eggsLaid++;
                 }
             }
         }

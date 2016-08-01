@@ -4,7 +4,8 @@ using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-public class StatTracker : MonoBehaviour {
+public class StatTracker : MonoBehaviour
+{
 
     public static StatTracker instance;
     public GameStatistics stats;
@@ -77,7 +78,7 @@ public class GameStatistics
     public int roundsPlayed = 0;
     [SerializeField]
     public int totalFlaps = 0;
-
+   
     //Rounds won/lost?
 }
 

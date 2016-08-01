@@ -98,7 +98,7 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
                 {
                     if (p.playerType == PlayerType.BADGUY)
                     {
-                        SoundManager.instance.playSound(collectionSound[0], 0.35f);
+                        SoundManager.instance.playSound(collectionSound[type == PickUpType.MONEY ?1 : 0], 0.35f);
                         p.collectable += type == PickUpType.MONEY ? 1 : 0;
                         if (owningPlayer != p.playerId)
                         {
@@ -108,7 +108,7 @@ public class Collectables : MonoBehaviour, IPoolable<Collectables>
                     }
                     else if (p.playerType == PlayerType.GOODGUY)
                     {
-                        SoundManager.instance.playSound(collectionSound[1], 0.35f);
+                        SoundManager.instance.playSound(collectionSound[type == PickUpType.HARDDRIVE ? 0 : 1], 0.35f);
                         p.collectable += type == PickUpType.HARDDRIVE ? 1 : 0;
                         if (owningPlayer != p.playerId)
                         {
