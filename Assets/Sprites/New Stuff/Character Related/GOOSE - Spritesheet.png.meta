@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 8be1abfb63d9b834cbf5764951ec63e5
-timeCreated: 1469460179
+timeCreated: 1470144144
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -30,6 +30,7 @@ TextureImporter:
     21300046: goose_head_c
     21300048: goose_head_f
     21300050: goose_head_g
+    21300052: goose_head_h
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -172,6 +173,10 @@ TextureImporter:
         - {x: 11.5, y: -19.5}
         - {x: 17.5, y: -16.5}
         - {x: 17.5, y: 3.5}
+      - - {x: 13.5, y: 19.5}
+        - {x: 14.5, y: 16.5}
+        - {x: 17.5, y: 16.5}
+        - {x: 17.5, y: 19.5}
     - name: goose_body_d
       rect:
         serializedVersion: 2
@@ -440,6 +445,17 @@ TextureImporter:
         height: 17
       alignment: 9
       pivot: {x: 0.475, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: goose_head_h
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 1
+        width: 20
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     outline: []

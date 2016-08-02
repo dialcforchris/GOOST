@@ -32,12 +32,16 @@ public class MainMenu : MonoBehaviour
 
     [Header("Options menu")]
     [SerializeField]
-    Text[] optionsElements;
+    Text[] optionsElements,TextToFadeOut;
     [SerializeField]
     Slider[] soundsSliders;
     [SerializeField]
-    Image[] optionsCursor;
-
+    Image[] optionsCursor,ImagesToFadeOut;
+    [SerializeField]
+    Image backdrop;
+    [SerializeField]
+    Text Credits;
+        
     [Header("Level Selection")]
     [SerializeField]
     Image[] levelSelectionElements;
@@ -135,7 +139,6 @@ public class MainMenu : MonoBehaviour
         {
             SoundManager.instance.playSound(wooshNoises[whichWoosh ? 0 : 1]);
             whichWoosh = !whichWoosh;
-            Debug.Log("SWITCH MENUS!  " + menu);
             switch (menu)
             {
                 case 0:
@@ -608,7 +611,6 @@ public class MainMenu : MonoBehaviour
 
         if (Input.GetButtonDown("Interact0") || Input.GetButtonDown("Interact1"))
         {
-                Debug.Log(mainMenuIndex);
             switch (mainMenuIndex)
             {
                 case 0:
@@ -676,6 +678,11 @@ public class MainMenu : MonoBehaviour
             switch (optionsIndex)
             {
                 case 2:
+                    //credits
+                    transitioning = true;
+                    StartCoroutine(DisplayCredits());
+                    break;
+                case 3:
                     switchMenus(0);
                     break;
             }
@@ -706,6 +713,100 @@ public class MainMenu : MonoBehaviour
             }
         }
         #endregion
+    }
+
+    IEnumerator DisplayCredits()
+    {
+        float lerpy = 0;
+        #region fade out everything
+        while (lerpy < 1)
+        {
+            foreach (Image i in ImagesToFadeOut)
+            {
+                Color ImageCol = i.color;
+                ImageCol.a = Mathf.Lerp(1, 0, lerpy);
+                i.color = ImageCol;
+                if (i.GetComponent<Outline>())
+                {
+                    ImageCol = i.GetComponent<Outline>().effectColor;
+                    ImageCol.a = Mathf.Lerp(1, 0, lerpy);
+                    i.GetComponent<Outline>().effectColor = ImageCol;
+                }
+            }
+            foreach (Text t in TextToFadeOut)
+            {
+                Color ImageCol = t.color;
+                ImageCol.a = Mathf.Lerp(1, 0, lerpy);
+                t.color = ImageCol;
+                if (t.GetComponent<Outline>())
+                {
+                    ImageCol = t.GetComponent<Outline>().effectColor;
+                    ImageCol.a = Mathf.Lerp(1, 0, lerpy);
+                    t.GetComponent<Outline>().effectColor = ImageCol;
+                }
+            }
+
+            Color backdropCol = backdrop.color;
+            backdropCol.a = Mathf.Lerp(0, .5f, lerpy);
+            backdrop.color = backdropCol;
+
+            lerpy += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        #endregion
+
+        //Scroll credits up
+        lerpy = 0;
+        while (Credits.rectTransform.anchoredPosition.y < 900)
+        {
+            Credits.rectTransform.anchoredPosition = Vector2.Lerp(-Vector2.up * 1500, Vector2.up * 900, lerpy / 25);
+            if (Input.GetButton("Interact0") || Input.GetButton("Interact1"))
+                lerpy += Time.deltaTime * 5;
+
+            lerpy += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        //Reset credit location
+        Credits.rectTransform.anchoredPosition = -Vector2.up * 1500;
+
+
+        lerpy = 0;
+        #region fade in everything
+        while (lerpy < 1)
+        {
+            foreach (Image i in ImagesToFadeOut)
+            {
+                Color ImageCol = i.color;
+                ImageCol.a = Mathf.Lerp(0, 1, lerpy);
+                i.color = ImageCol;
+                if (i.GetComponent<Outline>())
+                {
+                    ImageCol = i.GetComponent<Outline>().effectColor;
+                    ImageCol.a = Mathf.Lerp(0, 1, lerpy);
+                    i.GetComponent<Outline>().effectColor = ImageCol;
+                }
+            }
+            foreach (Text t in TextToFadeOut)
+            {
+                Color ImageCol = t.color;
+                ImageCol.a = Mathf.Lerp(0, 1, lerpy);
+                t.color = ImageCol;
+                if (t.GetComponent<Outline>())
+                {
+                    ImageCol = t.GetComponent<Outline>().effectColor;
+                    ImageCol.a = Mathf.Lerp(0, 1, lerpy);
+                    t.GetComponent<Outline>().effectColor = ImageCol;
+                }
+            }
+            Color backdropCol = backdrop.color;
+            backdropCol.a = Mathf.Lerp(.5f, 0, lerpy);
+            backdrop.color = backdropCol;
+            lerpy += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        #endregion
+        transitioning = false;
     }
 
     int level;

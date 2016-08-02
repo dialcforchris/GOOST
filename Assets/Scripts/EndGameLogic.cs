@@ -92,8 +92,16 @@ public class EndGameLogic : MonoBehaviour
     void AnnounceWinner()
     {
         winner.gameObject.SetActive(true);
-        winner.text = PlayerManager.instance.GetPlayer(0).GetScore() > PlayerManager.instance.GetPlayer(1).GetScore() ? "Player 1 Wins" : "Player2 Wins";
-     
+        if (PlayerManager.instance.GetPlayer(0).GetScore() > PlayerManager.instance.GetPlayer(1).GetScore())
+        {
+            winner.text = "Player 1 Wins";
+            StatTracker.instance.stats.ransomWins++;
+        }
+        else
+        {
+            winner.text = "Player 2 Wins";
+            StatTracker.instance.stats.ITGuyWins++;
+        }
     }
     //[SerializeField]
     //EnterName[] enterName;

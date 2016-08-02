@@ -27,6 +27,7 @@ public class CameraShake : MonoBehaviour
     
     public void GetGoosed()
     {
+        StatTracker.instance.stats.gooseZillaSightings++;
         GetComponent<Animator>().Play("gooseZilla");
     }
 
