@@ -17,9 +17,13 @@ public class EndGameLogic : MonoBehaviour
     private GameObject statUI;
     float fade = 1;
 
-    void Update()
+    void Awake()
     {
         AnnounceWinner();
+    }
+    void Update()
+    {
+       
         timer.text = "Game Over";
         StartCoroutine(DoAFade());
         //if (Input.anyKey)

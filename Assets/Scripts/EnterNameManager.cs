@@ -24,7 +24,7 @@ public class EnterNameManager : MonoBehaviour
     {
 	  
            
-            for (int i=0;i<PlayerManager.instance.NumberOfPlayers();i++)
+            for (int i=0;i<PlayerManager.instance.NumberOfPlayers();++i)
             {
 
             if (!enterNames[i].check && LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(i).GetScore()))
@@ -33,14 +33,14 @@ public class EnterNameManager : MonoBehaviour
                     enterNames[i].EnableIt(i);
                 }
             }
-            if (PlayerManager.instance.NumberOfPlayers()<done.Length)
-            {
-                done[PlayerManager.instance.NumberOfPlayers()+1] = true;
-            }
+            //if (PlayerManager.instance.NumberOfPlayers()<done.Length)
+            //{
+            //    done[PlayerManager.instance.NumberOfPlayers()+1] = true;
+            //}
 
             if (done[0]&&done[1])
             {
-                SceneManager.LoadScene(0);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name.ToString());
             }
         
 	}
