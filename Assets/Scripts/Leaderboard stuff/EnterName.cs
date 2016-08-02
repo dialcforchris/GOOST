@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class EnterName : MonoBehaviour
 {
     public Text[] box;
-    int playerNumber = 0;
+    [SerializeField] private int playerNumber = 0;
     public Text playerName;
     int[] currentCharacter;
     public Text score;

@@ -178,7 +178,7 @@ public class PlayerManager : MonoBehaviour
 
         if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            for (int i = 0; i < players.Length; i++)
+            for (int i = 0; i < 2;i++)
             {
                 scores[i].text = players[i].GetScore().ToString();
                 lives[i].text = "X" + players[i].eggLives.ToString();
