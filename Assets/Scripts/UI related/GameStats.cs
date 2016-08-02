@@ -41,6 +41,11 @@ public class GameStats : MonoBehaviour
         }
     }
   
+    public void FadeInText(int index)
+    {
+        //do a thing
+    }
+
     public void ShowStats()
     {
         flags.SetActive(true);
