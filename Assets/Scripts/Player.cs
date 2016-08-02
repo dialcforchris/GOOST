@@ -227,6 +227,7 @@ public class Player : Actor, ISegmentable<Actor>
         {
             if (!invincible)
             {
+                if (_type == PlayerType.BADGUY||_type == PlayerType.GOODGUY)
                 GameStats.instance.attack[playerId == 0 ? 1 : 0]++;
 
                 if (collectable > 0)

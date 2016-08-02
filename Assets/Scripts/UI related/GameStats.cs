@@ -44,16 +44,17 @@ public class GameStats : MonoBehaviour
   
     public void ShowStats()
     {
+        flags.SetActive(true);
+
         if (PlayerManager.instance.GetPlayer(0).GetScore() > PlayerManager.instance.GetPlayer(1).GetScore())
             {
-          //  winnerFlags[0].enabled = false;
+            winnerFlags[0].enabled = false;
 
         }
         else
         {
-            winnerFlags[0].enabled = false;
+            winnerFlags[1].enabled = false;
         }
-            flags.SetActive(true);
         theUIPart.SetActive(true);
         for (int i=0;i<2;i++)
         {

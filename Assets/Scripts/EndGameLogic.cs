@@ -5,7 +5,72 @@ using UnityEngine.UI;
 public class EndGameLogic : MonoBehaviour
 {
 
-   
+
+    [SerializeField]
+    private GameObject entername;
+    [SerializeField]
+    private GameObject statUI;
+    float fade = 1;
+    bool end = false;
+    void Update()
+    {
+        StartCoroutine(WaitForSecs());
+        //if (Input.anyKey)
+        //{
+        //    end = true;
+        //}
+        //if (end)
+        //{ 
+        //    if (statUI.gameObject.activeInHierarchy)
+        //    {
+        //        for (int i = 0; i < statUI.transform.childCount; i++)
+        //        {
+        //            fade -= Time.deltaTime/2;
+        //            statUI.transform.GetChild(i).GetComponent<Text>().color =
+        //                new Color(statUI.transform.GetChild(i).GetComponent<Text>().color.r,
+        //                statUI.transform.GetChild(i).GetComponent<Text>().color.g, statUI.transform.GetChild(i).GetComponent<Text>().color.b, fade);
+        //        }
+        //        if (fade <= 0)
+        //        {
+        //            entername.SetActive(true);
+        //            statUI.gameObject.SetActive(false);
+        //        }
+
+        //    }
+        //}
+    }
+
+    IEnumerator WaitForSecs()
+    {
+        yield return new WaitForSeconds(2);
+        StartCoroutine(WaitForInput(Input.anyKey));
+        
+    }
+
+    IEnumerator WaitForInput(bool anykey)
+    {
+      
+      while(!anykey)
+        {
+            yield return null;
+        }
+        if (statUI.gameObject.activeInHierarchy)
+        {
+            for (int i = 0; i < statUI.transform.childCount; i++)
+            {
+                fade -= Time.deltaTime / 2;
+                statUI.transform.GetChild(i).GetComponent<Text>().color =
+                    new Color(statUI.transform.GetChild(i).GetComponent<Text>().color.r,
+                    statUI.transform.GetChild(i).GetComponent<Text>().color.g, statUI.transform.GetChild(i).GetComponent<Text>().color.b, fade);
+            }
+            if (fade <= 0)
+            {
+                entername.SetActive(true);
+                statUI.gameObject.SetActive(false);
+            }
+
+        }
+    }
     //[SerializeField]
     //EnterName[] enterName;
     //public static EndGameLogic instance = null;
