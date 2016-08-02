@@ -15,6 +15,10 @@ public class EndGameLogic : MonoBehaviour
     void Update()
     {
         StartCoroutine(WaitForSecs());
+        if (end)
+        {
+            StartCoroutine(DoAFade());
+        }
         //if (Input.anyKey)
         //{
         //    end = true;
@@ -54,6 +58,11 @@ public class EndGameLogic : MonoBehaviour
         {
             yield return null;
         }
+        end = true; 
+       
+    }
+    IEnumerator DoAFade()
+    {
         if (statUI.gameObject.activeInHierarchy)
         {
             for (int i = 0; i < statUI.transform.childCount; i++)
@@ -70,6 +79,7 @@ public class EndGameLogic : MonoBehaviour
             }
 
         }
+        yield return null;
     }
     //[SerializeField]
     //EnterName[] enterName;
