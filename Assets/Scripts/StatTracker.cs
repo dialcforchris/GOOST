@@ -91,8 +91,9 @@ public class StatTracker : MonoBehaviour
         #endregion
 
         textElements[2].text = "" + stats.roundsPlayed;
-        textElements[3].text = "" + stats.totalFlaps;
-        textElements[4].text = "" + stats.gooseZillaSightings;
+        textElements[3].text = "" + stats.totalFlaps;//yup
+        textElements[4].text = "" + stats.gooseZillaSightings;//yup
+        textElements[5].text = "" + stats.eggsCollected;//yup
         totalVictoriesText[0].text = "" + stats.ransomWins;
         totalVictoriesText[1].text = "" + stats.ITGuyWins;
 
@@ -116,6 +117,8 @@ public class GameStatistics
     public int gooseZillaSightings = 0;
     [SerializeField]
     public int ransomWins=0, ITGuyWins = 0;
+    [SerializeField]
+    public int eggsCollected = 0;
 
     //Rounds won/lost?
 }

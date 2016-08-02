@@ -93,6 +93,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
                     ReturnPool();
                     SoundManager.instance.playSound(eggGet);
                     GameStats.instance.eggs[p.playerId]++;
+                    StatTracker.instance.stats.eggsCollected++;
                 }
             }
         }

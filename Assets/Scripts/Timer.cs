@@ -102,6 +102,8 @@ public class Timer : MonoBehaviour
                     yield return null;
             }
 
+            StatTracker.instance.stats.roundsPlayed++;
+
             countdownText.text = "Time!";
             while (Time.timeScale > 0)
             {
