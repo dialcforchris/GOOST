@@ -6,12 +6,7 @@ using UnityEngine.UI;
 public class EnterNameManager : MonoBehaviour
 {
     public static EnterNameManager instance = null;
-    //[SerializeField]
-    //GameObject gameOver;
-    //[SerializeField]
-    //Text winner;
-    //[SerializeField]
-    //GameObject timer;
+   
     [SerializeField]
     private EnterName[] enterNames;
     [SerializeField]
@@ -31,7 +26,8 @@ public class EnterNameManager : MonoBehaviour
            
             for (int i=0;i<PlayerManager.instance.NumberOfPlayers();i++)
             {
-                if (!enterNames[i].check)
+
+            if (!enterNames[i].check && LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(i).GetScore()))
                 {
                     enterNames[i].gameObject.SetActive(true);
                     enterNames[i].EnableIt(i);
@@ -60,7 +56,5 @@ public class EnterNameManager : MonoBehaviour
             win = PlayerManager.instance.GetPlayer(0).GetScore() > PlayerManager.instance.GetPlayer(1).GetScore() ? "THE HACKER " : "THE I.T GUY ";
         else
             win = "THE HACKER ";
-
-     //   winner.text = win + "Wins";
     }
 }

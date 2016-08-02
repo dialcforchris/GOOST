@@ -5,7 +5,12 @@ using UnityEngine.UI;
 public class EndGameLogic : MonoBehaviour
 {
 
-
+    [SerializeField]
+    GameObject gameOver;
+    [SerializeField]
+    Text winner;
+    [SerializeField]
+    Text timer;
     [SerializeField]
     private GameObject entername;
     [SerializeField]
@@ -14,6 +19,9 @@ public class EndGameLogic : MonoBehaviour
     bool end = false;
     void Update()
     {
+
+        AnnounceWinner();
+        timer.text = "Game Over";
         StartCoroutine(WaitForSecs());
         if (end)
         {
@@ -80,6 +88,12 @@ public class EndGameLogic : MonoBehaviour
 
         }
         yield return null;
+    }
+    void AnnounceWinner()
+    {
+        winner.gameObject.SetActive(true);
+        winner.text = PlayerManager.instance.GetPlayer(0).GetScore() > PlayerManager.instance.GetPlayer(1).GetScore() ? "Player 1 Wins" : "Player2 Wins";
+     
     }
     //[SerializeField]
     //EnterName[] enterName;
