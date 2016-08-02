@@ -40,35 +40,32 @@ public class GameStats : MonoBehaviour
             instance = this;
         }
     }
-
   
     public void ShowStats()
     {
         flags.SetActive(true);
 
         if (PlayerManager.instance.GetPlayer(0).GetScore() > PlayerManager.instance.GetPlayer(1).GetScore())
-            {
+        {
             winnerFlags[0].enabled = false;
-
         }
         else
         {
             winnerFlags[1].enabled = false;
         }
         theUIPart.SetActive(true);
-        for (int i=0;i<2;i++)
+        for (int i = 0; i < 2; i++)
         {
-            string colour = i == 0 ?"orange": "green";
+            string colour = i == 0 ? "orange" : "green";
             score[i] = PlayerManager.instance.GetPlayer(i).GetScore();
-            tScore[i].text = "<color="+colour+">P" + (i+1) + " "+score[i].ToString()+"</color>";
-         //   tScore[i].color = colour; 
-            tCollectables[i].text = "<color="+colour+">P" + (i + 1) + " " + collectables[i].ToString()+"</color>";
-           // tCollectables[i].color = colour; 
-            tEggs[i].text = "<color="+colour+">P" + (i + 1) + "  " + eggs[i].ToString()+"</color>";
+            tScore[i].text = "<color=" + colour + ">" + score[i].ToString() + "</color>";
+            //   tScore[i].color = colour; 
+            tCollectables[i].text = "<color=" + colour + ">" + collectables[i].ToString() + "</color>";
+            // tCollectables[i].color = colour; 
+            tEggs[i].text = "<color=" + colour + ">" + eggs[i].ToString() + "</color>";
             //tEggs[i].color = colour;
-            tAttack[i].text = "<color="+colour+">P" + (i + 1) + " " + attack[i].ToString()+"</color>";// +" Times";
+            tAttack[i].text = "<color=" + colour + ">" + attack[i].ToString() + "</color>";// +" Times";
             //tAttack[i].color = colour;
         }
     }
-
 }

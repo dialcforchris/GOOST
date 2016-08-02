@@ -113,6 +113,7 @@ public class Timer : MonoBehaviour
                     Time.timeScale = 0;
             }
             counting = false;
+            GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
             Time.timeScale = 1;
         }
         else

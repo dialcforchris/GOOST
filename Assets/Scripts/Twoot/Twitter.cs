@@ -639,7 +639,6 @@ namespace Twitter
             else
             {
                 SearchResults newResults = JsonUtility.FromJson<SearchResults>(web.text);
-                Debug.Log(web.text);
                 int i = callback.availableTweets.Count;
                 foreach (Tweet t in newResults.statuses)
                 {

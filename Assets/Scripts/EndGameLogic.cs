@@ -16,17 +16,12 @@ public class EndGameLogic : MonoBehaviour
     [SerializeField]
     private GameObject statUI;
     float fade = 1;
-    bool end = false;
+
     void Update()
     {
-
         AnnounceWinner();
         timer.text = "Game Over";
-        StartCoroutine(WaitForSecs());
-        if (end)
-        {
-            StartCoroutine(DoAFade());
-        }
+        StartCoroutine(DoAFade());
         //if (Input.anyKey)
         //{
         //    end = true;
@@ -51,26 +46,16 @@ public class EndGameLogic : MonoBehaviour
         //    }
         //}
     }
-
-    IEnumerator WaitForSecs()
-    {
-        yield return new WaitForSeconds(2);
-        StartCoroutine(WaitForInput(Input.anyKey));
-        
-    }
-
-    IEnumerator WaitForInput(bool anykey)
-    {
-      
-      while(!anykey)
-        {
-            yield return null;
-        }
-        end = true; 
-       
-    }
     IEnumerator DoAFade()
     {
+        yield return new WaitForSeconds(2);
+
+        while (!Input.anyKey)
+        {
+            if (Input.anyKey)
+                break;
+            yield return null;
+        }
         if (statUI.gameObject.activeInHierarchy)
         {
             for (int i = 0; i < statUI.transform.childCount; i++)
@@ -85,7 +70,6 @@ public class EndGameLogic : MonoBehaviour
                 entername.SetActive(true);
                 statUI.gameObject.SetActive(false);
             }
-
         }
         yield return null;
     }

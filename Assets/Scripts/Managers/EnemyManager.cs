@@ -72,8 +72,7 @@ public class EnemyManager : MonoBehaviour
                         ++currentWave;
                         Debug.Log("Wave:" + currentWave);
                         spawnIndex = 0;
-                        if (currentWave == 2)//waves.Length)
-                     
+                        if (currentWave == 2)//waves.Length)                     
                         {
 
                             //////////////////////////////////////
@@ -81,11 +80,6 @@ public class EnemyManager : MonoBehaviour
                             //////////////////////////////////////
 
                            GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
-                           
-
-                           // --currentWave;
-
-                            //GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
                            
                         }
                     }
