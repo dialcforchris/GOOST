@@ -103,7 +103,7 @@ public class TwitterPlane : MonoBehaviour
                 {
                     fly(!currentDirection);
                     //Each flight takes ~ 10 seconds
-                    flybyCooldown = Random.Range(20, 25);
+                    flybyCooldown = Random.Range(25, 30);
                 }
             }
         }

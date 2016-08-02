@@ -34,6 +34,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     Text[] optionsElements;
     [SerializeField]
+    Slider[] soundsSliders;
+    [SerializeField]
     Image[] optionsCursor;
 
     [Header("Level Selection")]
@@ -133,6 +135,7 @@ public class MainMenu : MonoBehaviour
         {
             SoundManager.instance.playSound(wooshNoises[whichWoosh ? 0 : 1]);
             whichWoosh = !whichWoosh;
+            Debug.Log("SWITCH MENUS!  " + menu);
             switch (menu)
             {
                 case 0:
@@ -246,14 +249,14 @@ public class MainMenu : MonoBehaviour
                         LevelSelectionMenu();
                         break;
                     case menuState.tutorial:
-                        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
+                        if ( Input.GetButtonDown("Interact0")||  Input.GetButtonDown("Interact1"))
                         {
                             TutorialAnimator.Play("tutorial_out");
                             transitioning = true;
                         }
                         break;
                     default:
-                        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
+                        if (Input.GetButtonDown("Interact0")|| Input.GetButtonDown("Interact1"))
                         {
                             switchMenus(0);
                         }
@@ -603,8 +606,9 @@ public class MainMenu : MonoBehaviour
     {
         changeSelection(mainMenuCursor, GetRectTransforms(mainMenuElements), ref mainMenuIndex, 42);
 
-        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
+        if (Input.GetButtonDown("Interact0") || Input.GetButtonDown("Interact1"))
         {
+                Debug.Log(mainMenuIndex);
             switch (mainMenuIndex)
             {
                 case 0:
@@ -667,27 +671,41 @@ public class MainMenu : MonoBehaviour
     {
         changeSelection(optionsCursor, GetRectTransforms(optionsElements), ref optionsIndex, 42);
 
-        if (Input.GetAxis("Interact0") > 0 || Input.GetButtonDown("Interact0") || Input.GetAxis("Interact1") > 0 || Input.GetButtonDown("Interact1"))
+        if (Input.GetButtonDown("Interact0") || Input.GetButtonDown("Interact1"))
         {
             switch (optionsIndex)
             {
-                case 0:
-                    //do a thing
-                    break;
-                case 1:
-                    //do a thing
-                    break;
                 case 2:
-                    //do a thing
-                    break;
-                case 3:
-                    //do a thing
-                    break;
-                case 4:
                     switchMenus(0);
                     break;
             }
         }
+        #region sound sliders
+        if (Input.GetAxis("Horizontal0") < 0 || Input.GetAxis("Horizontal1") < 0)
+        {
+            switch (optionsIndex)
+            {
+                case 0:
+                    soundsSliders[0].value -= Time.fixedDeltaTime;
+                    break;
+                case 1:
+                    soundsSliders[1].value -= Time.fixedDeltaTime;
+                    break;
+            }
+        }
+        if (Input.GetAxis("Horizontal0") > 0 || Input.GetAxis("Horizontal1") > 0)
+        {
+            switch (optionsIndex)
+            {
+                case 0:
+                    soundsSliders[0].value += Time.fixedDeltaTime;
+                    break;
+                case 1:
+                    soundsSliders[1].value += Time.fixedDeltaTime;
+                    break;
+            }
+        }
+        #endregion
     }
 
     int level;
