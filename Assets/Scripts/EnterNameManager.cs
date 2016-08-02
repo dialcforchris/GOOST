@@ -6,12 +6,12 @@ using UnityEngine.UI;
 public class EnterNameManager : MonoBehaviour
 {
     public static EnterNameManager instance = null;
-    [SerializeField]
-    GameObject gameOver;
-    [SerializeField]
-    Text winner;
-    [SerializeField]
-    GameObject timer;
+    //[SerializeField]
+    //GameObject gameOver;
+    //[SerializeField]
+    //Text winner;
+    //[SerializeField]
+    //GameObject timer;
     [SerializeField]
     private EnterName[] enterNames;
     [SerializeField]
@@ -27,12 +27,7 @@ public class EnterNameManager : MonoBehaviour
    	// Update is called once per frame
 	void Update ()
     {
-	    if (GameStateManager.instance.GetState()==GameStates.STATE_GAMEOVER)
-        {
-            gameOver.SetActive(true);
-            timer.SetActive(false);
-            ShowWinner();
-
+	  
            
             for (int i=0;i<PlayerManager.instance.NumberOfPlayers();i++)
             {
@@ -51,8 +46,9 @@ public class EnterNameManager : MonoBehaviour
             {
                 SceneManager.LoadScene(0);
             }
-        }
+        
 	}
+
     public void Done(int playerIndex)
     {
         done[playerIndex] = true;
@@ -65,6 +61,6 @@ public class EnterNameManager : MonoBehaviour
         else
             win = "THE HACKER ";
 
-        winner.text = win + "Wins";
+     //   winner.text = win + "Wins";
     }
 }
