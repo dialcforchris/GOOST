@@ -82,8 +82,35 @@ public class Timer : MonoBehaviour
     {
         counting = false;
         currentTime = maxSeconds;
+
+        if (currentTime % 60 > 10)
+            TimerText.text = (int)(currentTime / 60) + ":" + (int)(currentTime % 60);
+        else
+            TimerText.text = (int)(currentTime / 60) + ":0" + (int)(currentTime % 60);
+
         StopAllCoroutines();
         countdownTextAnimator.gameObject.SetActive(false);
+    }
+    
+    public IEnumerator MidGameOver()
+    {
+        StatTracker.instance.stats.roundsPlayed++;
+
+        countdownTextAnimator.gameObject.SetActive(true);
+        countdownTextAnimator.Play("text_in");
+        countdownText.text = "Game!";
+        while (Time.timeScale > 0)
+        {
+            Time.timeScale -= Time.deltaTime * 2;
+            yield return new WaitForEndOfFrame();
+            if (Time.timeScale < 0.01f)
+                Time.timeScale = 0;
+        }
+        countdownTextAnimator.gameObject.SetActive(false);
+        counting = false;
+        EndGameLogic.instance.TriggerGameEnd(false);
+        GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
+        Time.timeScale = 1;
     }
 
     public IEnumerator TextInOut(bool InOut)
@@ -113,6 +140,7 @@ public class Timer : MonoBehaviour
                     Time.timeScale = 0;
             }
             counting = false;
+            EndGameLogic.instance.TriggerGameEnd(true);
             GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
             Time.timeScale = 1;
         }

@@ -9,41 +9,23 @@ public class DisplayLeaderboard : MonoBehaviour
     public Text[] scores;
     public Text[] names;
     public Text[] rank;
-    bool once =false;
+    bool once = false;
 
-    public void update()
+    public void Update()
     {
-        Debug.Log("called");
-       
-            Debug.Log("once = false");
-            
+        if (!once)
+        {
             List<KeyValuePair<string, int>> k = LeaderBoard.instance.ReturnLeaderBoard();
             for (int i = 0; i < k.Count; i++)
             {
-
-                rank[i].text = (i+1).ToString()+".";
-                scores[i].text = k[i].Value.ToString();
+                rank[i].text = (i + 1).ToString() + ".";
+                scores[i].text = k[i].Value + "";
                 names[i].text = k[i].Key;
-                rank[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.03f));
-                scores[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.03f));
-                names[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.03f));
+                rank[i].color = Color.Lerp(Color.green, Color.red, (float)(i * (1f / (float)k.Count)));
+                scores[i].color = Color.Lerp(Color.green, Color.red, (float)(i * (1f / (float)k.Count)));
+                names[i].color = Color.Lerp(Color.green, Color.red, (float)(i * (1f/(float)k.Count)));
             }
             once = true;
-      
-    }
-}
-
-[CustomEditor(typeof(DisplayLeaderboard))]
-public class leaderboardDisplayer : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        DisplayLeaderboard myScript = (DisplayLeaderboard)target;
-        if (GUILayout.Button("do it"))
-        {
-            myScript.update();
         }
     }
 }

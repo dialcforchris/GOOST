@@ -99,8 +99,8 @@ public class Player : Actor, ISegmentable<Actor>
                 }
             }
         }
-                DetermineAnimationState();
-	}
+        DetermineAnimationState();
+    }
 
     protected void Update()
     {
@@ -277,6 +277,11 @@ public class Player : Actor, ISegmentable<Actor>
             invincible = true;
             Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
             invinciblePermanence = true;
+        }
+        else
+        {
+            //Must be dead, trigger game end.
+            Timer.instance.StartCoroutine(Timer.instance.MidGameOver());
         }
     }
   

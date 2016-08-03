@@ -31,7 +31,18 @@ public class GameStats : MonoBehaviour
     [SerializeField]
     private Text press;
     float fade = 1;
-  
+
+    public SpriteRenderer[] WinnerFlags
+    {
+        get
+        {
+            return winnerFlags;
+        }
+        set
+        {
+            winnerFlags = value;
+        }
+    }
 
     void Start()
     {
@@ -41,9 +52,74 @@ public class GameStats : MonoBehaviour
         }
     }
   
-    public void FadeInText(int index)
+    public void RevealText(int index)
     {
         //do a thing
+        switch (index)
+        {
+            case 0:
+                for (int i = 0; i < 2; i++)
+                {
+                    score[i] = PlayerManager.instance.GetPlayer(i).GetScore();
+                    tScore[i].text = score[i] + "";
+                    tCollectables[i].text = collectables[i] + "";
+                    tEggs[i].text = eggs[i] + "";
+                    tAttack[i].text = attack[i] + "";
+                }
+                StartCoroutine(fadeInText(tAttack[0], tAttack[0].GetComponent<Outline>()));
+                StartCoroutine(fadeInText(tAttack[1], tAttack[1].GetComponent<Outline>()));
+                StartCoroutine(fadeInText(tAttack[0].GetComponentsInParent<Text>()[1], tAttack[0].GetComponentsInParent<Outline>()[1]));
+                break;
+            case 1:
+                StartCoroutine(fadeInText(tEggs[0], tEggs[0].GetComponent<Outline>()));
+                StartCoroutine(fadeInText(tEggs[1], tEggs[1].GetComponent<Outline>()));
+                StartCoroutine(fadeInText(tEggs[0].GetComponentsInParent<Text>()[1], tEggs[0].GetComponentsInParent<Outline>()[1]));
+                break;
+            case 2:
+                StartCoroutine(fadeInText(tCollectables[0], tCollectables[0].GetComponent<Outline>()));
+                StartCoroutine(fadeInText(tCollectables[1], tCollectables[1].GetComponent<Outline>()));
+                StartCoroutine(fadeInText(tCollectables[0].GetComponentsInParent<Text>()[1], tCollectables[0].GetComponentsInParent<Outline>()[1]));
+                break;
+            case 3:
+                StartCoroutine(fadeInText(tScore[0], tScore[0].GetComponent<Outline>()));
+                StartCoroutine(fadeInText(tScore[1], tScore[1].GetComponent<Outline>()));
+                StartCoroutine(fadeInText(tScore[0].GetComponentsInParent<Text>()[1], tScore[0].GetComponentsInParent<Outline>()[1]));
+                break;
+        }
+    }
+
+    public void ResetText()
+    {
+        //Hi Shaun
+        StartCoroutine(fadeInText(tAttack[0], tAttack[0].GetComponent<Outline>(), 5, false));
+        StartCoroutine(fadeInText(tAttack[1], tAttack[1].GetComponent<Outline>(), 5, false));
+        StartCoroutine(fadeInText(tAttack[0].GetComponentsInParent<Text>()[1], tAttack[0].GetComponentsInParent<Outline>()[1], 5, false));
+        StartCoroutine(fadeInText(tEggs[0], tEggs[0].GetComponent<Outline>(), 5, false));
+        StartCoroutine(fadeInText(tEggs[1], tEggs[1].GetComponent<Outline>(), 5, false));
+        StartCoroutine(fadeInText(tEggs[0].GetComponentsInParent<Text>()[1], tEggs[0].GetComponentsInParent<Outline>()[1], 5, false));
+        StartCoroutine(fadeInText(tCollectables[0], tCollectables[0].GetComponent<Outline>(), 5, false));
+        StartCoroutine(fadeInText(tCollectables[1], tCollectables[1].GetComponent<Outline>(), 5, false));
+        StartCoroutine(fadeInText(tCollectables[0].GetComponentsInParent<Text>()[1], tCollectables[0].GetComponentsInParent<Outline>()[1], 5, false));
+        StartCoroutine(fadeInText(tScore[0], tScore[0].GetComponent<Outline>(), 5, false));
+        StartCoroutine(fadeInText(tScore[1], tScore[1].GetComponent<Outline>(), 5, false));
+        StartCoroutine(fadeInText(tScore[0].GetComponentsInParent<Text>()[1], tScore[0].GetComponentsInParent<Outline>()[1], 5, false));
+    }
+
+    IEnumerator fadeInText(Text t, Outline o, float speed = 5, bool inOut = true)
+    {
+        Color TextCol;
+        float lerpy = 0;
+        while (lerpy < 1)
+        {
+            TextCol = t.color;
+            TextCol.a = Mathf.Lerp(inOut ? 0 : 1, inOut ? 1 : 0, lerpy);
+            t.color = TextCol;
+            TextCol = o.effectColor;
+            TextCol.a = Mathf.Lerp(inOut ? 0 : 1, inOut ? 1 : 0, lerpy);
+            o.effectColor = TextCol;
+            lerpy += Time.deltaTime * speed;
+            yield return new WaitForEndOfFrame();
+        }
     }
 
     public void ShowStats()
@@ -52,11 +128,11 @@ public class GameStats : MonoBehaviour
 
         if (PlayerManager.instance.GetPlayer(0).GetScore() > PlayerManager.instance.GetPlayer(1).GetScore())
         {
-            winnerFlags[0].enabled = false;
+            WinnerFlags[0].enabled = false;
         }
         else
         {
-            winnerFlags[1].enabled = false;
+            WinnerFlags[1].enabled = false;
         }
         theUIPart.SetActive(true);
         for (int i = 0; i < 2; i++)

@@ -28,7 +28,27 @@ public class TwitterPlane : MonoBehaviour
 
     public void GetTweets()
     {
-        StartCoroutine(Twitter.API.SearchForTweets("%23RansomWare", AcessToken, 10, this));
+        switch (Random.Range(0,6))
+        {
+            case 0:
+                StartCoroutine(Twitter.API.SearchForTweets("%23RansomWare", AcessToken, 2, this));
+                break;
+            case 1:
+                StartCoroutine(Twitter.API.SearchForTweets("%23cybersecurity", AcessToken, 2, this));
+                break;
+            case 2:
+                StartCoroutine(Twitter.API.SearchForTweets("%23Infosec", AcessToken, 2, this));
+                break;
+            case 3:
+                StartCoroutine(Twitter.API.SearchForTweets("%23Malware", AcessToken, 2, this));
+                break;
+            case 4:
+                StartCoroutine(Twitter.API.SearchForTweets("%23RansomWare", AcessToken, 2, this));
+                break;
+            case 5:
+                StartCoroutine(Twitter.API.SearchForTweets("%23RansomWare", AcessToken, 10, this));
+                break;
+        }
     }
 
     public void fly(bool dir)
@@ -79,7 +99,7 @@ public class TwitterPlane : MonoBehaviour
             }
         }
 
-        bannerText.text = text.Replace("&amp", "&") + " <color=blue>@" + availableTweets[rand].user.name + "</color>";
+        bannerText.text = text.Replace("&amp", "&") + " <color=blue>@" + availableTweets[rand].user.screen_name + "</color>";
         availableTweets.Remove(availableTweets[rand]);
     }
 

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public struct Wave
@@ -17,6 +17,8 @@ public struct WaveSettings
 
 public class EnemyManager : MonoBehaviour
 {
+    public List<Enemy> AllEnemies = new List<Enemy>();
+
     private static EnemyManager enemyManager = null;
     public static EnemyManager instance { get { return enemyManager; } }
 
@@ -56,6 +58,8 @@ public class EnemyManager : MonoBehaviour
                 {
                     spawnTime = 0;
                     Enemy _e = objectPool.GetPooledObject();
+                    if (!AllEnemies.Contains(_e))
+                        AllEnemies.Add(_e);
                     _e.transform.position = spawnTransforms[Random.Range(0, spawnTransforms.Length)].position;
                     _e.Spawn(waves[currentWave].settings[spawnIndex].enemySpawnOrder, waves[currentWave].settings[spawnIndex].speed);
                     ++spawnIndex;

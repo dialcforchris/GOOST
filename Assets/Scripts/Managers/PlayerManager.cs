@@ -115,7 +115,6 @@ public class PlayerManager : MonoBehaviour
 
     void Update()
     {
-
         for (int i = 0; i < playerRespawn.Length; ++i)
         {
             if (playerRespawn[i])
@@ -180,9 +179,9 @@ public class PlayerManager : MonoBehaviour
         {
             for (int i = 0; i < 2;i++)
             {
-                scores[i].text = players[i].GetScore().ToString();
-                lives[i].text = "X" + players[i].eggLives.ToString();
-                coll[i].text = "X" + players[i].collectable.ToString();
+                scores[i].text = ""+players[i].GetScore();
+                lives[i].text = "X" + players[i].eggLives;
+                coll[i].text = "X" + players[i].collectable;
                 lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
                 collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
                 boosts[i].fillAmount = players[i].dashcool;

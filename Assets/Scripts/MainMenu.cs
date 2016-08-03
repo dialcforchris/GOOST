@@ -157,7 +157,7 @@ public class MainMenu : MonoBehaviour
                 case 2:
                     transitioning = true;
                     currentState = menuState.leaderboardsMenu;
-                    LeaderBoard.instance.display.update();
+                    //LeaderBoard.instance.display.update();
                     menuScreens[2].SetActive(true);
                     menuScreens[1].SetActive(false);
                     menuScreens[4].SetActive(false);
@@ -848,20 +848,4 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         scrolling[index] = false;
     }
-}
-
-[CustomEditor(typeof(MainMenu))]
-public class MainMenuTester : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-        MainMenu scriptToControl = (MainMenu)target;
-        if (GUILayout.Button("bounce"))
-        {
-            scriptToControl.StartCoroutine(scriptToControl.BounceyGeese(0, 1));
-            scriptToControl.StartCoroutine(scriptToControl.BounceyGeese(1, 1));
-        }
-
-    }
-}
+}   

@@ -31,10 +31,7 @@ public class Nest : MonoBehaviour
 	void Update()
     {
         PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = numEggs;
-    }
-
- 
-  
+    }  
     //void UpdateEggs()
     //{
     //    for (int i=0;i<anEggs.Length;i++)

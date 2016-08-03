@@ -71,6 +71,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             brokenEgg.transform.rotation = transform.rotation;
             hatchTime = 0;
             Enemy e = EnemyManager.instance.EnemyPool();
+            EnemyManager.instance.AllEnemies.Add(e);
             e.transform.position = new Vector2(transform.position.x, transform.position.y + 0.8f);
             e.Spawn(parentType, parentSpeed);
             ReturnPool();
