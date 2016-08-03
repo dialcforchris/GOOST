@@ -19,6 +19,12 @@ public class Timer : MonoBehaviour
     bool counting,upDown;
     [SerializeField]
     private Text TimerText;
+    [SerializeField]
+    private AudioClip[] countDownSound;
+    [SerializeField]
+    private AudioClip stop;
+    [SerializeField]
+    private AudioClip go;
 
     bool goosed;
 
@@ -123,13 +129,15 @@ public class Timer : MonoBehaviour
             for (int i = 5; i > 0; i--)
             {
                 countdownText.text = "" + i;
-
+                SoundManager.instance.playSound(countDownSound[i-1]);
                 countdownTextAnimator.Play("text_in");
                 while (currentTime > i)
                     yield return null;
             }
 
             StatTracker.instance.stats.roundsPlayed++;
+
+            SoundManager.instance.playSound(stop);
 
             countdownText.text = "Time!";
             while (Time.timeScale > 0)
@@ -149,11 +157,14 @@ public class Timer : MonoBehaviour
             for (int i = 6; i > 0; i--)
             {
                 countdownText.text = "" + i;
-
+                if (i<=3)
+                {
+                    SoundManager.instance.playSound(countDownSound[i - 1]);
+                }
                 countdownTextAnimator.Play("text_in");
                 yield return new WaitForSeconds(1);
             }
-
+            SoundManager.instance.playSound(go);
             countdownText.text = "Go!";
             GameStateManager.instance.ChangeState(GameStates.STATE_GAMEPLAY);
 
