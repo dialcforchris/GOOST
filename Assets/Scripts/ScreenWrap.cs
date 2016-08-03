@@ -36,7 +36,10 @@ public class ScreenWrap : MonoBehaviour
     private void Wrapped()
     {
         if (ActorComponent)
-            ActorComponent.DetermineAnimationState();
+        {
+            //Pure scum
+            transform.position -= Vector3.down * 0.01f;
+        }
 
         if (screenWrapped != null)
         {
