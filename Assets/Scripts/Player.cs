@@ -34,7 +34,7 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     AudioClip[] dashSounds,hurtSounds;
   
-    public float dashcool = 0;
+    public float dashcool = 5;
     public float maxDashCool = 5.0f;
    
     float flashTime = 0;
@@ -70,6 +70,7 @@ public class Player : Actor, ISegmentable<Actor>
     }
     protected override void OnEnable()
     {
+        dashcool = maxDashCool;
         base.OnEnable();
         SwitchGuys(_playerType);
     }
