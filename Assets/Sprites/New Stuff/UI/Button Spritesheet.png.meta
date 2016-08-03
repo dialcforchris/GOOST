@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 63b77b03d69d6124dbcef40886bef9f0
-timeCreated: 1469546942
+timeCreated: 1470231836
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -58,9 +58,9 @@ TextureImporter:
         x: 0
         y: 0
         width: 40
-        height: 13
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: Button down
@@ -69,9 +69,9 @@ TextureImporter:
         x: 41
         y: 0
         width: 40
-        height: 13
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     outline: []

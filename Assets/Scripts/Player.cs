@@ -338,7 +338,9 @@ public class Player : Actor, ISegmentable<Actor>
             flashTime = 0.0f;
         }
         dashcool = maxDashCool;
+        _collectable = 0;
         score = 0;
+        _eggLives = 3;
     }
 
     void FlashSprite()

@@ -453,7 +453,7 @@ public class MainMenu : MonoBehaviour
         PlayerManager.instance.ResetGameStart();
         PlayerManager.instance.GetPlayer(0).TakeOffFromPlatform();
         PlayerManager.instance.GetPlayer(1).TakeOffFromPlatform();
-
+        
         StartCoroutine(BounceyGeese(0, level));
         StartCoroutine(BounceyGeese(1, level));
 
