@@ -136,6 +136,11 @@ public class EndGameLogic : MonoBehaviour
         GameStateManager.instance.ChangeState(GameStates.STATE_TRANSITIONING);
         CameraController.instance.switchViews(true);
 
+        while (!EnterNameManager.instance.ended)
+        {
+            yield return null;
+        }
+
         //Wait a moment before resetting everything, just to make sure it's not in the camera view
         yield return new WaitForSeconds(2);
         FlagAnimator.Play("flag_idle_down");
@@ -150,7 +155,7 @@ public class EndGameLogic : MonoBehaviour
         PlayerManager.instance.GetPlayer(0).GooseyBod.isKinematic = false;
         PlayerManager.instance.GetPlayer(1).GooseyBod.isKinematic = false;
     }
-
+  
     IEnumerator DoAFade()
     {
         yield return new WaitForSeconds(2);
