@@ -39,12 +39,25 @@ public class EnemyManager : MonoBehaviour
     private void Awake()
     {
         enemyManager = this;
+        Enemy.total = 0;
     }
 
     private void Start()
     {
         objectPool = new ObjectPool<Enemy>(enemyPrefab, 10, transform);
         Physics2D.IgnoreLayerCollision(10, 11);
+    }
+
+    public void Reset()
+    {
+        Enemy.total = 0;
+        Enemy.numActive = 0;
+        currentWave = 0;
+        for (int i = 0; i < AllEnemies.Count; i++)
+        {
+            AllEnemies[i].gameObject.SetActive(false);
+            AllEnemies[i].poolData.ReturnPool(AllEnemies[i]);
+        }
     }
 
     private void Update()
@@ -74,15 +87,13 @@ public class EnemyManager : MonoBehaviour
                     {
                         nextWaveTime = 0.0f;
                         ++currentWave;
-                        Debug.Log("Wave:" + currentWave);
                         spawnIndex = 0;
-                        if (currentWave == 2)//waves.Length)                     
+                        if (currentWave == waves.Length)                     
                         {
-
                             //////////////////////////////////////
                             //////////////END THE GAME
                             //////////////////////////////////////
-
+                            EndGameLogic.instance.TriggerGameEnd(true);
                            GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
                            
                         }

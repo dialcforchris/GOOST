@@ -145,8 +145,8 @@ public class EndGameLogic : MonoBehaviour
         for (int i = 0; i < EnemyManager.instance.AllEnemies.Count; i++)
         {
             EnemyManager.instance.AllEnemies[i].GetComponent<Rigidbody2D>().isKinematic = false;
-            EnemyManager.instance.AllEnemies[i].poolData.ReturnPool(EnemyManager.instance.AllEnemies[i]);
         }
+        EnemyManager.instance.Reset();
         PlayerManager.instance.GetPlayer(0).GooseyBod.isKinematic = false;
         PlayerManager.instance.GetPlayer(1).GooseyBod.isKinematic = false;
     }

@@ -84,6 +84,7 @@ public class PlayerManager : MonoBehaviour
 
     public void SetupPlayer(int index)
     {
+        players[index].Respawn();
         players[index].gameObject.SetActive(true);
         players[index].playerId = index;
         scores[index].gameObject.SetActive(true);
@@ -175,7 +176,7 @@ public class PlayerManager : MonoBehaviour
     void UpdateUI()
     {
 
-        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY || GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
         {
             for (int i = 0; i < 2;i++)
             {
@@ -185,8 +186,7 @@ public class PlayerManager : MonoBehaviour
                 lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
                 collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
                 boosts[i].fillAmount = players[i].dashcool;
-
-
+                
                 //lives[i].text = "X" + players[i].eggLives.ToString();
                 //coll[i].text = "X" + players[i].collectable.ToString();
                 //lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];

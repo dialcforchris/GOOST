@@ -34,7 +34,7 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     AudioClip[] dashSounds,hurtSounds;
   
-    public float dashcool = 0;
+    public float dashcool = 5;
     public float maxDashCool = 5.0f;
    
     float flashTime = 0;
@@ -289,12 +289,12 @@ public class Player : Actor, ISegmentable<Actor>
     {
         if (_on)
         {
-            if (invicibleTimer<maxInvin)
+            if (invicibleTimer < maxInvin)
             {
                 invicibleTimer += Time.deltaTime;
-                if(invinciblePermanence)
+                if (invinciblePermanence)
                 {
-                    if(invicibleTimer > maxInvin / 2.0f)
+                    if (invicibleTimer > maxInvin / 2.0f)
                     {
                         Physics2D.IgnoreLayerCollision(8 + playerId, 10, false);
                         invinciblePermanence = false;
@@ -314,6 +314,7 @@ public class Player : Actor, ISegmentable<Actor>
             {
                 s.enabled = true;
             }
+
             spRend.enabled = true;
         }
     }
@@ -345,23 +346,26 @@ public class Player : Actor, ISegmentable<Actor>
 
     void FlashSprite()
     {
-        if (flashTime<0.1f)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
-            flashTime += Time.deltaTime;
-            foreach (SpriteRenderer s in allsprites)
+            if (flashTime < 0.1f)
             {
-                s.enabled = flashBool;
+                flashTime += Time.deltaTime;
+                foreach (SpriteRenderer s in allsprites)
+                {
+                    s.enabled = flashBool;
+                }
+                spRend.enabled = flashBool;
+                if (playerType == PlayerType.BADGUY)
+                {
+                    cape.enabled = flashBool;
+                }
             }
-            spRend.enabled = flashBool;
-            if (playerType == PlayerType.BADGUY)
+            else
             {
-                cape.enabled = flashBool;
+                flashBool = !flashBool;
+                flashTime = 0;
             }
-        }
-        else
-        {
-            flashBool = !flashBool;
-            flashTime = 0;
         }
     }
 

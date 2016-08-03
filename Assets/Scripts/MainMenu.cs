@@ -178,13 +178,13 @@ public class MainMenu : MonoBehaviour
                     currentState = menuState.readyUpScreen;
                     GameStateManager.instance.ChangeState(GameStates.STATE_READYUP);
 
+                    PlayerManager.instance.ResetPlayers();
+                    EggPool.instance.Reset();
                     #region a lot of nonsense
                     //Make sure the players can't escape the screen
                     readyUpBounds.SetActive(true);
 
                     //Reset the everything
-                    //readyTextPrompts[0].text = "Press        \nto spawn";
-                    //readyTextPrompts[1].text = "Press \n to spawn";
                     customised[0] = false;
                     customised[1] = false;
                     cosmeticIndex[0] = 0;
@@ -283,12 +283,6 @@ public class MainMenu : MonoBehaviour
 
     void ReadyUpScreen()
     {
-        //Press button
-        //Get rid of faces
-        //Display goose customisability bit
-        //Comfirm to spawn goose
-        //Then standard ready up bs
-
         if (Input.GetButtonDown("Fly0") && bigHead[0] && !charTransitionP1)
         {
             charTransitionP1 = true;
@@ -349,8 +343,8 @@ public class MainMenu : MonoBehaviour
             //Setup player
             CustomGeese[0].SetActive(false);
             PlayerManager.instance.SetupPlayer(0);
+            PlayerManager.instance.GetPlayer(0).TakeOffFromPlatform();
             PlayerManager.instance.GetPlayer(0).headSprite.sprite = hats[cosmeticIndex[0]];
-            //readyTextPrompts[0].text = "Press Dash and Fly\n buttons to ready up";
             readyTextPrompts[0].text = "Waiting for\nother player...";
             clouds[0].gameObject.SetActive(true);
             leftCloudPlatform.SetActive(true);
@@ -363,9 +357,9 @@ public class MainMenu : MonoBehaviour
             //Setup player
             CustomGeese[1].SetActive(false);
             PlayerManager.instance.SetupPlayer(1);
+            PlayerManager.instance.GetPlayer(1).TakeOffFromPlatform();
             PlayerManager.instance.GetPlayer(1).backpack.sprite = backpacks[cosmeticIndex[1]];
-
-            //readyTextPrompts[1].text = "Press Dash and Fly\n buttons to ready up";
+            
             readyTextPrompts[1].text = "Waiting for\nother player...";
             clouds[1].gameObject.SetActive(true);
             rightCloudPlatform.SetActive(true);

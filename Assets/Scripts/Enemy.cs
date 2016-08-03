@@ -12,7 +12,6 @@ public enum EnemyBehaviour
 
 public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 {
-
     public static int total = 0;
     public int eid = 0;
 

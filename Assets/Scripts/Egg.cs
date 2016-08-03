@@ -8,7 +8,6 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     #endregion
 
     public bool getLaid = false;
-    public bool inNest = false;
     [SerializeField]
     private Collider2D col;
     [SerializeField]
@@ -46,6 +45,8 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
    // Update is called once per frame
 	void Update ()
     {
+        if (!EggPool.instance.OneBasket.Contains(this))
+            EggPool.instance.OneBasket.Add(this);
         if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
         {
             if (getLaid)
@@ -59,7 +60,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
     
     void Hatch()
     {
-            if (hatchTime<maxHatchTime)
+        if (hatchTime < maxHatchTime)
         {
             hatchTime += Time.deltaTime;
         }
@@ -77,8 +78,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
             ReturnPool();
         }
     }
-
- 
+    
     void OnCollisionStay2D(Collision2D col)
     {
         if (InvincibilityTimer())
