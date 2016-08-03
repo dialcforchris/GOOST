@@ -11,6 +11,7 @@ public class EnterNameManager : MonoBehaviour
     private EnterName[] enterNames;
     [SerializeField]
     bool[] done = new bool[2];
+    public bool ended = false;
 	
     void Start()
     {
@@ -22,28 +23,25 @@ public class EnterNameManager : MonoBehaviour
    	// Update is called once per frame
 	void Update ()
     {
-	  
-           
-            for (int i=0;i<PlayerManager.instance.NumberOfPlayers();++i)
-            {
+        ended = (done[0] & done[1]);
+    }
+    public void ShowEnterName()
+    {
+        for (int i = 0; i < PlayerManager.instance.NumberOfPlayers(); ++i)
+        {
 
             if (!enterNames[i].check && LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(i).GetScore()))
-                {
-                    enterNames[i].gameObject.SetActive(true);
-                    enterNames[i].EnableIt(i);
-                }
-            }
-            //if (PlayerManager.instance.NumberOfPlayers()<done.Length)
-            //{
-            //    done[PlayerManager.instance.NumberOfPlayers()+1] = true;
-            //}
-
-            if (done[0]&&done[1])
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name.ToString());
+                enterNames[i].gameObject.SetActive(true);
+                enterNames[i].EnableIt(i);
             }
-        
-	}
+            else
+            {
+                Done(i);
+                continue;
+            }
+        }
+    }
 
     public void Done(int playerIndex)
     {
