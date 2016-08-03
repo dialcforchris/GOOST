@@ -34,7 +34,7 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     AudioClip[] dashSounds,hurtSounds;
   
-    public float dashcool = 5;
+    public float dashcool = 0;
     public float maxDashCool = 5.0f;
    
     float flashTime = 0;
@@ -76,7 +76,6 @@ public class Player : Actor, ISegmentable<Actor>
     protected void Start()
     {
         allsprites = transform.GetComponentsInChildren<SpriteRenderer>();
-        dashcool = maxDashCool;
     }
 	
 	// Update is called once per frame

@@ -84,6 +84,7 @@ public class PlayerManager : MonoBehaviour
 
     public void SetupPlayer(int index)
     {
+        players[index].eggLives = 3;
         players[index].Respawn();
         players[index].gameObject.SetActive(true);
         players[index].playerId = index;
@@ -128,10 +129,7 @@ public class PlayerManager : MonoBehaviour
                 }
             }
         }
-        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY || GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
-        {
-          UpdateUI();
-        }
+        UpdateUI();
     }
     public Player GetPlayer(int _playerIndex)
     {
@@ -172,44 +170,36 @@ public class PlayerManager : MonoBehaviour
         return players[0];
     }
 
-
     void UpdateUI()
     {
-
-        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY || GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
+        for (int i = 0; i < 2; i++)
         {
-            for (int i = 0; i < 2;i++)
-            {
-                scores[i].text = ""+players[i].GetScore();
-                lives[i].text = "X" + players[i].eggLives;
-                coll[i].text = "X" + players[i].collectable;
-                lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
-                collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
-                boosts[i].fillAmount = players[i].dashcool;
-                
-                //lives[i].text = "X" + players[i].eggLives.ToString();
-                //coll[i].text = "X" + players[i].collectable.ToString();
-                //lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
-                //collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
-                if (players[i].dashcool < players[i].maxDashCool)
-                {
-                    boosts[i].fillAmount = 1 - players[i].dashcool / players[i].maxDashCool;
+            scores[i].text = "" + players[i].GetScore();
+            lives[i].text = "X" + players[i].eggLives;
+            coll[i].text = "X" + players[i].collectable;
+            lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
+            collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
+            boosts[i].fillAmount = players[i].dashcool;
 
-                    Color colA = boosts[i].color;
-                    Color colB = boosts[i].transform.parent.GetComponent<Outline>().effectColor;
-                    Color colC = boosts[i].transform.parent.GetComponent<Image>().color;
+            //lives[i].text = "X" + players[i].eggLives.ToString();
+            //coll[i].text = "X" + players[i].collectable.ToString();
+            //lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+            //collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+            boosts[i].fillAmount = 1 - players[i].dashcool / players[i].maxDashCool;
 
-                    colA.a = 1 - players[i].dashcool / players[i].maxDashCool;
-                    colB.a = colA.a;
-                    colC.a = colA.a;
+            Color colA = boosts[i].color;
+            Color colB = boosts[i].transform.parent.GetComponent<Outline>().effectColor;
+            Color colC = boosts[i].transform.parent.GetComponent<Image>().color;
 
-                    boosts[i].color = colA;
-                    boosts[i].transform.parent.GetComponent<Outline>().effectColor = colB;
-                    boosts[i].transform.parent.GetComponent<Image>().color = colC;
-                }
-            }
+            colA.a = 1 - players[i].dashcool / players[i].maxDashCool;
+            colB.a = colA.a;
+            colC.a = colA.a;
+
+            boosts[i].color = colA;
+            boosts[i].transform.parent.GetComponent<Outline>().effectColor = colB;
+            boosts[i].transform.parent.GetComponent<Image>().color = colC;
         }
-    }  
+    }
 
     public void ResetGameStart()
     {

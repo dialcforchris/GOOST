@@ -8,7 +8,8 @@ public class ScreenWrap : MonoBehaviour
        
     private Vector2 screenToWorldMax;
     private Vector2 screenToWorldMin;
-
+    [SerializeField]
+    Actor ActorComponent;
     [SerializeField] private float wrapMin = -0.01f;
     [SerializeField] private float wrapMax = 1.01f;
 
@@ -34,7 +35,10 @@ public class ScreenWrap : MonoBehaviour
 
     private void Wrapped()
     {
-        if(screenWrapped != null)
+        if (ActorComponent)
+            ActorComponent.DetermineAnimationState();
+
+        if (screenWrapped != null)
         {
             screenWrapped(true);
         }

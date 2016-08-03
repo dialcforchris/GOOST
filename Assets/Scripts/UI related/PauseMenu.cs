@@ -91,6 +91,7 @@ public class PauseMenu : MonoBehaviour
                     //Quit to menu
                     BigGoose.Play("gooseZilla_idle");
                     CameraShake.instance.shakeDuration = 0;
+                    EnemyManager.instance.Reset();
                     MainMenu.instance.transform.rotation = Quaternion.Euler(Vector3.zero);
                     MainMenu.instance.switchMenus(0);
                     CameraController.instance.switchViews(true);
