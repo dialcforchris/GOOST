@@ -40,19 +40,26 @@ public class PlayerManager : MonoBehaviour
 
     public Vector3 GetRespawnPos(int playerIndex)
     {
-        if (MainMenu.instance.getLevel()==0)//Woodland level
+        if (MainMenu.instance.getLevel() == 0)//Woodland level
         {
-
-            return spawnPositions[1].position;
+            if (Random.value > .7)
+                return spawnPositions[3].position;
+            else if (playerIndex == 0)
+                return spawnPositions[2].position;
+            else
+                return spawnPositions[4].position;
         }
         else //City level
         {
-            return spawnPositions[0].position;
+            if (playerIndex == 0)
+                return spawnPositions[0].position;
+            else
+                return spawnPositions[1].position;
         }
     }
 
-	// Use this for initialization
-	void Awake () 
+    // Use this for initialization
+    void Awake()
     {
         if (playerManager != null)
         {

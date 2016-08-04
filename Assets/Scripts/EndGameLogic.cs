@@ -91,10 +91,10 @@ public class EndGameLogic : MonoBehaviour
         Color TextCol;
         while (lerpy < 1)
         {
+            lerpy += Time.deltaTime * 1.0f;
             TextCol = Backdrop.color;
             TextCol.a = Mathf.Lerp(0, .75f, lerpy);
             Backdrop.color = TextCol;
-            lerpy += Time.deltaTime * 1.0f;
             yield return new WaitForEndOfFrame();
         }
 
@@ -123,10 +123,10 @@ public class EndGameLogic : MonoBehaviour
         lerpy = 0;
         while (lerpy < 1)
         {
+            lerpy += Time.deltaTime * 5.0f;
             TextCol = Backdrop.color;
             TextCol.a = Mathf.Lerp(.75f, 0, lerpy);
             Backdrop.color = TextCol;
-            lerpy += Time.deltaTime * 5.0f;
             yield return new WaitForEndOfFrame();
         }
         FlagAnimator.Play("flag_idle_down");

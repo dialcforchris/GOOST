@@ -104,11 +104,11 @@ public class MainMenu : MonoBehaviour
         {
             while (lerpy < 1 && start.y != 180)
             {
+                lerpy += Time.deltaTime;
                 start = transform.rotation.eulerAngles;
                 //transform.rotation = Quaternion.Euler(Vector3.Slerp(start, end, lerpy));
                 transform.rotation = Quaternion.Euler(new Vector3(Mathf.LerpAngle(start.x, end.x, lerpy), Mathf.LerpAngle(start.y, end.y, lerpy), Mathf.LerpAngle(start.z, end.z, lerpy)));
 
-                lerpy += Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -716,6 +716,9 @@ public class MainMenu : MonoBehaviour
         #region fade out everything
         while (lerpy < 1)
         {
+            lerpy += Time.deltaTime;
+            if (lerpy > 1)
+                lerpy = 1;
             foreach (Image i in ImagesToFadeOut)
             {
                 Color ImageCol = i.color;
@@ -744,32 +747,31 @@ public class MainMenu : MonoBehaviour
             Color backdropCol = backdrop.color;
             backdropCol.a = Mathf.Lerp(0, .5f, lerpy);
             backdrop.color = backdropCol;
-
-            lerpy += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
         #endregion
 
         //Scroll credits up
         lerpy = 0;
-        while (Credits.rectTransform.anchoredPosition.y < 900)
+        while (Credits.rectTransform.anchoredPosition.y < 2150)
         {
-            Credits.rectTransform.anchoredPosition = Vector2.Lerp(-Vector2.up * 1500, Vector2.up * 900, lerpy / 25);
+            lerpy += Time.deltaTime;
+            Credits.rectTransform.anchoredPosition = Vector2.Lerp(-Vector2.up * 1250, Vector2.up * 2150, lerpy / 25);
             if (Input.GetButton("Interact0") || Input.GetButton("Interact1"))
                 lerpy += Time.deltaTime * 5;
 
-            lerpy += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
 
         //Reset credit location
-        Credits.rectTransform.anchoredPosition = -Vector2.up * 1500;
+        Credits.rectTransform.anchoredPosition = -Vector2.up * 1250;
 
 
         lerpy = 0;
         #region fade in everything
         while (lerpy < 1)
         {
+            lerpy += Time.deltaTime;
             foreach (Image i in ImagesToFadeOut)
             {
                 Color ImageCol = i.color;
@@ -797,7 +799,6 @@ public class MainMenu : MonoBehaviour
             Color backdropCol = backdrop.color;
             backdropCol.a = Mathf.Lerp(.5f, 0, lerpy);
             backdrop.color = backdropCol;
-            lerpy += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
         #endregion

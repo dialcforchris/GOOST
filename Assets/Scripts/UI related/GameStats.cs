@@ -111,13 +111,13 @@ public class GameStats : MonoBehaviour
         float lerpy = 0;
         while (lerpy < 1)
         {
+            lerpy += Time.deltaTime * speed;
             TextCol = t.color;
             TextCol.a = Mathf.Lerp(inOut ? 0 : 1, inOut ? 1 : 0, lerpy);
             t.color = TextCol;
             TextCol = o.effectColor;
             TextCol.a = Mathf.Lerp(inOut ? 0 : 1, inOut ? 1 : 0, lerpy);
             o.effectColor = TextCol;
-            lerpy += Time.deltaTime * speed;
             yield return new WaitForEndOfFrame();
         }
     }

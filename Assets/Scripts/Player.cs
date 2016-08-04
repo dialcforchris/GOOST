@@ -272,7 +272,7 @@ public class Player : Actor, ISegmentable<Actor>
             base.Respawn();
             isDead = false;
             _eggLives--;
-            transform.position = PlayerManager.instance.GetRespawnPos(_playerType == PlayerType.BADGUY ? 1 : 0);
+            transform.position = PlayerManager.instance.GetRespawnPos(_playerType == PlayerType.BADGUY ? 0 : 1);
             TakeOffFromPlatform();
             invincible = true;
             Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);

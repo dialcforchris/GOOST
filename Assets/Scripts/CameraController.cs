@@ -23,8 +23,8 @@ public class CameraController : MonoBehaviour
         float lerpy = 0;
         while (lerpy < 0.15f)
         {
-            transform.position = Vector3.Lerp(transform.position, end, lerpy);
             lerpy += Time.deltaTime * 0.1f;
+            transform.position = Vector3.Lerp(transform.position, end, lerpy);
             yield return new WaitForEndOfFrame();
         }
         if (end == up)
