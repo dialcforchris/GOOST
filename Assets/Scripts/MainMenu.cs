@@ -158,6 +158,7 @@ public class MainMenu : MonoBehaviour
                     transitioning = true;
                     currentState = menuState.leaderboardsMenu;
                     //LeaderBoard.instance.display.update();
+                    LeaderBoard.instance.display.ShowTheDarnThing();
                     menuScreens[2].SetActive(true);
                     menuScreens[1].SetActive(false);
                     menuScreens[4].SetActive(false);

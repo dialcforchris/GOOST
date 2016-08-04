@@ -23,9 +23,22 @@ public class DisplayLeaderboard : MonoBehaviour
                 names[i].text = k[i].Key;
                 rank[i].color = Color.Lerp(Color.green, Color.red, (float)(i * (1f / (float)k.Count)));
                 scores[i].color = Color.Lerp(Color.green, Color.red, (float)(i * (1f / (float)k.Count)));
-                names[i].color = Color.Lerp(Color.green, Color.red, (float)(i * (1f/(float)k.Count)));
+                names[i].color = Color.Lerp(Color.green, Color.red, (float)(i * (1f / (float)k.Count)));
             }
             once = true;
+        }
+    }
+    public void ShowTheDarnThing()
+    {
+        List<KeyValuePair<string, int>> k = LeaderBoard.instance.ReturnLeaderBoard();
+        for (int i = 0; i < k.Count; i++)
+        {
+            rank[i].text = (i + 1).ToString() + ".";
+            scores[i].text = k[i].Value + "";
+            names[i].text = k[i].Key;
+            rank[i].color = Color.Lerp(Color.green, Color.red, (float)(i * (1f / (float)k.Count)));
+            scores[i].color = Color.Lerp(Color.green, Color.red, (float)(i * (1f / (float)k.Count)));
+            names[i].color = Color.Lerp(Color.green, Color.red, (float)(i * (1f / (float)k.Count)));
         }
     }
 }

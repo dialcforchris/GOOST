@@ -32,13 +32,14 @@ public class EnterName : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
-        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEOVER)
+       StartCoroutine( HoldIt());
+        // if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEOVER)
         {
             if (!check)
             {
                 enterCan.enabled = true;
                 int scre = PlayerManager.instance.GetPlayer(playerNumber).GetScore();
-                if (LeaderBoard.instance.CheckIfHighScore(scre) && scre > 0)
+                if (LeaderBoard.instance.CheckIfHighScore(scre,playerNumber)&&scre>0)
                 {
                     playerName.text = "Player " + (playerNumber + 1) + " Enter Name:";
                     MenuInput();
@@ -59,10 +60,14 @@ public class EnterName : MonoBehaviour
             else
             {
                 EnterNameManager.instance.Done(playerNumber);
+                gameObject.SetActive(false);
             }
         }
     }
-
+    IEnumerator HoldIt()
+    {
+        yield return new WaitForSeconds(1);
+    }
     void MenuInput()
     {
         if (ConvertToPos())
@@ -154,8 +159,8 @@ public class EnterName : MonoBehaviour
         {
             theName = theName + box[i].text;
         }
-        LeaderBoard.instance.SetName(theName);
-        LeaderBoard.instance.AddNewScoreToLB();
+        LeaderBoard.instance.AddNewScoreToLB(PlayerManager.instance.GetPlayer(playerNumber).GetScore(),theName);
+        theName = string.Empty;
     }
 
     bool ConvertToPos()

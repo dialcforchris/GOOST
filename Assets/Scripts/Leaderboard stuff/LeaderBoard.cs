@@ -13,9 +13,9 @@ public class LeaderBoard : MonoBehaviour
     {
         get { return leader; }
     }
-    string playerName;
+    string[] playerName;
     public string gameName = "GOOST";
-    int playerScore;
+    int[] playerScore;
     public int stringLength;
     [SerializeField]
     public List<KeyValuePair<string, int>> scores = new List<KeyValuePair<string,int>>();
@@ -138,9 +138,10 @@ public class LeaderBoard : MonoBehaviour
         }
         highScores.Close();
     }
-   public void AddNewScoreToLB()
+   public void AddNewScoreToLB(int _playerScore,string _playerName)
     {
-        AddToList(playerScore, playerName);
+        Debug.Log("add to LB " + _playerScore + " " + _playerName);
+        AddToList(_playerScore, _playerName);
         SortScores();
         TrimList();
         WriteToFile();
@@ -163,25 +164,28 @@ public class LeaderBoard : MonoBehaviour
 
     public void SetScore(int _score,int _playerId)
     {
-        playerScore = _score;
-        if (CheckIfHighScore(_score))
+        playerScore[_playerId] = _score;
+        if (CheckIfHighScore(_score,_playerId))
         {
           //  enterName.gameObject.SetActive(true);
         }
     }
 
-    public void SetName(string _name)
+    public void SetName(string _name,int _playerId)
     {
-        playerName = _name;
+        playerName[_playerId] = _name;
     }
 
-    public bool CheckIfHighScore(int _score)
+    public bool CheckIfHighScore(int _score,int _playerId)
     {
+        Debug.Log("checkifhighScore");
         for (int i = scores.Count-1; i >0 ;i-- )
         { 
+
             if (scores[i].Value < _score)
             {
-                playerScore = _score;
+                Debug.Log("highscore is go");
+           //     playerScore[_playerId] = _score;
                 return true;
             }
         }

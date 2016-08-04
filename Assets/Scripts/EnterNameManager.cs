@@ -10,6 +10,8 @@ public class EnterNameManager : MonoBehaviour
     [SerializeField]
     private EnterName[] enterNames;
     [SerializeField]
+    private GameObject enterCanvas;
+    [SerializeField]
     bool[] done = new bool[2];
     public bool ended = false;
 	
@@ -24,21 +26,38 @@ public class EnterNameManager : MonoBehaviour
 	void Update ()
     {
         ended = (done[0] & done[1]);
+        if (ended)
+        {
+            for (int i = 0; i < enterNames.Length - 1; i++)
+            {
+                enterNames[i].gameObject.SetActive(false);
+            }
+            enterCanvas.SetActive(false);
+        }
     }
     public void ShowEnterName()
     {
-        for (int i = 0; i < PlayerManager.instance.NumberOfPlayers(); ++i)
+        enterCanvas.SetActive(true);
+        for (int i = 0; i < PlayerManager.instance.NumberOfPlayers(); i++)
         {
-
-            if (!enterNames[i].check && LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(i).GetScore()))
+            if (PlayerManager.instance.GetPlayer(i).gameObject.activeInHierarchy)
             {
-                enterNames[i].gameObject.SetActive(true);
-                enterNames[i].EnableIt(i);
+                if (!enterNames[i].check)
+                {
+                    if (LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(i).GetScore(),i))
+                    {
+                        enterNames[i].gameObject.SetActive(true);
+                        enterNames[i].EnableIt(i);
+                    }
+                    else
+                    {
+                      Done(i);
+                    }
+                }
             }
             else
             {
                 Done(i);
-                continue;
             }
         }
     }
