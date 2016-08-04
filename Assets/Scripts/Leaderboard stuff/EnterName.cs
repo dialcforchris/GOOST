@@ -38,8 +38,7 @@ public class EnterName : MonoBehaviour
             if (!check)
             {
                 enterCan.enabled = true;
-                int scre = PlayerManager.instance.GetPlayer(playerNumber).GetScore();
-                if (LeaderBoard.instance.CheckIfHighScore(scre,playerNumber)&&scre>0)
+                if (LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(playerNumber).GetScore()) && PlayerManager.instance.GetPlayer(playerNumber).GetScore() > 0)
                 {
                     playerName.text = "Player " + (playerNumber + 1) + " Enter Name:";
                     MenuInput();
@@ -60,6 +59,7 @@ public class EnterName : MonoBehaviour
             else
             {
                 EnterNameManager.instance.Done(playerNumber);
+                theName = string.Empty;
                 gameObject.SetActive(false);
             }
         }
@@ -155,6 +155,10 @@ public class EnterName : MonoBehaviour
     }
     void SelectName()
     {
+        if (theName!=null)
+        {
+            theName = null;
+        }
         for (int i = 0; i < box.Length; i++)
         {
             theName = theName + box[i].text;
@@ -187,6 +191,7 @@ public class EnterName : MonoBehaviour
     public void EnableIt(int _playerId)
     {
         playerNumber = _playerId;
+        check = false;
         enterCan.gameObject.SetActive(true);
     }
   

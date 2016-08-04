@@ -165,7 +165,7 @@ public class LeaderBoard : MonoBehaviour
     public void SetScore(int _score,int _playerId)
     {
         playerScore[_playerId] = _score;
-        if (CheckIfHighScore(_score,_playerId))
+        if (CheckIfHighScore(_score))
         {
           //  enterName.gameObject.SetActive(true);
         }
@@ -176,20 +176,18 @@ public class LeaderBoard : MonoBehaviour
         playerName[_playerId] = _name;
     }
 
-    public bool CheckIfHighScore(int _score,int _playerId)
+    public bool CheckIfHighScore(int _score)
     {
-        Debug.Log("checkifhighScore");
+
         for (int i = scores.Count-1; i >0 ;i-- )
         { 
 
             if (scores[i].Value < _score)
             {
-                Debug.Log("highscore is go");
-           //     playerScore[_playerId] = _score;
                 return true;
             }
         }
-        if (scores.Count <40)
+        if (scores.Count <30)
         {
             return true;
         }

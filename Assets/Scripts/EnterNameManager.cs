@@ -34,17 +34,20 @@ public class EnterNameManager : MonoBehaviour
             }
             enterCanvas.SetActive(false);
         }
+        Debug.Log("done 1 " + done[0] + " done 2 " + done[1]);
     }
     public void ShowEnterName()
     {
+        EnterNameReset();
         enterCanvas.SetActive(true);
         for (int i = 0; i < PlayerManager.instance.NumberOfPlayers(); i++)
         {
+
             if (PlayerManager.instance.GetPlayer(i).gameObject.activeInHierarchy)
             {
                 if (!enterNames[i].check)
                 {
-                    if (LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(i).GetScore(),i))
+                    if (LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(i).GetScore()))
                     {
                         enterNames[i].gameObject.SetActive(true);
                         enterNames[i].EnableIt(i);
@@ -73,5 +76,11 @@ public class EnterNameManager : MonoBehaviour
             win = PlayerManager.instance.GetPlayer(0).GetScore() > PlayerManager.instance.GetPlayer(1).GetScore() ? "THE HACKER " : "THE I.T GUY ";
         else
             win = "THE HACKER ";
+    }
+    void EnterNameReset()
+    {
+        done[0] = false;
+        done[1] = false;
+        ended = false;
     }
 }

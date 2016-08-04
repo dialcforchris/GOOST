@@ -130,22 +130,20 @@ public class EndGameLogic : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         FlagAnimator.Play("flag_idle_down");
-        Debug.Log("flag");
         ContinueTextAnimator.Play("fade_text_idle");
-        Debug.Log("text ani");
-        GameStats.instance.ResetText();
-        Debug.Log("Reset text");
+
+       
         EnterNameManager.instance.ShowEnterName();
         while (!EnterNameManager.instance.ended)
         {
             yield return null;
         }
+        GameStats.instance.ResetText();
         MainMenu.instance.transform.rotation = Quaternion.Euler(Vector3.zero);
         MainMenu.instance.switchMenus(0);
         MainMenu.instance.currentState = MainMenu.menuState.mainMenu;
         GameStateManager.instance.ChangeState(GameStates.STATE_TRANSITIONING);
         CameraController.instance.switchViews(true);
-        Debug.Log("back to menu");
 
         //Wait a moment before resetting everything, just to make sure it's not in the camera view
         yield return new WaitForSeconds(2);
