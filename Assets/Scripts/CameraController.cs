@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 
 public class CameraController : MonoBehaviour
@@ -31,23 +30,5 @@ public class CameraController : MonoBehaviour
         if (end == up)
             GameStateManager.instance.ChangeState(GameStates.STATE_MENU);
         Actor.worldMaxY = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 1.01f));
-    }
-}
-
-[CustomEditor(typeof(CameraController))]
-public class tempUIcammover : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-        CameraController scriptToControl = (CameraController)target;
-        if (GUILayout.Button("move camera up"))
-        {
-            scriptToControl.switchViews(true);
-        }
-        if (GUILayout.Button("move camera down"))
-        {
-            scriptToControl.switchViews(false);
-        }
     }
 }

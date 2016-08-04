@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -220,19 +219,4 @@ public class EndGameLogic : MonoBehaviour
     //        enterName[i].EnableIt(i);
     //    }
     //}
-}
-
-
-[CustomEditor(typeof(EndGameLogic))]
-public class MainMenuTester : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-        EndGameLogic scriptToControl = (EndGameLogic)target;
-        if (GUILayout.Button("bounce"))
-        {
-            scriptToControl.TriggerGameEnd(false);
-        }
-    }
 }

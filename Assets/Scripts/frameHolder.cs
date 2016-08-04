@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 
 //Create tiny pauses for certain events
@@ -39,19 +38,3 @@ public class frameHolder : MonoBehaviour {
 	
 	}
 }
-
-
-[CustomEditor(typeof(frameHolder))]
-public class frameholderUI : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-        frameHolder scriptToControl = (frameHolder)target;
-        if (GUILayout.Button("hold frame"))
-        {
-            scriptToControl.holdFrame(0.1f);
-        }
-    }
-}
-

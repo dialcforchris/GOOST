@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -248,23 +247,3 @@ public class TwitterPlane : MonoBehaviour
         }
     }
 }
-
-
-[CustomEditor(typeof(TwitterPlane))]
-public class TwitterTester : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-        TwitterPlane scriptToControl = (TwitterPlane)target;
-        if (GUILayout.Button("left"))
-        {
-            scriptToControl.fly(false);
-        }
-        if (GUILayout.Button("right"))
-        {
-            scriptToControl.fly(true);
-        }
-    }
-}
-

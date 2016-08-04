@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -63,20 +62,5 @@ public class CameraShake : MonoBehaviour
                 Camera.main.transform.position = new Vector3(0, 0, -10);
             }
         }
-    }
-}
-
-[CustomEditor(typeof(CameraShake))]
-public class GOOSEZILLA  : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-        CameraShake scriptToControl = (CameraShake)target;
-        if (GUILayout.Button("Get Goosed"))
-        {
-            scriptToControl.GetGoosed();
-        }
-
     }
 }

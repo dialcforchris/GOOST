@@ -32,10 +32,24 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private float respawnLength = 1.0f;
     private bool[] playerRespawn = null;
     private float[] respawnTime = null;
-    
+    [SerializeField]
+    Transform[] spawnPositions;
 
     //set this properly when we have a splash screen menu
     private int amountOfPlayers = 2;
+
+    public Vector3 GetRespawnPos(int playerIndex)
+    {
+        if (MainMenu.instance.getLevel()==0)//Woodland level
+        {
+
+            return spawnPositions[1].position;
+        }
+        else //City level
+        {
+            return spawnPositions[0].position;
+        }
+    }
 
 	// Use this for initialization
 	void Awake () 
