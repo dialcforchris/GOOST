@@ -7,10 +7,8 @@ public class FloatingText : MonoBehaviour, IPoolable<FloatingText>
     #region IPoolable
     public PoolData<FloatingText> poolData { get; set; }
     #endregion
-
     
-    [SerializeField]
-    Text score;
+    public Text score;
     private bool onOff = true;
 	
     void Update()
@@ -26,7 +24,7 @@ public class FloatingText : MonoBehaviour, IPoolable<FloatingText>
         }
     }
 
-    public void OnPooled(int _score,Vector2 _position, Color _colour)
+    public void OnPooled(string _score,Vector2 _position, Color _colour)
     {
         gameObject.SetActive(true);
         score.color = new Color( _colour.r,_colour.g,_colour.b,1);

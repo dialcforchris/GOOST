@@ -28,7 +28,7 @@ public class Player : Actor, ISegmentable<Actor>
     private int score = 0;
     private SpriteRenderer[] allsprites;
 
-    private int _eggLives = 3;
+    private int _eggLives = 5;
     [SerializeField]
     Canvas PlayerCanvas;
     [SerializeField]
@@ -44,6 +44,10 @@ public class Player : Actor, ISegmentable<Actor>
     bool invincible = false;
     bool invinciblePermanence = false;
     private int _collectable = 10;
+
+    float comboCooldown=0;
+    int currentCombo=0;
+
     public int collectable
     {
         get { return _collectable; } 
@@ -102,6 +106,17 @@ public class Player : Actor, ISegmentable<Actor>
         DetermineAnimationState();
     }
 
+    public void incrementCombo()
+    {
+        currentCombo++;
+        comboCooldown = 3;
+    }
+
+    public int getCurrentCombo()
+    {
+        return currentCombo;
+    }
+
     protected void Update()
     {
         if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY || GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
@@ -131,6 +146,13 @@ public class Player : Actor, ISegmentable<Actor>
             Dash();
             DashCoolTime();
             Invinciblity(invincible);
+            if (comboCooldown > 0)
+            {
+                comboCooldown -= Time.deltaTime;
+                if (comboCooldown <= 0)
+                    currentCombo = 0;
+            }
+
         }
     }
 
@@ -174,6 +196,7 @@ public class Player : Actor, ISegmentable<Actor>
 
     public override void LandedOnPlatform(Collider2D col)
     {
+        currentCombo = 0;
         base.LandedOnPlatform(col);
         riderAnimator.Play("cape_flap_a");
     }
@@ -241,17 +264,27 @@ public class Player : Actor, ISegmentable<Actor>
                         _collectable = 0;
 
                     SoundManager.instance.playSound(hurtSounds[Random.Range(0, hurtSounds.Length)]);
-
                     Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);
                     invinciblePermanence = true;
                     invincible = true;
                 }
                 else
                 {
+                    PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).incrementCombo();
+                    int combo = PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).getCurrentCombo();
+
+                    if (combo > 1)
+                    {
+                        SoundManager.instance.playSound(deathSound, 1, 1 + ((float)combo / 10f));
+                        FloatingTextPool.instance.PoolText("x" + combo, transform.position + Vector3.up, Color.magenta,3);
+                    }
+                    else
+                        SoundManager.instance.playSound(deathSound);
+
                     if (_type != PlayerType.ENEMY)
                     {
-                        FloatingTextPool.instance.PoolText(deathScore, transform.position, Color.red);
-                        PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(deathScore);
+                        FloatingTextPool.instance.PoolText(""+deathScore, transform.position, Color.red);
+                        PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(deathScore*combo);
                     }
                     applyFly = false;
                     Collectables c = CollectablePool.instance.PoolCollectables(playerType == PlayerType.BADGUY ? PickUpType.HARDDRIVE : PickUpType.MONEY, playerId);
@@ -260,7 +293,6 @@ public class Player : Actor, ISegmentable<Actor>
                     base.Defeat(_type);
                     PlayerManager.instance.RespawnPlayer(playerId);
                 }
-
             }
         }
     }

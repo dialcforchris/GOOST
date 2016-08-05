@@ -34,7 +34,6 @@ public class EnterNameManager : MonoBehaviour
             }
             enterCanvas.SetActive(false);
         }
-        Debug.Log("done 1 " + done[0] + " done 2 " + done[1]);
     }
     public void ShowEnterName()
     {

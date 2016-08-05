@@ -277,10 +277,22 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     {
         base.Defeat(_type);
 
-        Collectables c = CollectablePool.instance.PoolCollectables(_type == PlayerType.BADGUY? PickUpType.MONEY:PickUpType.HARDDRIVE);
+        Collectables c = CollectablePool.instance.PoolCollectables(_type == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
         c.transform.position = transform.position;
-        FloatingTextPool.instance.PoolText(score,transform.position,Color.green);
-        PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).ChangeScore(score);
+        FloatingTextPool.instance.PoolText("" + score, transform.position, Color.green);
+        PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).incrementCombo();
+
+        int combo = PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).getCurrentCombo();
+
+        if (combo > 1)
+        {
+            SoundManager.instance.playSound(deathSound, 1, 1 + ((float)combo / 10f));
+            FloatingTextPool.instance.PoolText("x" + combo, transform.position + Vector3.up, Color.magenta,2.5f);
+        }
+        else
+            SoundManager.instance.playSound(deathSound);
+
+        PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).ChangeScore(score * combo);
         --numActive;
         anim.Stop();
         poolData.ReturnPool(this);

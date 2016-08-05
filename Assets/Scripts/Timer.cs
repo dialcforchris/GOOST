@@ -100,23 +100,26 @@ public class Timer : MonoBehaviour
     
     public IEnumerator MidGameOver()
     {
-        StatTracker.instance.stats.roundsPlayed++;
-
-        countdownTextAnimator.gameObject.SetActive(true);
-        countdownTextAnimator.Play("text_in");
-        countdownText.text = "Game!";
-        while (Time.timeScale > 0)
+        if (currentTime > 3.5f)
         {
-            Time.timeScale -= Time.deltaTime * 2;
-            yield return new WaitForEndOfFrame();
-            if (Time.timeScale < 0.01f)
-                Time.timeScale = 0;
+            counting = false;
+            StatTracker.instance.stats.roundsPlayed++;
+
+            countdownTextAnimator.gameObject.SetActive(true);
+            countdownTextAnimator.Play("text_in");
+            countdownText.text = "Game!";
+            while (Time.timeScale > 0)
+            {
+                Time.timeScale -= Time.deltaTime * 2;
+                yield return new WaitForEndOfFrame();
+                if (Time.timeScale < 0.01f)
+                    Time.timeScale = 0;
+            }
+            countdownTextAnimator.gameObject.SetActive(false);
+            EndGameLogic.instance.TriggerGameEnd(false);
+            GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
+            Time.timeScale = 1;
         }
-        countdownTextAnimator.gameObject.SetActive(false);
-        counting = false;
-        EndGameLogic.instance.TriggerGameEnd(false);
-        GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
-        Time.timeScale = 1;
     }
 
     public IEnumerator TextInOut(bool InOut)

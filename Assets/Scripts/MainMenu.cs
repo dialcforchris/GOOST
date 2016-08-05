@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
@@ -70,6 +71,12 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     GameObject[] CustomGeese;
 
+    [Header("Misc")]
+    [SerializeField]
+    Image ScreenFade;
+    [SerializeField]
+    float maxIdleTime, idleTime=0;
+
     int mainMenuIndex, optionsIndex, levelSelectionIndex;
     bool transitioning;
 
@@ -87,6 +94,7 @@ public class MainMenu : MonoBehaviour
 
     public void Awake()
     {
+        StartCoroutine(FadeScreenInOut(true));
         instance = this;
         ready = new bool[2] { false, false };
         pressingReady = new bool[2] { false, false };
@@ -228,6 +236,7 @@ public class MainMenu : MonoBehaviour
     bool[] scrolling;
     void Update()
     {
+        #region menu navigation
         if (TutorialAnimator.GetCurrentAnimatorStateInfo(0).IsName("tutorial_idle") && transitioning)
             transitioning = false;
         if (TutorialAnimator.GetCurrentAnimatorStateInfo(0).IsName("tutorial_out_idle") && currentState == menuState.tutorial)
@@ -253,14 +262,14 @@ public class MainMenu : MonoBehaviour
                         LevelSelectionMenu();
                         break;
                     case menuState.tutorial:
-                        if ( Input.GetButtonDown("Interact0")||  Input.GetButtonDown("Interact1"))
+                        if (Input.GetButtonDown("Interact0") || Input.GetButtonDown("Interact1"))
                         {
                             TutorialAnimator.Play("tutorial_out");
                             transitioning = true;
                         }
                         break;
                     default:
-                        if (Input.GetButtonDown("Interact0")|| Input.GetButtonDown("Interact1"))
+                        if (Input.GetButtonDown("Interact0") || Input.GetButtonDown("Interact1"))
                         {
                             switchMenus(0);
                         }
@@ -268,10 +277,42 @@ public class MainMenu : MonoBehaviour
                 }
             }
         }
-        if (GameStateManager.instance.GetState() == GameStates.STATE_READYUP)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_READYUP && !transitioning)
         {
             ReadyUpScreen();
         }
+        #endregion
+
+        if (!Input.anyKey)
+        {
+            idleTime += Time.deltaTime;
+        }
+        else
+        {
+            idleTime = 0;
+        }
+
+        if (idleTime > maxIdleTime && GameStateManager.instance.GetState() != GameStates.STATE_GAMEOVER)
+        {
+            GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
+            StartCoroutine(FadeScreenInOut(false));
+        }
+    }
+
+    IEnumerator FadeScreenInOut(bool inOut)//True for in, false for out
+    {
+        if (!inOut)
+            ScreenFade.color = new Color(0, 0, 0, 0);
+
+        float lerpy = 0;
+        while (lerpy < 1)
+        {
+            lerpy += Time.deltaTime;
+            ScreenFade.color = inOut ? new Color(1, 1, 1, 1 - lerpy) : new Color(0, 0, 0, lerpy);
+            yield return new WaitForEndOfFrame();
+        }
+        if (!inOut)
+            SceneManager.LoadScene(0);
     }
 
     float returnTimer;
@@ -284,12 +325,12 @@ public class MainMenu : MonoBehaviour
 
     void ReadyUpScreen()
     {
-        if (Input.GetButtonDown("Fly0") && bigHead[0] && !charTransitionP1)
+        if (Input.GetButtonDown("Interact0") && bigHead[0] && !charTransitionP1)
         {
             charTransitionP1 = true;
             StartCoroutine(CharacterImageTransition(false, 0));
         }
-        if (Input.GetButtonDown("Fly1") && bigHead[1] && !charTransitionP2)
+        if (Input.GetButtonDown("Interact1") && bigHead[1] && !charTransitionP2)
         {
             charTransitionP2 = true;
             StartCoroutine(CharacterImageTransition(false, 1));
@@ -338,7 +379,7 @@ public class MainMenu : MonoBehaviour
             StopCoroutine(allowMove(1));
             scrolling[1] = false;
         }
-        if (Input.GetButtonDown("Fly0") && characterImg[0].color.a < 0.1f && !customised[0])
+        if (Input.GetButtonDown("Interact0") && characterImg[0].color.a < 0.1f && !customised[0])
         {
             customised[0] = true;
             //Setup player
@@ -352,7 +393,7 @@ public class MainMenu : MonoBehaviour
 
             ready[0] = true;
         }
-        if (Input.GetButtonDown("Fly1") && characterImg[1].color.a < 0.1f && !customised[1])
+        if (Input.GetButtonDown("Interact1") && characterImg[1].color.a < 0.1f && !customised[1])
         {
             customised[1] = true;
             //Setup player
@@ -409,7 +450,7 @@ public class MainMenu : MonoBehaviour
         #endregion
 
         #region holding dash to quit
-        if ((Input.GetButton("Interact1") || Input.GetButton("Interact0")) && !Timer.instance.countdown)
+        if ((Input.GetButton("Fly1") || Input.GetButton("Fly0")) && !Timer.instance.countdown)
         {
             returnTimer += Time.deltaTime * .5f;
             returnImage.fillAmount = returnTimer;
@@ -633,7 +674,7 @@ public class MainMenu : MonoBehaviour
                     break;
                 case 5:
                     //Quit game
-                    Application.Quit();
+                    //Application.Quit();
                     break;
             }
         }

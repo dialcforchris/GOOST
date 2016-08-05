@@ -33,7 +33,7 @@ public class EnemyManager : MonoBehaviour
     private int currentWave = 0;
     private int spawnIndex = 0;
 
-    [SerializeField] private float nextWaveLength = 3.0f;
+    [SerializeField] private float nextWaveLength = 1f;
     private float nextWaveTime = 0.0f;
     
     private void Awake()
@@ -66,6 +66,7 @@ public class EnemyManager : MonoBehaviour
         {
             if (spawnIndex < waves[currentWave].settings.Length)
             {
+                Debug.Log(currentWave+"" + spawnIndex);
                 spawnTime += Time.deltaTime;
                 if (spawnTime >= waves[currentWave].settings[spawnIndex].spawnRate)
                 {
@@ -77,11 +78,20 @@ public class EnemyManager : MonoBehaviour
                     _e.Spawn(waves[currentWave].settings[spawnIndex].enemySpawnOrder, waves[currentWave].settings[spawnIndex].speed);
                     ++spawnIndex;
                 }
+                if (spawnTime >= waves[currentWave].settings[waves[currentWave].settings.Length-1].spawnRate && Enemy.numActive < 3)
+                {
+                    Debug.Log("inc");
+                    ++currentWave;
+                    spawnIndex = 0;
+                }
             }
             else
             {
-                if (Enemy.numActive == 0)
+                if (Enemy.numActive < 3)
                 {
+                    //++currentWave;
+                    //spawnIndex = 0;
+                    
                     nextWaveTime += Time.deltaTime;
                     if (nextWaveTime >= nextWaveLength)
                     {

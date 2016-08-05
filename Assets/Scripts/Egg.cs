@@ -90,7 +90,7 @@ public class Egg : MonoBehaviour, IPoolable<Egg>
                 {
                     Player p = (Player)rigSegment.rigBase;
                     p.ChangeScore(score);
-                    FloatingTextPool.instance.PoolText(score, transform.position, Color.white);
+                    FloatingTextPool.instance.PoolText(""+score, transform.position, Color.white);
                     ReturnPool();
                     SoundManager.instance.playSound(eggGet);
                     GameStats.instance.eggs[p.playerId]++;

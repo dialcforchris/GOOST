@@ -54,7 +54,7 @@ public class SoundManager : MonoBehaviour
         }      
     }
 
-    public void playSound(AudioClip sound,float volume = 1)
+    public void playSound(AudioClip sound,float volume = 1,float pitch=1)
     {
         int c = 0;
         while (c < audioSrcs.Count)
@@ -62,7 +62,7 @@ public class SoundManager : MonoBehaviour
             if (!audioSrcs[c].isPlaying)
             {
                 audioSrcs[c].clip = sound;
-                audioSrcs[c].pitch = 1;
+                audioSrcs[c].pitch = pitch;
                 audioSrcs[c].PlayOneShot(sound);
                 audioSrcs[c].volume = volume * volumeMultiplayer;
                 break;

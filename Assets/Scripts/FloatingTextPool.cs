@@ -20,10 +20,11 @@ public class FloatingTextPool : MonoBehaviour
         objectPool = new ObjectPool<FloatingText>(floatingTextPrefab, 10, transform);
     }
 
-    public FloatingText PoolText(int _score, Vector2 _position, Color _colour)
+    public FloatingText PoolText(string _score, Vector2 _position, Color _colour,float size=1)
     {
         FloatingText _floatingText = objectPool.GetPooledObject();
-        _floatingText.OnPooled(_score,_position,_colour);
+        _floatingText.score.fontSize = (int)size * 24;
+        _floatingText.OnPooled(_score, _position, _colour);
         return _floatingText;
     }
 }

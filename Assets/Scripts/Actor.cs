@@ -88,7 +88,6 @@ public class Actor : MonoBehaviour
 
     protected virtual IEnumerator DeathAnimation()
     {
-        SoundManager.instance.playSound(deathSound);
         FeatherManager.instance.HaveSomeFeathers(transform.position);
         yield return new WaitForSeconds(0.01f);
         anim.Stop();
