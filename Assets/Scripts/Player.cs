@@ -33,6 +33,8 @@ public class Player : Actor, ISegmentable<Actor>
     Canvas PlayerCanvas;
     [SerializeField]
     AudioClip[] dashSounds,hurtSounds;
+    [SerializeField]
+    private ParticleSystem respawn;
   
     public float dashcool = 5;
     public float maxDashCool = 5.0f;
@@ -305,6 +307,7 @@ public class Player : Actor, ISegmentable<Actor>
             isDead = false;
             _eggLives--;
             transform.position = PlayerManager.instance.GetRespawnPos(_playerType == PlayerType.BADGUY ? 0 : 1);
+            RespawnPlayerParticle.instance.MakeLookNice(new Vector2(transform.position.x,transform.position.y-0.5f), (_playerType == PlayerType.BADGUY ? new Color(233,77,7) : Color.green));
             TakeOffFromPlatform();
             invincible = true;
             Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);

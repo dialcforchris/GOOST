@@ -34,6 +34,7 @@ public class PlayerManager : MonoBehaviour
     private float[] respawnTime = null;
     [SerializeField]
     Transform[] spawnPositions;
+   
 
     //set this properly when we have a splash screen menu
     private int amountOfPlayers = 2;
