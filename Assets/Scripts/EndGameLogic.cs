@@ -29,7 +29,6 @@ public class EndGameLogic : MonoBehaviour
     void Awake()
     {
         instance = this;
-        //AnnounceWinner();
     }
     void Update()
     {
@@ -131,14 +130,14 @@ public class EndGameLogic : MonoBehaviour
         }
         FlagAnimator.Play("flag_idle_down");
         ContinueTextAnimator.Play("fade_text_idle");
+        GameStats.instance.ResetText();
 
-       
+
         EnterNameManager.instance.ShowEnterName();
         while (!EnterNameManager.instance.ended)
         {
             yield return null;
         }
-        GameStats.instance.ResetText();
         MainMenu.instance.transform.rotation = Quaternion.Euler(Vector3.zero);
         MainMenu.instance.switchMenus(0);
         MainMenu.instance.currentState = MainMenu.menuState.mainMenu;

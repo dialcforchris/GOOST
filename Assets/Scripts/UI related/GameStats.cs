@@ -140,13 +140,9 @@ public class GameStats : MonoBehaviour
             string colour = i == 0 ? "orange" : "green";
             score[i] = PlayerManager.instance.GetPlayer(i).GetScore();
             tScore[i].text = "<color=" + colour + ">" + score[i].ToString() + "</color>";
-            //   tScore[i].color = colour; 
             tCollectables[i].text = "<color=" + colour + ">" + collectables[i].ToString() + "</color>";
-            // tCollectables[i].color = colour; 
             tEggs[i].text = "<color=" + colour + ">" + eggs[i].ToString() + "</color>";
-            //tEggs[i].color = colour;
             tAttack[i].text = "<color=" + colour + ">" + attack[i].ToString() + "</color>";// +" Times";
-            //tAttack[i].color = colour;
         }
     }
 }
