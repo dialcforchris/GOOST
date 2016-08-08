@@ -15,7 +15,6 @@ public class EnterName : MonoBehaviour
     float coolDown = 0;
     float maxCool = 0.2f;
     string theName = string.Empty;
-    public Canvas enterCan;
     public bool check = false;
 	
     // Use this for initialization
@@ -32,12 +31,8 @@ public class EnterName : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
-       StartCoroutine( HoldIt());
-        // if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEOVER)
-        {
             if (!check)
             {
-                enterCan.enabled = true;
                 if (LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(playerNumber).GetScore()) && PlayerManager.instance.GetPlayer(playerNumber).GetScore() > 0)
                 {
                     playerName.text = "Player " + (playerNumber + 1) + " Enter Name:";
@@ -62,12 +57,8 @@ public class EnterName : MonoBehaviour
                 theName = string.Empty;
                 gameObject.SetActive(false);
             }
-        }
     }
-    IEnumerator HoldIt()
-    {
-        yield return new WaitForSeconds(1);
-    }
+   
     void MenuInput()
     {
         if (ConvertToPos())
@@ -191,8 +182,11 @@ public class EnterName : MonoBehaviour
     public void EnableIt(int _playerId)
     {
         playerNumber = _playerId;
+        for (int i = 0; i < currentCharacter.Length; i++)
+        {
+            currentCharacter[i] = 65;
+        }
         check = false;
-        enterCan.gameObject.SetActive(true);
     }
   
 }

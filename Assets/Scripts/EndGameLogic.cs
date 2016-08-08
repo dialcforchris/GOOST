@@ -96,7 +96,7 @@ public class EndGameLogic : MonoBehaviour
             Backdrop.color = TextCol;
             yield return new WaitForEndOfFrame();
         }
-
+        EnterNameManager.instance.EnterNameReset();
         //Change shield sprite
         Shield.sprite = ShieldSprites[winner ? 0 : 1];
         //Enable the right flag

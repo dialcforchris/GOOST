@@ -25,6 +25,10 @@ public class EnterNameManager : MonoBehaviour
    	// Update is called once per frame
 	void Update ()
     {
+        if (GameStateManager.instance.GetState()==GameStates.STATE_MENU)
+        {
+            EnterNameReset();
+        }
         ended = (done[0] & done[1]);
         if (ended)
         {
@@ -76,10 +80,13 @@ public class EnterNameManager : MonoBehaviour
         else
             win = "THE HACKER ";
     }
-    void EnterNameReset()
+   public void EnterNameReset()
     {
-        done[0] = false;
-        done[1] = false;
+        for (int i = 0; i < 2; i++)
+        {
+            done[i] = false;
+            enterNames[i].check = false;
+        }
         ended = false;
     }
 }

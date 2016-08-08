@@ -66,7 +66,7 @@ public class EnemyManager : MonoBehaviour
         {
             if (spawnIndex < waves[currentWave].settings.Length)
             {
-                Debug.Log(currentWave+"" + spawnIndex);
+             ///   Debug.Log(currentWave+"" + spawnIndex);
                 spawnTime += Time.deltaTime;
                 if (spawnTime >= waves[currentWave].settings[spawnIndex].spawnRate)
                 {
