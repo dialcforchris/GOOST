@@ -288,7 +288,7 @@ public class Player : Actor, ISegmentable<Actor>
 
                     if (_type != PlayerType.ENEMY)
                     {
-                        FloatingTextPool.instance.PoolText(""+deathScore, transform.position, Color.red);
+                        FloatingTextPool.instance.PoolText(""+deathScore*combo, transform.position, Color.red);
                         PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(deathScore*combo);
                     }
                     applyFly = false;
@@ -297,6 +297,9 @@ public class Player : Actor, ISegmentable<Actor>
                     isDead = true;
                     base.Defeat(_type);
                     PlayerManager.instance.RespawnPlayer(playerId);
+                    
+                    EnterNameManager.instance.deadPlayerScore[playerId] = score;
+                        
                 }
             }
         }

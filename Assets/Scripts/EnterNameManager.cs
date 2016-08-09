@@ -14,7 +14,7 @@ public class EnterNameManager : MonoBehaviour
     [SerializeField]
     bool[] done = new bool[2];
     public bool ended = false;
-	
+    public int[] deadPlayerScore = new int[2] { 0, 0 };
     void Start()
     {
         if (instance == null)
@@ -63,7 +63,22 @@ public class EnterNameManager : MonoBehaviour
             }
             else
             {
-                Done(i);
+                if (!enterNames[i].check)
+                {
+                    if (LeaderBoard.instance.CheckIfHighScore(deadPlayerScore[i]))
+                    {
+                        enterNames[i].gameObject.SetActive(true);
+                        enterNames[i].EnableIt(i);
+                    }
+                    else
+                    {
+                        Done(i);
+                    }
+                }
+                //else
+                //{
+                //    Done(i);
+                //}
             }
         }
     }

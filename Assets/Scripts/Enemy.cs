@@ -276,13 +276,13 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public override void Defeat(PlayerType _type)
     {
         base.Defeat(_type);
-
         Collectables c = CollectablePool.instance.PoolCollectables(_type == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
         c.transform.position = transform.position;
-        FloatingTextPool.instance.PoolText("" + score, transform.position, Color.green);
         PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).incrementCombo();
 
         int combo = PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).getCurrentCombo();
+
+        FloatingTextPool.instance.PoolText("" + (score * combo), transform.position, Color.green);
 
         if (combo > 1)
         {
@@ -292,7 +292,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
         else
             SoundManager.instance.playSound(deathSound);
 
-        PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).ChangeScore(score * combo);
+        PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).ChangeScore( score * combo);
         --numActive;
         anim.Stop();
         poolData.ReturnPool(this);
