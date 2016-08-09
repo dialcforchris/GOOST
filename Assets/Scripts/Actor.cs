@@ -157,6 +157,7 @@ public class Actor : MonoBehaviour
                     break;
                 case CollisionEffect.CLASH:
                     Clash.instance.HaveClash(_col.contacts[0].point);
+                    StatTracker.instance.stats.totalClashes++;
                     break;
                 case CollisionEffect.CLASH_WIN:
                     _rigSegment.rigBase.Defeat(_playerType);
