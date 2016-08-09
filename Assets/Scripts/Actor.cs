@@ -52,7 +52,7 @@ public class Actor : MonoBehaviour
     public List<AudioClip> flappingSounds = new List<AudioClip>();
     [HideInInspector]
     public AudioClip lastFlapSound;
-    public AudioClip deathSound;
+    public AudioClip deathSound,specialDeathsound;
 
     public platformManager.platformTypes currentSurface;
 

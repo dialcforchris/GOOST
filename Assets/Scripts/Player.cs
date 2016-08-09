@@ -278,10 +278,14 @@ public class Player : Actor, ISegmentable<Actor>
                         PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).incrementCombo();
                         combo = PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).getCurrentCombo();
                     }
-                    if (combo > 1&& _type != PlayerType.ENEMY)
+                    if (combo > 1 && _type != PlayerType.ENEMY)
                     {
-                        SoundManager.instance.playSound(deathSound, 1, 1 + ((float)combo / 10f));
-                        FloatingTextPool.instance.PoolText("x" + combo, transform.position + Vector3.up, Color.magenta,3);
+                        if (combo < 6)
+                            SoundManager.instance.playSound(deathSound, 1, 1 + ((float)combo / 10f));
+                        else
+                            SoundManager.instance.playSound(specialDeathsound, 1, 1 + (((float)combo - 5) / 10f));
+
+                        FloatingTextPool.instance.PoolText("x" + combo, transform.position + Vector3.up, Color.magenta, 3);
                     }
                     else
                         SoundManager.instance.playSound(deathSound);
