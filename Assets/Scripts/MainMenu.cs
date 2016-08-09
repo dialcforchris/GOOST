@@ -79,7 +79,7 @@ public class MainMenu : MonoBehaviour
 
     int mainMenuIndex, optionsIndex, levelSelectionIndex;
     bool transitioning;
-
+    
     public menuState currentState;
     public enum menuState
     {
@@ -296,6 +296,7 @@ public class MainMenu : MonoBehaviour
             GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
             StartCoroutine(FadeScreenInOut(false));
         }
+    
     }
 
     IEnumerator FadeScreenInOut(bool inOut)//True for in, false for out

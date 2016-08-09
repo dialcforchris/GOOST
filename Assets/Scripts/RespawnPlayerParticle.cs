@@ -10,6 +10,8 @@ public class RespawnPlayerParticle : MonoBehaviour {
     }
     [SerializeField]
     ParticleSystem respawnLookNice;
+    [SerializeField]
+    private Material[] rotParticles;
     // Use this for initialization
     void Start()
     {
@@ -19,14 +21,14 @@ public class RespawnPlayerParticle : MonoBehaviour {
         }
     }
 
-    public void MakeLookNice(Vector2 _pos,Color _colour)
+    public void MakeLookNice(Vector2 _pos,int _playerId)//Color _colour)
     {
         respawnLookNice.transform.position = _pos;
         if (respawnLookNice.isPlaying)
         {
             respawnLookNice.Stop();
         }
-        respawnLookNice.startColor = _colour;
+        respawnLookNice.GetComponent<Renderer>().material = rotParticles[_playerId];
         respawnLookNice.Play();
         respawnLookNice.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
     }
