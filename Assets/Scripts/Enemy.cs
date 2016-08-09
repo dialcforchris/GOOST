@@ -286,8 +286,14 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
 
         if (combo > 1)
         {
-            SoundManager.instance.playSound(deathSound, 1, 1 + ((float)combo / 10f));
-            FloatingTextPool.instance.PoolText("x" + combo, transform.position + Vector3.up, Color.magenta,2.5f);
+            if (combo < 6)
+                SoundManager.instance.playSound(deathSound, 1, 1 + ((float)combo / 10f));
+            else
+                SoundManager.instance.playSound(specialDeathsound, 1, 1 + (((float)combo - 5) / 10f));
+
+            FloatingTextPool.instance.PoolText("x" + combo, transform.position + Vector3.up, Color.magenta, 2.5f);
+            if (combo > StatTracker.instance.stats.HighestCombo)
+                StatTracker.instance.stats.HighestCombo = combo;
         }
         else
             SoundManager.instance.playSound(deathSound);

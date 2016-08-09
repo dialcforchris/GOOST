@@ -49,7 +49,7 @@ public class StatTracker : MonoBehaviour
         file.Close();
     }
     
-    void Update ()
+    void FixedUpdate()
     {
         #region run time
         string[] time = new string[4];
@@ -90,12 +90,14 @@ public class StatTracker : MonoBehaviour
         }
         #endregion
 
-        textElements[2].text = "" + stats.roundsPlayed;
-        textElements[3].text = "" + stats.totalFlaps;//yup
-        textElements[4].text = "" + stats.gooseZillaSightings;//yup
-        textElements[5].text = "" + stats.eggsCollected;//yup
-        totalVictoriesText[0].text = "" + stats.ransomWins;
-        totalVictoriesText[1].text = "" + stats.ITGuyWins;
+        textElements[2].text = stats.roundsPlayed.ToString("N0"); ;
+        textElements[3].text = stats.totalFlaps.ToString("N0");
+        textElements[4].text = stats.gooseZillaSightings.ToString("N0");
+        textElements[5].text = stats.eggsCollected.ToString("N0");
+        textElements[6].text = "<size=40>x </size>" + stats.HighestCombo;
+        textElements[7].text = (stats.totalClashes/2).ToString("N0");
+        totalVictoriesText[0].text = stats.ransomWins.ToString("N0"); ;
+        totalVictoriesText[1].text = stats.ITGuyWins.ToString("N0"); ;
 
         if (stats.ITGuyWins > 0 && stats.roundsPlayed > 0)
             victoriesSlider.value = ((float)stats.roundsPlayed - (float)stats.ITGuyWins) / (float)stats.roundsPlayed;
@@ -119,6 +121,10 @@ public class GameStatistics
     public int ransomWins=0, ITGuyWins = 0;
     [SerializeField]
     public int eggsCollected = 0;
+    [SerializeField]
+    public int HighestCombo = 0;
+    [SerializeField]
+    public int totalClashes = 0;
 
     //Rounds won/lost?
 }

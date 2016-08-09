@@ -282,7 +282,7 @@ public class MainMenu : MonoBehaviour
         }
         #endregion
 
-        if (!Input.anyKey)
+        if (!Input.anyKey && GameStateManager.instance.GetState() != GameStates.STATE_GAMEPLAY)
         {
             idleTime += Time.deltaTime;
         }
