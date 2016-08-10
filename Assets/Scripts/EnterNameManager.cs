@@ -57,7 +57,7 @@ public class EnterNameManager : MonoBehaviour
                     }
                     else
                     {
-                      Done(i);
+                        Done(i);
                     }
                 }
             }
@@ -75,10 +75,6 @@ public class EnterNameManager : MonoBehaviour
                         Done(i);
                     }
                 }
-                //else
-                //{
-                //    Done(i);
-                //}
             }
         }
     }

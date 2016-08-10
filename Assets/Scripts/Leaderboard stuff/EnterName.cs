@@ -185,6 +185,8 @@ public class EnterName : MonoBehaviour
         for (int i = 0; i < currentCharacter.Length; i++)
         {
             currentCharacter[i] = 65;
+            box[i].text = "A";
+            selectBox = 0;
         }
         check = false;
     }
