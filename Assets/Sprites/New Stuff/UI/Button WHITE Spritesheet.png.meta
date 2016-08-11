@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 63b77b03d69d6124dbcef40886bef9f0
-timeCreated: 1470231836
+guid: 6d1106603bcd18b439ccd6a2b10865a0
+timeCreated: 1470911353
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Button up
-    21300002: Button down
+    21300000: Button WHITE up
+    21300002: Button WHITE down
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -28,7 +28,7 @@ TextureImporter:
   cubemapConvolutionSteps: 7
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
-  textureFormat: -3
+  textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
     filterMode: 0
@@ -52,26 +52,26 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: Button up
+    - name: Button WHITE up
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 40
         height: 16
-      alignment: 9
-      pivot: {x: 0.5, y: 0.4}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: Button down
+    - name: Button WHITE down
       rect:
         serializedVersion: 2
         x: 41
         y: 0
         width: 40
         height: 16
-      alignment: 9
-      pivot: {x: 0.5, y: 0.4}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     outline: []

@@ -11,7 +11,9 @@ public class EndGameLogic : MonoBehaviour
     [SerializeField]
     Sprite[] ShieldSprites; //0 for simon, 1 for handsomeware
     [SerializeField]
-    Animator FlagAnimator,ContinueTextAnimator;
+    Animator FlagAnimator;
+    [SerializeField]
+    GameObject ContinueText;
     [SerializeField]
     AudioClip[] AudienceSounds;
     [SerializeField]
@@ -66,9 +68,9 @@ public class EndGameLogic : MonoBehaviour
         }
     }
 
-    IEnumerator EndGameScreenReveal(bool winner)//False for highway man, True for Simon
+    IEnumerator EndGameScreenReveal(bool result)//False for highway man, True for Simon
     {
-        if (!winner)
+        if (!result)
             StatTracker.instance.stats.ransomWins++;
         else
             StatTracker.instance.stats.ITGuyWins++;
@@ -82,7 +84,7 @@ public class EndGameLogic : MonoBehaviour
 
         //Timer to game over
         timer.text = "Game over";
-
+        
         Image Backdrop = GetComponent<Image>();
         float lerpy = 0;
 
@@ -98,26 +100,48 @@ public class EndGameLogic : MonoBehaviour
         }
         EnterNameManager.instance.EnterNameReset();
         //Change shield sprite
-        Shield.sprite = ShieldSprites[winner ? 0 : 1];
+        Shield.sprite = ShieldSprites[result ? 0 : 1];
         //Enable the right flag
-        GameStats.instance.WinnerFlags[1].enabled = !winner;
-        GameStats.instance.WinnerFlags[0].enabled = winner;
+        GameStats.instance.WinnerFlags[1].enabled = !result;
+        GameStats.instance.WinnerFlags[0].enabled = result;
 
         //Play flag animation
         FlagAnimator.Play("flag_erect");//hehe
 
         //Play appluase sounds
         yield return new WaitForSeconds(3);
-        SoundManager.instance.playSound(AudienceSounds[winner ? 0 : 1]);
+        SoundManager.instance.playSound(AudienceSounds[result ? 0 : 1]);
+        winner.gameObject.SetActive(true);
+        winner.text = "Player " + (result ? "1" : "2") + " Wins!";
 
         //When concluded, allow input, play animation for "Press any button" text prompt
-        ContinueTextAnimator.Play("fadeTExt");
+        //ContinueTextAnimator.Play("fadeTExt");
+        ContinueText.SetActive(true);
 
         while (!Input.anyKey)
         {
             yield return null;
         }
 
+        winner.gameObject.SetActive(false);
+        FlagAnimator.Play("flag_idle_down");
+        ContinueText.SetActive(false);
+        GameStats.instance.ResetText();
+        
+        while (Input.anyKey)
+        {
+            yield return null;
+        }
+
+
+        TextCol = Backdrop.color;
+        TextCol.a = 0;
+        Backdrop.color = TextCol;
+        EnterNameManager.instance.ShowEnterName();
+        while (!EnterNameManager.instance.ended)
+        {
+            yield return null;
+        }
 
         lerpy = 0;
         while (lerpy < 1)
@@ -128,16 +152,7 @@ public class EndGameLogic : MonoBehaviour
             Backdrop.color = TextCol;
             yield return new WaitForEndOfFrame();
         }
-        FlagAnimator.Play("flag_idle_down");
-        ContinueTextAnimator.Play("fade_text_idle");
-        GameStats.instance.ResetText();
 
-
-        EnterNameManager.instance.ShowEnterName();
-        while (!EnterNameManager.instance.ended)
-        {
-            yield return null;
-        }
         MainMenu.instance.transform.rotation = Quaternion.Euler(Vector3.zero);
         MainMenu.instance.switchMenus(0);
         MainMenu.instance.currentState = MainMenu.menuState.mainMenu;
@@ -189,11 +204,11 @@ public class EndGameLogic : MonoBehaviour
         winner.gameObject.SetActive(true);
         if (PlayerManager.instance.GetPlayer(0).GetScore() > PlayerManager.instance.GetPlayer(1).GetScore())
         {
-            winner.text = "Player 1 Wins";
+            winner.text = "Player 1 Wins!";
         }
         else
         {
-            winner.text = "Player 2 Wins";
+            winner.text = "Player 2 Wins!";
             StatTracker.instance.stats.ITGuyWins++;
         }
     }

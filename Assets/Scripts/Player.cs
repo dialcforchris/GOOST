@@ -36,7 +36,7 @@ public class Player : Actor, ISegmentable<Actor>
     [SerializeField]
     private ParticleSystem respawn;
   
-    public float dashcool = 5;
+    public float dashcool = 4;
     public float maxDashCool = 5.0f;
    
     float flashTime = 0;
@@ -76,7 +76,7 @@ public class Player : Actor, ISegmentable<Actor>
     }
     protected override void OnEnable()
     {
-        dashcool = maxDashCool;
+        dashcool = maxDashCool-0.2f;
         base.OnEnable();
         SwitchGuys(_playerType);
     }
@@ -317,7 +317,8 @@ public class Player : Actor, ISegmentable<Actor>
             isDead = false;
             _eggLives--;
             transform.position = PlayerManager.instance.GetRespawnPos(_playerType == PlayerType.BADGUY ? 0 : 1);
-            RespawnPlayerParticle.instance.MakeLookNice(new Vector2(transform.position.x, transform.position.y - 0.5f), (_playerType == PlayerType.BADGUY ? 0 : 1));// Color.green));
+            //Sorry Chris
+            //RespawnPlayerParticle.instance.MakeLookNice(new Vector2(transform.position.x, transform.position.y - 0.5f), (_playerType == PlayerType.BADGUY ? 0 : 1));// Color.green));
             TakeOffFromPlatform();
             invincible = true;
             Physics2D.IgnoreLayerCollision(8 + playerId, 10, true);

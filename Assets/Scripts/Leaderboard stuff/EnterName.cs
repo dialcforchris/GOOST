@@ -35,11 +35,10 @@ public class EnterName : MonoBehaviour
             {
                 if (LeaderBoard.instance.CheckIfHighScore(PlayerManager.instance.GetPlayer(playerNumber).GetScore()) && PlayerManager.instance.GetPlayer(playerNumber).GetScore() > 0)
                 {
-                    playerName.text = "Player " + (playerNumber + 1) + " Enter Name:";
                     MenuInput();
                     box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
                     ChangeTextColour();
-                    score.text = "Player " + (playerNumber + 1) + " Score: " + PlayerManager.instance.GetPlayer(playerNumber).GetScore().ToString();
+                    score.text = "Score: " + PlayerManager.instance.GetPlayer(playerNumber).GetScore().ToString();
                     if (Input.GetButton("Fly" + playerNumber))
                     {
                         SelectName();

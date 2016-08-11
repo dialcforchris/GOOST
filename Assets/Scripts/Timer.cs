@@ -64,10 +64,10 @@ public class Timer : MonoBehaviour
             }
             //Seconds + minutes interface
 
-            if ((int)currentTime == 60 && MainMenu.instance.getLevel() == 1 && !goosed)
+            if ((int)currentTime == 60 && MainMenu.instance.getLevel() == 2 && !goosed)
             {
                 goosed = true;
-                if (Random.value > .9)
+                if (Random.value > .7f)
                 {
                     //OH SHIT HERE COMES DAT BOI!
                     CameraShake.instance.GetGoosed();

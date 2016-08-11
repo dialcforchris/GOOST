@@ -45,7 +45,6 @@ public class EnterNameManager : MonoBehaviour
         enterCanvas.SetActive(true);
         for (int i = 0; i < PlayerManager.instance.NumberOfPlayers(); i++)
         {
-
             if (PlayerManager.instance.GetPlayer(i).gameObject.activeInHierarchy)
             {
                 if (!enterNames[i].check)

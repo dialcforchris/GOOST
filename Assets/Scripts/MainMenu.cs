@@ -45,7 +45,7 @@ public class MainMenu : MonoBehaviour
         
     [Header("Level Selection")]
     [SerializeField]
-    Image[] levelSelectionElements;
+    RectTransform[] levelSelectionElements;
     [SerializeField]
     Image[] levelSelectionCursor;
     [SerializeField]
@@ -53,13 +53,13 @@ public class MainMenu : MonoBehaviour
 
     [Header("Ready up menu")]
     [SerializeField]
-    Text[] readyTextPrompts;
+    Text[] readyTextPrompts,nameFields;
     [SerializeField]
     GameObject readyUpBounds, leftCloudPlatform, rightCloudPlatform;
     [SerializeField]
     Image returnImage;
     [SerializeField]
-    Image[] readyIndicator, characterImg, clouds;
+    Image[] characterImg, clouds;
     [SerializeField]
     Vector2[] characterImgStart, characterImgEnd;
 
@@ -196,8 +196,10 @@ public class MainMenu : MonoBehaviour
                     customised[0] = false;
                     customised[1] = false;
                     cosmeticIndex[0] = 0;
+                    nameFields[0].text = "Mr  Handsomeware\n&\nHarold";
                     CustomisableSlots[0].sprite = hats[0];
                     cosmeticIndex[1] = 0;
+                    nameFields[1].text = "Simon\n&\ntheir trusty goose";
                     CustomisableSlots[1].sprite = backpacks[0];
                     bigHead[0] = true;
                     bigHead[1] = true;
@@ -282,7 +284,9 @@ public class MainMenu : MonoBehaviour
         }
         #endregion
 
-        if (!Input.anyKey && GameStateManager.instance.GetState() != GameStates.STATE_GAMEPLAY)
+        if (!Input.anyKey && GameStateManager.instance.GetState() != GameStates.STATE_GAMEPLAY
+            && Input.GetAxis("Horizontal0") == 0 && Input.GetAxis("Horizontal1") == 0
+             && Input.GetAxis("Vertical0") == 0 && Input.GetAxis("Vertical1") == 0)
         {
             idleTime += Time.deltaTime;
         }
@@ -351,6 +355,40 @@ public class MainMenu : MonoBehaviour
             else if (cosmeticIndex[0] < 0)
                 cosmeticIndex[0] = hats.Length - 1;
 
+            switch(cosmeticIndex[0])
+            {
+                case 0:
+                    nameFields[0].text = "Mr  Handsomeware\n&\nHarold";
+                    break;
+                case 1:
+                    nameFields[0].text = "Mr  Handsomeware\n&\nRiker";
+                    break;
+                case 2:
+                    nameFields[0].text = "Mr  Handsomeware\n&\nBiggust goosus";
+                    break;
+                case 3:
+                    nameFields[0].text = "Mr  Handsomeware\n&\nMr Handsomegoose";
+                    break;
+                case 4:
+                    nameFields[0].text = "Mr  Handsomeware\n&\nleonard";
+                    break;
+                case 5:
+                    nameFields[0].text = "Mr  Handsomeware\n&\nBilly";
+                    break;
+                case 6:
+                    nameFields[0].text = "Mr  Handsomeware\n&\nbrunel";
+                    break; 
+                case 7:
+                    nameFields[0].text = "Mr  Handsomeware\n&\nCool billy";
+                    break;
+                case 8:
+                    nameFields[0].text = "Mr  Handsomeware\n&\nProf. Goosington";
+                    break;
+                default:
+                    nameFields[0].text = "Mr  Handsomeware\n&\nleonard";
+                    break;
+            }
+
             //Change cosmetic
             CustomisableSlots[0].sprite = hats[cosmeticIndex[0]];
         }
@@ -372,6 +410,27 @@ public class MainMenu : MonoBehaviour
             else if (cosmeticIndex[1] < 0)
                 cosmeticIndex[1] = backpacks.Length - 1;
 
+            switch (cosmeticIndex[1])
+            {
+                case 0:
+                    nameFields[1].text = "Simon\n&\ntheir trusty goose";
+                    break;
+                case 1:
+                    nameFields[1].text = "Alan\n&\ntheir trusty goose";
+                    break;
+                case 2:
+                    nameFields[1].text = "Geoff\n&\ntheir trusty goose";
+                    break;
+                case 3:
+                    nameFields[1].text = "Steve\n&\ntheir trusty goose";
+                    break;
+                case 4:
+                    nameFields[1].text = "John\n&\ntheir trusty goose";
+                    break;
+                default:
+                    nameFields[1].text = "Jerry\n&\ntheir trusty goose";
+                    break;
+            }
             CustomisableSlots[1].sprite = backpacks[cosmeticIndex[1]];
         }
         if (scrolling[1] && Input.GetAxis("Horizontal1") == 0)
@@ -459,8 +518,6 @@ public class MainMenu : MonoBehaviour
                 switchMenus(5);
                 ready[0] = false;
                 ready[1] = false;
-                readyIndicator[0].color = Color.white;
-                readyIndicator[1].color = Color.white;
                 GameStateManager.instance.ChangeState(GameStates.STATE_MENU);
                 PlayerManager.instance.ResetPlayers();
             }
@@ -854,7 +911,7 @@ public class MainMenu : MonoBehaviour
     void LevelSelectionMenu()
     {
         //Select level
-        changeSelection(levelSelectionCursor, GetRectTransforms(levelSelectionElements), ref levelSelectionIndex);
+        changeSelection(levelSelectionCursor, levelSelectionElements, ref levelSelectionIndex);
 
         if (Input.GetButtonDown("Interact0") || Input.GetButtonDown("Interact1"))
         {
@@ -868,15 +925,22 @@ public class MainMenu : MonoBehaviour
                     break;
                 case 1:
                     switchMenus(4);
-                    //City level
+                    //Labs level
                     level = 1;
                     LevelSelector.transform.position = Vector3.zero;
                     break;
                 case 2:
-                    //Back to main menu
-                    switchMenus(0);
+                    switchMenus(4);
+                    //City level
+                    level = 2;
+                    LevelSelector.transform.position = Vector3.zero;//change this
                     break;
             }
+        }
+        if (Input.GetButtonDown("Fly1") || Input.GetButtonDown("Fly0"))
+        {
+            //Back to main menu
+            switchMenus(0);
         }
     }
 

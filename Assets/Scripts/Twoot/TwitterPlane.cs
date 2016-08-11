@@ -42,10 +42,19 @@ public class TwitterPlane : MonoBehaviour
                 StartCoroutine(Twitter.API.SearchForTweets("%23Malware", AcessToken, 2, this));
                 break;
             case 4:
-                StartCoroutine(Twitter.API.SearchForTweets("%23RansomWare", AcessToken, 2, this));
+                StartCoroutine(Twitter.API.SearchForTweets("%23Hacking", AcessToken, 2, this));
                 break;
             case 5:
-                StartCoroutine(Twitter.API.SearchForTweets("%23RansomWare", AcessToken, 10, this));
+                StartCoroutine(Twitter.API.SearchForTweets("%23Security", AcessToken, 10, this));
+                break;
+            case 6:
+                StartCoroutine(Twitter.API.SearchForTweets("%23Hack", AcessToken, 2, this));
+                break;
+            case 7:
+                StartCoroutine(Twitter.API.SearchForTweets("%23PlayGoose", AcessToken, 2, this));
+                break;
+            case 8:
+                StartCoroutine(Twitter.API.SearchForTweets("%23CyberCrime", AcessToken, 2, this));
                 break;
         }
     }
@@ -111,7 +120,7 @@ public class TwitterPlane : MonoBehaviour
 
     void Update()
     {
-        if (GameStateManager.instance.GetState() == GameStates.STATE_MENU || GameStateManager.instance.GetState() == GameStates.STATE_READYUP || (MainMenu.instance.getLevel() == 1 && GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY))
+        if (GameStateManager.instance.GetState() == GameStates.STATE_MENU || GameStateManager.instance.GetState() == GameStates.STATE_READYUP || (MainMenu.instance.getLevel() == 2 && GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY))
         {
             if (availableTweets.Count > 0)
             {
