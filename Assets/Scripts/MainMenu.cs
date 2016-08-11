@@ -70,6 +70,8 @@ public class MainMenu : MonoBehaviour
     Sprite[] backpacks, hats;
     [SerializeField]
     GameObject[] CustomGeese;
+    [SerializeField]
+    private Image versus;
 
     [Header("Misc")]
     [SerializeField]
@@ -616,7 +618,7 @@ public class MainMenu : MonoBehaviour
                 characterImg[index].color = col;
                 //Move character image out of screen
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgEnd[index], characterImgStart[index], lerpy);
-
+                versus.rectTransform.anchoredPosition = Vector2.Lerp(new Vector2(65, 2313), new Vector2(65,587), lerpy);
             }
             else
             {
@@ -624,13 +626,17 @@ public class MainMenu : MonoBehaviour
                 col.a = 1 - lerpy;
                 characterImg[index].color = col;
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgStart[index], characterImgEnd[index], lerpy);
+                if (!bigHead[index == 0 ? 1 : 0])
+                versus.rectTransform.anchoredPosition = Vector2.Lerp(new Vector2(65,587), new Vector2(65, 2313), lerpy);
             }
+            
             lerpy += Time.deltaTime * 1.5f;
             yield return new WaitForEndOfFrame();
+
         }
         if (!inOut)
             bigHead[index] = false;
-
+        
         if (index == 0)
         {
             charTransitionP1 = false;
@@ -927,7 +933,7 @@ public class MainMenu : MonoBehaviour
                     switchMenus(4);
                     //Labs level
                     level = 1;
-                    LevelSelector.transform.position = Vector3.zero;
+                    LevelSelector.transform.position = new Vector2 (50,0);
                     break;
                 case 2:
                     switchMenus(4);
