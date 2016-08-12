@@ -83,12 +83,13 @@ public class Actor : MonoBehaviour
         body.velocity = Vector2.zero;
         lance.ActorDefeated();
         legs.ActorDefeated();
+        FeatherManager.instance.HaveSomeFeathers(transform.position);
+        Debug.Log(Camera.main.WorldToViewportPoint(transform.position));
         StartCoroutine(DeathAnimation());
     }
 
     protected virtual IEnumerator DeathAnimation()
     {
-        FeatherManager.instance.HaveSomeFeathers(transform.position);
         yield return new WaitForSeconds(0.01f);
         anim.Stop();
         gameObject.SetActive(false);

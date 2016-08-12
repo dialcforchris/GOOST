@@ -276,6 +276,7 @@ public class Enemy : Actor, IPoolable<Enemy>, ISegmentable<Actor>
     public override void Defeat(PlayerType _type)
     {
         base.Defeat(_type);
+        FeatherManager.instance.HaveSomeFeathers(transform.position);
         Collectables c = CollectablePool.instance.PoolCollectables(_type == PlayerType.BADGUY ? PickUpType.MONEY : PickUpType.HARDDRIVE);
         c.transform.position = transform.position;
         PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).incrementCombo();
