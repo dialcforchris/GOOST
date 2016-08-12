@@ -57,7 +57,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     GameObject readyUpBounds, leftCloudPlatform, rightCloudPlatform;
     [SerializeField]
-    Image returnImage;
+    Image returnImage,versus;
     [SerializeField]
     Image[] characterImg, clouds;
     [SerializeField]
@@ -70,8 +70,6 @@ public class MainMenu : MonoBehaviour
     Sprite[] backpacks, hats;
     [SerializeField]
     GameObject[] CustomGeese;
-    [SerializeField]
-    private Image versus;
 
     [Header("Misc")]
     [SerializeField]
@@ -518,6 +516,8 @@ public class MainMenu : MonoBehaviour
             if (returnTimer > 1)
             {
                 switchMenus(5);
+                StartCoroutine(CharacterImageTransition(false, 0));
+                StartCoroutine(CharacterImageTransition(false, 1));
                 ready[0] = false;
                 ready[1] = false;
                 GameStateManager.instance.ChangeState(GameStates.STATE_MENU);
@@ -595,15 +595,65 @@ public class MainMenu : MonoBehaviour
     }
 
     public AnimationCurve bounceNess;
+    [SerializeField]
+    AudioClip clash;
+    IEnumerator versusImageInOut(bool inOut)//TRUE for IN, FALSE for OUT
+    {
+        while (transitioning)
+            yield return null;
+
+        float lerpy = 0;
+        while (lerpy<1)
+        {
+            lerpy += Time.fixedDeltaTime * 1.5f;
+
+            Color col = versus.color;
+            if (inOut)
+            {
+                col.a = lerpy;
+                versus.color = col;
+                versus.rectTransform.anchoredPosition = Vector2.Lerp(new Vector2(65, 1750), new Vector2(65, 250), lerpy);
+            }
+            else
+            {
+                col.a = 1 - lerpy;
+                versus.color = col;
+                versus.rectTransform.anchoredPosition = Vector2.Lerp(new Vector2(65, 250), new Vector2(65, 1750), lerpy);
+            }
+            yield return new WaitForEndOfFrame();
+        }
+        if (inOut)
+        {
+            ScreenFade.color = Color.white;
+            SoundManager.instance.playSound(clash);
+            yield return new WaitForEndOfFrame();
+            Color colour = ScreenFade.color;
+            colour.a = 0;
+            ScreenFade.color = colour;
+        }
+    }
 
     bool charTransitionP1, charTransitionP2;
     //Moves big character images out of screen, sets custom geese to active
     IEnumerator CharacterImageTransition(bool inOut, int index)
     {
+        if (!inOut && versus.rectTransform.anchoredPosition.y < 251)
+        {
+            StopCoroutine("versusImageInOut");
+            StartCoroutine(versusImageInOut(inOut));
+        }
+        else if (inOut)
+        {
+            StopCoroutine("versusImageInOut");
+            StartCoroutine(versusImageInOut(inOut));
+        }
+
         float lerpy = 0;
         CustomGeese[index].SetActive(!inOut);
         while (lerpy < 1)
         {
+            lerpy += Time.deltaTime * 1.5f;
+
             if (inOut)
             {
                 if (index == 0)
@@ -618,7 +668,6 @@ public class MainMenu : MonoBehaviour
                 characterImg[index].color = col;
                 //Move character image out of screen
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgEnd[index], characterImgStart[index], lerpy);
-                versus.rectTransform.anchoredPosition = Vector2.Lerp(new Vector2(65, 2313), new Vector2(65,587), lerpy);
             }
             else
             {
@@ -626,17 +675,16 @@ public class MainMenu : MonoBehaviour
                 col.a = 1 - lerpy;
                 characterImg[index].color = col;
                 characterImg[index].rectTransform.anchoredPosition = Vector2.Lerp(characterImgStart[index], characterImgEnd[index], lerpy);
-                if (!bigHead[index == 0 ? 1 : 0])
-                versus.rectTransform.anchoredPosition = Vector2.Lerp(new Vector2(65,587), new Vector2(65, 2313), lerpy);
             }
-            
-            lerpy += Time.deltaTime * 1.5f;
+
             yield return new WaitForEndOfFrame();
 
         }
         if (!inOut)
             bigHead[index] = false;
-        
+        else
+            bigHead[index] = true;
+
         if (index == 0)
         {
             charTransitionP1 = false;
