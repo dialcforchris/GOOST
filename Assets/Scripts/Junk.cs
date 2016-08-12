@@ -40,5 +40,11 @@ public class Junk : MonoBehaviour, IPoolable<Junk>
         spRend.sprite = sprites[rand];
         colliders[rand].enabled = true;
     }
-   
+   void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.GetComponent<Junk>())
+        {
+            col.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 0.5f), ForceMode2D.Impulse);
+        }
+    }
 }

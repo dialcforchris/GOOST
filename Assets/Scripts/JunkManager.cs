@@ -20,7 +20,7 @@ public class JunkManager : MonoBehaviour
     // Update is called once per frame
     void Randomise(int currentSpawn)
     {
-        maxJunks[currentSpawn] = Random.Range(3.5f, 5.5f);
+        maxJunks[currentSpawn] = Random.Range(5.5f, 8.5f);
     }
 
     void Update ()
@@ -41,8 +41,8 @@ public class JunkManager : MonoBehaviour
             else
             {
                 JunkPool.instance.PoolJunk(spawnPos[Random.Range(0,4)].position);
-                Randomise(i);
                 junkTime[i] = 0;
+                Randomise(i);
 
             }
         }
