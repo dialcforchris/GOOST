@@ -301,6 +301,7 @@ public class Player : Actor, ISegmentable<Actor>
                     c.transform.position = transform.position;
                     isDead = true;
                     base.Defeat(_type);
+                    FeatherManager.instance.HaveSomeFeathers(transform.position);
                     PlayerManager.instance.RespawnPlayer(playerId);
                     
                     EnterNameManager.instance.deadPlayerScore[playerId] = score;
