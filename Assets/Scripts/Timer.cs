@@ -11,7 +11,6 @@ public class Timer : MonoBehaviour
     private Animator countdownTextAnimator;
     [SerializeField]
     private Text countdownText;
-    [SerializeField] private AudioClip game;
     
     public int maxSeconds;
     [SerializeField]
@@ -109,7 +108,6 @@ public class Timer : MonoBehaviour
             countdownTextAnimator.gameObject.SetActive(true);
             countdownTextAnimator.Play("text_in");
             countdownText.text = "Game!";
-            SoundManager.instance.playSound(game);
             while (Time.timeScale > 0)
             {
                 Time.timeScale -= Time.deltaTime * 2;

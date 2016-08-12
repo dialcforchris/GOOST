@@ -329,7 +329,6 @@ public class Player : Actor, ISegmentable<Actor>
         {
             //Must be dead, trigger game end.
             Timer.instance.StartCoroutine(Timer.instance.MidGameOver());
-        //    SoundManager.instance.playSound()
         }
     }
   
