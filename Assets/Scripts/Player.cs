@@ -252,6 +252,7 @@ public class Player : Actor, ISegmentable<Actor>
         {
             if (!invincible)
             {
+                currentCombo = 0;
                 if (_type == PlayerType.BADGUY||_type == PlayerType.GOODGUY)
                 GameStats.instance.attack[playerId == 0 ? 1 : 0]++;
 

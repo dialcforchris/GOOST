@@ -50,7 +50,18 @@ public class PlayerManager : MonoBehaviour
             else
                 return spawnPositions[4].position;
         }
-        else //City level
+        else if (MainMenu.instance.getLevel() == 1)
+        {
+            if (playerIndex == 0)
+            {
+                return spawnPositions[5].position;
+            }
+            else
+            {
+                return spawnPositions[6].position;
+            }
+        }
+        else// if (MainMenu.instance.getLevel() == 2 ) //City level
         {
             if (playerIndex == 0)
                 return spawnPositions[0].position;
