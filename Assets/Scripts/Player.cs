@@ -198,7 +198,7 @@ public class Player : Actor, ISegmentable<Actor>
 
     public override void LandedOnPlatform(Collider2D col)
     {
-        currentCombo = 0;
+     //   currentCombo = 0;
         base.LandedOnPlatform(col);
         riderAnimator.Play("cape_flap_a");
     }
@@ -274,7 +274,7 @@ public class Player : Actor, ISegmentable<Actor>
                 else
                 {
                     int combo = 0;
-                    if (_type != PlayerType.ENEMY)
+                    if (_type != PlayerType.ENEMY || _type!= PlayerType.OTHER)
                     {
                         PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).incrementCombo();
                         combo = PlayerManager.instance.GetPlayer(_type == PlayerType.BADGUY ? 0 : 1).getCurrentCombo();
@@ -291,7 +291,7 @@ public class Player : Actor, ISegmentable<Actor>
                     else
                         SoundManager.instance.playSound(deathSound);
 
-                    if (_type != PlayerType.ENEMY)
+                    if (_type == (playerType == PlayerType.BADGUY? PlayerType.GOODGUY : PlayerType.BADGUY))
                     {
                         FloatingTextPool.instance.PoolText(""+deathScore*combo, transform.position, Color.red);
                         PlayerManager.instance.GetPlayer(playerId == 0 ? 1 : 0).ChangeScore(deathScore*combo);

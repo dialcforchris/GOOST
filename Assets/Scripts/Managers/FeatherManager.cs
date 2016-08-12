@@ -22,10 +22,6 @@ public class FeatherManager : MonoBehaviour
     public void HaveSomeFeathers(Vector2 _pos)
     {
         feathers.transform.position = _pos;
-        if (feathers.isPlaying)
-        {
-            feathers.Stop();
-        }
-        feathers.Play();
+        feathers.Emit(1);
     }
 }
