@@ -413,10 +413,10 @@ public class MainMenu : MonoBehaviour
             switch (cosmeticIndex[1])
             {
                 case 0:
-                    nameFields[1].text = "Simon\n&\ntheir trusty goose";
+                    nameFields[1].text = "Alan\n&\ntheir trusty goose";
                     break;
                 case 1:
-                    nameFields[1].text = "Alan\n&\ntheir trusty goose";
+                    nameFields[1].text = "Trevor\n&\ntheir trusty goose";
                     break;
                 case 2:
                     nameFields[1].text = "Geoff\n&\ntheir trusty goose";
@@ -446,7 +446,7 @@ public class MainMenu : MonoBehaviour
             PlayerManager.instance.SetupPlayer(0);
             PlayerManager.instance.GetPlayer(0).TakeOffFromPlatform();
             PlayerManager.instance.GetPlayer(0).headSprite.sprite = hats[cosmeticIndex[0]];
-            readyTextPrompts[0].text = "Waiting for\nother player...";
+            //readyTextPrompts[0].text = "Waiting for\nother player...";
             clouds[0].gameObject.SetActive(true);
             leftCloudPlatform.SetActive(true);
 
@@ -461,7 +461,7 @@ public class MainMenu : MonoBehaviour
             PlayerManager.instance.GetPlayer(1).TakeOffFromPlatform();
             PlayerManager.instance.GetPlayer(1).backpack.sprite = backpacks[cosmeticIndex[1]];
             
-            readyTextPrompts[1].text = "Waiting for\nother player...";
+            //readyTextPrompts[1].text = "Waiting for\nother player...";
             clouds[1].gameObject.SetActive(true);
             rightCloudPlatform.SetActive(true);
 
@@ -536,8 +536,8 @@ public class MainMenu : MonoBehaviour
     {
         Timer.instance.Reset();
         StartCoroutine(Timer.instance.TextInOut(true));
-        readyTextPrompts[1].text = "Game starting!";
-        readyTextPrompts[0].text = "Game starting!";
+        //readyTextPrompts[1].text = "Game starting!";
+        //readyTextPrompts[0].text = "Game starting!";
         yield return new WaitForSeconds(2.5f);
         GameStateManager.instance.ChangeState(GameStates.STATE_TRANSITIONING);
         currentState = menuState.mainMenu;

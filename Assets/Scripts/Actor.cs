@@ -84,7 +84,6 @@ public class Actor : MonoBehaviour
         lance.ActorDefeated();
         legs.ActorDefeated();
         FeatherManager.instance.HaveSomeFeathers(transform.position);
-        Debug.Log(Camera.main.WorldToViewportPoint(transform.position));
         StartCoroutine(DeathAnimation());
     }
 
