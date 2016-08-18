@@ -3,8 +3,7 @@ using System.Collections;
 
 public class platformManager : MonoBehaviour {
 
-    private static platformManager PlatformManager = null;
-    public static platformManager instance { get { return PlatformManager; } }
+    public static platformManager instance;
   
     [SerializeField]
     public platform[] allPlatforms = null;
@@ -37,7 +36,7 @@ public class platformManager : MonoBehaviour {
 
 	void Awake ()
     {
-        PlatformManager = this;
+        instance = this;
 	}
 	
     public void NoCollisionsPlease(Collider2D col)

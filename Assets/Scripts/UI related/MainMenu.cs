@@ -572,6 +572,10 @@ public class MainMenu : MonoBehaviour
             {
                 PlayerManager.instance.GetPlayer(index).transform.position = new Vector3(index > 0 ? 6 : -6, bounceNess.Evaluate(lerpy) + 2.15f, pos.z);
             }
+            else if (level==1)
+            {
+                PlayerManager.instance.GetPlayer(index).transform.position = new Vector3(index > 0 ? 7.75f : -7.75f, (bounceNess.Evaluate(lerpy) * 1.25f) - 0.4f, pos.z);
+            }
             else
             {
                 if (index == 0)

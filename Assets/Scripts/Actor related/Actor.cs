@@ -286,8 +286,11 @@ public class Actor : MonoBehaviour
         if (!onPlatform)
         {
             //Make sure the player hasn't sunk into the floor for some silly reason when we freeze the Y position of the player
-            float landPosition = col.bounds.max.y;
-            transform.position = new Vector3(transform.position.x, landPosition + 0.37f, transform.position.z);
+            if (!col.GetComponent<PolygonCollider2D>())
+            {
+                float landPosition = col.bounds.max.y;
+                transform.position = new Vector3(transform.position.x, landPosition + 0.37f, transform.position.z);
+            }
 
             currentSurface = platformManager.instance.whatPlatformIsThis(col);
 

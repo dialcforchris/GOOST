@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 285ca16e0e9fdae4a952cc93036f7b35
-timeCreated: 1470931750
+timeCreated: 1471440614
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -12,7 +12,7 @@ TextureImporter:
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -31,7 +31,7 @@ TextureImporter:
   cubemapConvolutionSteps: 7
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
     filterMode: 0
@@ -49,7 +49,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 30
+  spritePixelsToUnits: 40
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
@@ -63,7 +63,7 @@ TextureImporter:
         width: 321
         height: 42
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -157.5, y: 21}
@@ -84,7 +84,7 @@ TextureImporter:
         width: 321
         height: 42
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -160.5, y: 21}
@@ -103,7 +103,7 @@ TextureImporter:
         width: 321
         height: 42
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: 147.5, y: 21}
@@ -127,7 +127,7 @@ TextureImporter:
         width: 320
         height: 41
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -157, y: 20.5}
@@ -146,7 +146,7 @@ TextureImporter:
         width: 320
         height: 41
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -157, y: 20.5}
