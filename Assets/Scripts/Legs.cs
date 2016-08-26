@@ -64,11 +64,28 @@ public class Legs : MonoBehaviour, ISegmentable<Actor>
         }
     }
 
+    //bool isExiting;
+    //float exitTimer;
+
+    //void Update()
+    //{
+    //    if (isExiting)
+    //        exitTimer += Time.deltaTime;
+
+    //    if (exitTimer > 0.1f)
+    //    {
+    //        exitTimer = 0;
+    //        isExiting = false;
+    //        actor.TakeOffFromPlatform();
+    //    }
+    //}
+
     private void OnCollisionExit2D(Collision2D _col)
     {
         if (_col.collider.tag == "Platform")
         {
             actor.TakeOffFromPlatform();
+            //isExiting = true;
         }
     }
 }

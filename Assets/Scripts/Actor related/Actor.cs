@@ -289,7 +289,7 @@ public class Actor : MonoBehaviour
             if (!col.GetComponent<PolygonCollider2D>())
             {
                 float landPosition = col.bounds.max.y;
-                transform.position = new Vector3(transform.position.x, landPosition + 0.37f, transform.position.z);
+                transform.position = new Vector3(transform.position.x, landPosition + 0.325f, transform.position.z);//0.37f
             }
 
             currentSurface = platformManager.instance.whatPlatformIsThis(col);

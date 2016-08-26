@@ -30,7 +30,7 @@ public class JunkManager : MonoBehaviour
 
     void Update()
     {
-        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)//  && MainMenu.instance.getLevel() == 1)
+        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY  && MainMenu.instance.getLevel() == 1)
         {
             JunkTimer();
         }
