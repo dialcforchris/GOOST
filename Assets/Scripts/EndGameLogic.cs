@@ -112,7 +112,7 @@ public class EndGameLogic : MonoBehaviour
         yield return new WaitForSeconds(3);
         SoundManager.instance.playSound(AudienceSounds[result ? 0 : 1]);
         winner.gameObject.SetActive(true);
-        winner.text = "Player " + (result ? "1" : "2") + " Wins!";
+        winner.text = result ? "I.T. Data remains Protected" : "The Ransomware bandit stole the data"; // "Player " + (result ? "2" : "1") + " Wins!";
 
         //When concluded, allow input, play animation for "Press any button" text prompt
         //ContinueTextAnimator.Play("fadeTExt");

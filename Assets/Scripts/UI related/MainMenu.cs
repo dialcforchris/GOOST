@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
@@ -62,7 +61,8 @@ public class MainMenu : MonoBehaviour
     Image[] characterImg, clouds;
     [SerializeField]
     Vector2[] characterImgStart, characterImgEnd;
-
+    private string mrRansom = "The Ransomware Bandit\n&\n";
+    private string notSimon = "\n&\ntheir trusty goose";
     [Header("Cosmetics")]
     [SerializeField]
     Image[] CustomisableSlots;
@@ -196,10 +196,10 @@ public class MainMenu : MonoBehaviour
                     customised[0] = false;
                     customised[1] = false;
                     cosmeticIndex[0] = 0;
-                    nameFields[0].text = "Mr  Handsomeware\n&\nHarold";
+                    nameFields[0].text = mrRansom+"Harold";
                     CustomisableSlots[0].sprite = hats[0];
                     cosmeticIndex[1] = 0;
-                    nameFields[1].text = "Simon\n&\ntheir trusty goose";
+                    nameFields[1].text = "I.T. Alan" + notSimon;//\n&\ntheir trusty goose";
                     CustomisableSlots[1].sprite = backpacks[0];
                     bigHead[0] = true;
                     bigHead[1] = true;
@@ -359,34 +359,34 @@ public class MainMenu : MonoBehaviour
             switch(cosmeticIndex[0])
             {
                 case 0:
-                    nameFields[0].text = "Mr  Handsomeware\n&\nHarold";
+                    nameFields[0].text = mrRansom+"Harold";
                     break;
                 case 1:
-                    nameFields[0].text = "Mr  Handsomeware\n&\nRiker";
+                    nameFields[0].text = mrRansom+"Riker";
                     break;
                 case 2:
-                    nameFields[0].text = "Mr  Handsomeware\n&\nBiggust goosus";
+                    nameFields[0].text = mrRansom + "Biggust goosus";
                     break;
                 case 3:
-                    nameFields[0].text = "Mr  Handsomeware\n&\nMr Handsomegoose";
+                    nameFields[0].text = mrRansom + "The Ransomgoose bandit";
                     break;
                 case 4:
-                    nameFields[0].text = "Mr  Handsomeware\n&\nleonard";
+                    nameFields[0].text = mrRansom + "Leonard";
                     break;
                 case 5:
-                    nameFields[0].text = "Mr  Handsomeware\n&\nBilly";
+                    nameFields[0].text = mrRansom + "Billy";
                     break;
                 case 6:
-                    nameFields[0].text = "Mr  Handsomeware\n&\nbrunel";
+                    nameFields[0].text = mrRansom + "Brunel";
                     break; 
                 case 7:
-                    nameFields[0].text = "Mr  Handsomeware\n&\nCool billy";
+                    nameFields[0].text = mrRansom + "Cool billy";
                     break;
                 case 8:
-                    nameFields[0].text = "Mr  Handsomeware\n&\nProf. Goosington";
+                    nameFields[0].text = mrRansom + "Prof. Goosington";
                     break;
                 default:
-                    nameFields[0].text = "Mr  Handsomeware\n&\nleonard";
+                    nameFields[0].text = mrRansom + "Leonard";
                     break;
             }
 
@@ -414,22 +414,22 @@ public class MainMenu : MonoBehaviour
             switch (cosmeticIndex[1])
             {
                 case 0:
-                    nameFields[1].text = "Alan\n&\ntheir trusty goose";
+                    nameFields[1].text = "I.T. Alan"+notSimon;
                     break;
                 case 1:
-                    nameFields[1].text = "Trevor\n&\ntheir trusty goose";
+                    nameFields[1].text = "I.T. Trevor" + notSimon;
                     break;
                 case 2:
-                    nameFields[1].text = "Geoff\n&\ntheir trusty goose";
+                    nameFields[1].text = "I.T. Geoff" + notSimon;
                     break;
                 case 3:
-                    nameFields[1].text = "Steve\n&\ntheir trusty goose";
+                    nameFields[1].text = "I.T. Steve" + notSimon;
                     break;
                 case 4:
-                    nameFields[1].text = "John\n&\ntheir trusty goose";
+                    nameFields[1].text = "I.T. John" + notSimon;
                     break;
                 default:
-                    nameFields[1].text = "Jerry\n&\ntheir trusty goose";
+                    nameFields[1].text = "I.T. Jerry" + notSimon;
                     break;
             }
             CustomisableSlots[1].sprite = backpacks[cosmeticIndex[1]];
