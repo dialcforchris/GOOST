@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PhysicsForcer : MonoBehaviour
+namespace GOOST
 {
-
-   public bool once;
-    void Update()
+    public class PhysicsForcer : MonoBehaviour
     {
-        if (gameObject.activeInHierarchy && !once)
+
+        public bool once;
+        void Update()
         {
-            once = true;
-            GetComponent<Rigidbody2D>().AddForceAtPosition(new Vector2(1,1), transform.parent.position, ForceMode2D.Impulse);
+            if (gameObject.activeInHierarchy && !once)
+            {
+                once = true;
+                GetComponent<Rigidbody2D>().AddForceAtPosition(new Vector2(1, 1), transform.parent.position, ForceMode2D.Impulse);
+            }
+            StartCoroutine(WaitForDestroy());
         }
-        StartCoroutine(WaitForDestroy());
-    }
 
-    IEnumerator WaitForDestroy()
-    {
-        yield return new WaitForSeconds(1.5f);
-        Destroy(gameObject);
+        IEnumerator WaitForDestroy()
+        {
+            yield return new WaitForSeconds(1.5f);
+            Destroy(gameObject);
+        }
     }
 }

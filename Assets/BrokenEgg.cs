@@ -1,25 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BrokenEgg : MonoBehaviour 
+namespace GOOST
 {
-    [SerializeField]
-    private Rigidbody2D[] bodies;
-
-
-	// Use this for initialization
-	void Awake () 
+    public class BrokenEgg : MonoBehaviour
     {
-	    foreach (Rigidbody2D r in bodies)
+        [SerializeField]
+        private Rigidbody2D[] bodies;
+
+
+        // Use this for initialization
+        void Awake()
         {
-            r.AddForce(new Vector2(Random.Range(-5, 5), 5), ForceMode2D.Impulse);
+            foreach (Rigidbody2D r in bodies)
+            {
+                r.AddForce(new Vector2(Random.Range(-5, 5), 5), ForceMode2D.Impulse);
+            }
+            StartCoroutine(BreakEgg());
         }
-        StartCoroutine(BreakEgg());
-	}
-	
-	IEnumerator BreakEgg()
-    {
-        yield return new WaitForSeconds(1);
-        Destroy(gameObject);
+
+        IEnumerator BreakEgg()
+        {
+            yield return new WaitForSeconds(1);
+            Destroy(gameObject);
+        }
     }
 }

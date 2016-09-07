@@ -1,23 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[ExecuteInEditMode]
-public class BrightnessModifier : MonoBehaviour {
-
-    [Range(0,1)]
-    public float brightness;
-    float oldBrightness;
-    [SerializeField]
-    SpriteRenderer sr;
-    
-    void Update()
+namespace GOOST
+{
+    [ExecuteInEditMode]
+    public class BrightnessModifier : MonoBehaviour
     {
-        if (sr)
+
+        [Range(0, 1)]
+        public float brightness;
+        float oldBrightness;
+        [SerializeField]
+        SpriteRenderer sr;
+
+        void Update()
         {
-            if (oldBrightness != brightness)
+            if (sr)
             {
-                sr.color = new Color(brightness, brightness, brightness, 1);
-                oldBrightness = brightness;
+                if (oldBrightness != brightness)
+                {
+                    sr.color = new Color(brightness, brightness, brightness, 1);
+                    oldBrightness = brightness;
+                }
             }
         }
     }

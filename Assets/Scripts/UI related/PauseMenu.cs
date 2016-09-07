@@ -2,101 +2,104 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class PauseMenu : MonoBehaviour
+namespace GOOST
 {
-   public  Animator BigGoose;
-    public static PauseMenu instance;
-
-    int index = 0;
-    [SerializeField]
-    private Text[] options;
-    [SerializeField]
-    private Slider[] soundsSliders;
-
-    [SerializeField]
-    Color highlightColour;
-
-    void Start()
+    public class PauseMenu : MonoBehaviour
     {
-        instance = this;
-    }
-    bool scrolling;
-    void Update()
-    {
-        #region move selection up/down
-        if ((Input.GetAxis("Vertical0") > 0 || Input.GetAxis("Vertical1") > 0) && !scrolling)
-        {
-            scrolling = true;
-            index--;
-            if (index < 0)
-                index = options.Length - 1;
-        }
-        else if ((Input.GetAxis("Vertical0") < 0 || Input.GetAxis("Vertical1") < 0) && !scrolling)
-        {
-            scrolling = true;
-            index++;
-            if (index > options.Length - 1)
-                index = 0;
-        }
-        else if ((Input.GetAxis("Vertical0") == 0 && Input.GetAxis("Vertical1") == 0) && scrolling)
-        {
-            scrolling = false;
-        }
-        #endregion
+        public Animator BigGoose;
+        public static PauseMenu instance;
 
-        #region sound sliders
-        if (Input.GetAxis("Horizontal0") < 0 || Input.GetAxis("Horizontal1") < 0)
+        int index = 0;
+        [SerializeField]
+        private Text[] options;
+        [SerializeField]
+        private Slider[] soundsSliders;
+
+        [SerializeField]
+        Color highlightColour;
+
+        void Start()
         {
-            switch (index)
+            instance = this;
+        }
+        bool scrolling;
+        void Update()
+        {
+            #region move selection up/down
+            if ((Input.GetAxis("Vertical0") > 0 || Input.GetAxis("Vertical1") > 0) && !scrolling)
             {
-                case 1:
-                    soundsSliders[0].value -= Time.fixedDeltaTime;
-                    break;
-                case 2:
-                    soundsSliders[1].value -= Time.fixedDeltaTime;
-                    break;
+                scrolling = true;
+                index--;
+                if (index < 0)
+                    index = options.Length - 1;
             }
-        }
-        if (Input.GetAxis("Horizontal0") > 0 || Input.GetAxis("Horizontal1") > 0)
-        {
-            switch (index)
+            else if ((Input.GetAxis("Vertical0") < 0 || Input.GetAxis("Vertical1") < 0) && !scrolling)
             {
-                case 1:
-                    soundsSliders[0].value += Time.fixedDeltaTime;
-                    break;
-                case 2:
-                    soundsSliders[1].value += Time.fixedDeltaTime;
-                    break;
+                scrolling = true;
+                index++;
+                if (index > options.Length - 1)
+                    index = 0;
             }
-        }
-        #endregion
-
-        #region text highlighting
-        foreach (Text t in options)
-        {
-            t.color = Color.white;
-        }
-        options[index].color = highlightColour;
-        #endregion
-
-        if (Input.GetButton("Interact0") || Input.GetButton("Interact1"))
-        {
-            switch (index)
+            else if ((Input.GetAxis("Vertical0") == 0 && Input.GetAxis("Vertical1") == 0) && scrolling)
             {
-                case 0:
-                    //Resume
-                    GameStateManager.instance.unPause();
-                    break;
-                case 3:
-                    //Quit to menu
-                    BigGoose.Play("gooseZilla_idle");
-                    CameraShake.instance.shakeDuration = 0;
-                    EnemyManager.instance.Reset();
-                    MainMenu.instance.transform.rotation = Quaternion.Euler(Vector3.zero);
-                    MainMenu.instance.switchMenus(0);
-                    CameraController.instance.switchViews(true);
-                    GameStateManager.instance.ChangeState(GameStates.STATE_TRANSITIONING);
-                    break;
+                scrolling = false;
+            }
+            #endregion
+
+            #region sound sliders
+            if (Input.GetAxis("Horizontal0") < 0 || Input.GetAxis("Horizontal1") < 0)
+            {
+                switch (index)
+                {
+                    case 1:
+                        soundsSliders[0].value -= Time.fixedDeltaTime;
+                        break;
+                    case 2:
+                        soundsSliders[1].value -= Time.fixedDeltaTime;
+                        break;
+                }
+            }
+            if (Input.GetAxis("Horizontal0") > 0 || Input.GetAxis("Horizontal1") > 0)
+            {
+                switch (index)
+                {
+                    case 1:
+                        soundsSliders[0].value += Time.fixedDeltaTime;
+                        break;
+                    case 2:
+                        soundsSliders[1].value += Time.fixedDeltaTime;
+                        break;
+                }
+            }
+            #endregion
+
+            #region text highlighting
+            foreach (Text t in options)
+            {
+                t.color = Color.white;
+            }
+            options[index].color = highlightColour;
+            #endregion
+
+            if (Input.GetButton("Interact0") || Input.GetButton("Interact1"))
+            {
+                switch (index)
+                {
+                    case 0:
+                        //Resume
+                        GameStateManager.instance.unPause();
+                        break;
+                    case 3:
+                        //Quit to menu
+                        BigGoose.Play("gooseZilla_idle");
+                        CameraShake.instance.shakeDuration = 0;
+                        EnemyManager.instance.Reset();
+                        MainMenu.instance.transform.rotation = Quaternion.Euler(Vector3.zero);
+                        MainMenu.instance.switchMenus(0);
+                        CameraController.instance.switchViews(true);
+                        GameStateManager.instance.ChangeState(GameStates.STATE_TRANSITIONING);
+                        break;
+                }
             }
         }
     }

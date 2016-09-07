@@ -2,80 +2,83 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Nest : MonoBehaviour
+namespace GOOST
 {
-    [SerializeField]
-    private Transform[] eggTrans;
-    private List<Egg> anEggs = new List<Egg>();
-    private int maxEggs = 3;
-    public int numEggs { get { return anEggs.Count; } }
-    private int _owningPlayer = 0;
-    public int owningPlayer
+    public class Nest : MonoBehaviour
     {
-        get { return _owningPlayer; }
-        set { _owningPlayer = value; }
-    }
-
-    void Start()
-    {
-        for (int i = 0; i < maxEggs;i++ )
+        [SerializeField]
+        private Transform[] eggTrans;
+        private List<Egg> anEggs = new List<Egg>();
+        private int maxEggs = 3;
+        public int numEggs { get { return anEggs.Count; } }
+        private int _owningPlayer = 0;
+        public int owningPlayer
         {
-            //Egg e = EggPool.instance.PoolEgg();
-            //e.transform.position = eggTrans[i].position;
-            //anEggs.Add(e);
-            //e.DisablePhysics(true);
+            get { return _owningPlayer; }
+            set { _owningPlayer = value; }
         }
-    }
 
-
-	void Update()
-    {
-        PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = numEggs;
-    }  
-    //void UpdateEggs()
-    //{
-    //    for (int i=0;i<anEggs.Length;i++)
-    //    {
-    //        if (i <= activeEggs)
-    //        {
-    //            anEggs[i].gameObject.SetActive(true);
-    //        }
-    //        else
-    //        {
-    //            anEggs[i].gameObject.SetActive(false);
-    //        }
-    //    }
-    //}
-
-    public Egg GetRespawnEgg()
-    {
-        if(anEggs.Count == 0)
+        void Start()
         {
-            return null;
+            for (int i = 0; i < maxEggs; i++)
+            {
+                //Egg e = EggPool.instance.PoolEgg();
+                //e.transform.position = eggTrans[i].position;
+                //anEggs.Add(e);
+                //e.DisablePhysics(true);
+            }
         }
-        Egg _egg = anEggs[numEggs - 1];
-        anEggs.RemoveAt(anEggs.Count - 1);
-        _egg.ReturnPool();
-        return _egg;
-    }
 
-    public void EggStolen()
-    {
-        if (numEggs > 0)
+
+        void Update()
         {
-            anEggs[numEggs-1].ReturnPool();
+            PlayerManager.instance.GetPlayer(_owningPlayer).eggLives = numEggs;
         }
-    }
-    public void AddEgg()
-    {
-        if (numEggs < maxEggs)
+        //void UpdateEggs()
+        //{
+        //    for (int i=0;i<anEggs.Length;i++)
+        //    {
+        //        if (i <= activeEggs)
+        //        {
+        //            anEggs[i].gameObject.SetActive(true);
+        //        }
+        //        else
+        //        {
+        //            anEggs[i].gameObject.SetActive(false);
+        //        }
+        //    }
+        //}
+
+        public Egg GetRespawnEgg()
         {
-            //anEggs.Add(EggPool.instance.PoolEgg());
+            if (anEggs.Count == 0)
+            {
+                return null;
+            }
+            Egg _egg = anEggs[numEggs - 1];
+            anEggs.RemoveAt(anEggs.Count - 1);
+            _egg.ReturnPool();
+            return _egg;
         }
-        else
+
+        public void EggStolen()
         {
-            //Egg e = EggPool.instance.PoolEgg();
-            //e.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
+            if (numEggs > 0)
+            {
+                anEggs[numEggs - 1].ReturnPool();
+            }
+        }
+        public void AddEgg()
+        {
+            if (numEggs < maxEggs)
+            {
+                //anEggs.Add(EggPool.instance.PoolEgg());
+            }
+            else
+            {
+                //Egg e = EggPool.instance.PoolEgg();
+                //e.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
+            }
         }
     }
 }

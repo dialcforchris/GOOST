@@ -1,91 +1,95 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Legs : MonoBehaviour, ISegmentable<Actor>
+namespace GOOST
 {
-    [SerializeField]
-    private Actor actor = null;
-    public Actor legsActor { get { return actor; } }
-    [SerializeField]
-    private Collider2D col = null;
-    public Collider2D legsCollider { get { return col; } }
-
-    private bool legsActive = true;
-    [SerializeField] private string[] affectTags = null;
-
-    #region ISegmentable
-    public Actor rigBase { get { return actor; } }
-    public string segmentName { get { return "Legs"; } }
-    #endregion
-
-    [SerializeField]
-    private float knockPower = 50.0f;
-
-    public void ActorSpawned()
+    public class Legs : MonoBehaviour, ISegmentable<Actor>
     {
-        legsActive = true;
-        col.enabled = true;
-    }
+        [SerializeField]
+        private Actor actor = null;
+        public Actor legsActor { get { return actor; } }
+        [SerializeField]
+        private Collider2D col = null;
+        public Collider2D legsCollider { get { return col; } }
 
-    public void ActorDefeated()
-    {
-        legsActive = false;
-        col.enabled = false;
-    }
+        private bool legsActive = true;
+        [SerializeField]
+        private string[] affectTags = null;
 
-    private void OnCollisionEnter2D(Collision2D _col)
-    {
-        if (!legsActive)
+        #region ISegmentable
+        public Actor rigBase { get { return actor; } }
+        public string segmentName { get { return "Legs"; } }
+        #endregion
+
+        [SerializeField]
+        private float knockPower = 50.0f;
+
+        public void ActorSpawned()
         {
-            return;
+            legsActive = true;
+            col.enabled = true;
         }
 
-        if (_col.collider.tag == "Platform")
+        public void ActorDefeated()
         {
-            if (_col.contacts[0].normal.y > 0)
+            legsActive = false;
+            col.enabled = false;
+        }
+
+        private void OnCollisionEnter2D(Collision2D _col)
+        {
+            if (!legsActive)
             {
-                actor.LandedOnPlatform(_col.collider);
+                return;
             }
-            else if (_col.contacts[0].normal.x != 0.0f)
+
+            if (_col.collider.tag == "Platform")
             {
-                if (tag == "Enemy")
+                if (_col.contacts[0].normal.y > 0)
                 {
-                    ((Enemy)actor).PlatformSideCollision(_col);
+                    actor.LandedOnPlatform(_col.collider);
+                }
+                else if (_col.contacts[0].normal.x != 0.0f)
+                {
+                    if (tag == "Enemy")
+                    {
+                        ((Enemy)actor).PlatformSideCollision(_col);
+                    }
                 }
             }
-        } 
-    }
-
-    private void OnCollisionStay2D(Collision2D _col)
-    {
-        if (!legsActive)
-        {
-            return;
         }
-    }
 
-    //bool isExiting;
-    //float exitTimer;
-
-    //void Update()
-    //{
-    //    if (isExiting)
-    //        exitTimer += Time.deltaTime;
-
-    //    if (exitTimer > 0.1f)
-    //    {
-    //        exitTimer = 0;
-    //        isExiting = false;
-    //        actor.TakeOffFromPlatform();
-    //    }
-    //}
-
-    private void OnCollisionExit2D(Collision2D _col)
-    {
-        if (_col.collider.tag == "Platform")
+        private void OnCollisionStay2D(Collision2D _col)
         {
-            actor.TakeOffFromPlatform();
-            //isExiting = true;
+            if (!legsActive)
+            {
+                return;
+            }
+        }
+
+        //bool isExiting;
+        //float exitTimer;
+
+        //void Update()
+        //{
+        //    if (isExiting)
+        //        exitTimer += Time.deltaTime;
+
+        //    if (exitTimer > 0.1f)
+        //    {
+        //        exitTimer = 0;
+        //        isExiting = false;
+        //        actor.TakeOffFromPlatform();
+        //    }
+        //}
+
+        private void OnCollisionExit2D(Collision2D _col)
+        {
+            if (_col.collider.tag == "Platform")
+            {
+                actor.TakeOffFromPlatform();
+                //isExiting = true;
+            }
         }
     }
 }

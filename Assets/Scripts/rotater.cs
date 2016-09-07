@@ -1,31 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class rotater : MonoBehaviour {
-
-    public Transform rotationCenter;
-    public axis rotationAxis;
-
-    public enum axis
+namespace GOOST
+{
+    public class rotater : MonoBehaviour
     {
-        x, y, z,
-    }
 
-    public float speed;
-    float angle;
-    void FixedUpdate()
-    {
-        switch (rotationAxis)
+        public Transform rotationCenter;
+        public axis rotationAxis;
+
+        public enum axis
         {
-            case axis.x:
-                transform.RotateAround(rotationCenter.position, Vector3.right, Time.fixedDeltaTime * speed);
-                break;
-            case axis.y:
-                transform.RotateAround(rotationCenter.position, Vector3.up, Time.fixedDeltaTime * speed);
-                break;
-            case axis.z:
-                transform.RotateAround(rotationCenter.position, Vector3.forward, Time.fixedDeltaTime * speed);
-                break;
+            x, y, z,
+        }
+
+        public float speed;
+        float angle;
+        void FixedUpdate()
+        {
+            switch (rotationAxis)
+            {
+                case axis.x:
+                    transform.RotateAround(rotationCenter.position, Vector3.right, Time.fixedDeltaTime * speed);
+                    break;
+                case axis.y:
+                    transform.RotateAround(rotationCenter.position, Vector3.up, Time.fixedDeltaTime * speed);
+                    break;
+                case axis.z:
+                    transform.RotateAround(rotationCenter.position, Vector3.forward, Time.fixedDeltaTime * speed);
+                    break;
+            }
         }
     }
 }

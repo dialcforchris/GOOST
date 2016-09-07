@@ -1,56 +1,60 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class platformManager : MonoBehaviour {
-
-    public static platformManager instance;
-  
-    [SerializeField]
-    public platform[] allPlatforms = null;
-
-    [System.Serializable]
-    public struct platform
+namespace GOOST
+{
+    public class platformManager : MonoBehaviour
     {
-        public Collider2D collider;
-        public platformTypes type;
-    }
 
-    public enum platformTypes
-    {
-        grass,
-        wood,
-        concrete,
-        metal,
-        ERROR
-    }
+        public static platformManager instance;
 
-    public platformTypes whatPlatformIsThis(Collider2D col)
-    {
-        foreach(platform p in allPlatforms)
+        [SerializeField]
+        public platform[] allPlatforms = null;
+
+        [System.Serializable]
+        public struct platform
         {
-            if (p.collider == col)
-                return p.type;
+            public Collider2D collider;
+            public platformTypes type;
         }
-        return platformTypes.ERROR;
-    }
 
-	void Awake ()
-    {
-        instance = this;
-	}
-	
-    public void NoCollisionsPlease(Collider2D col)
-    {
-        foreach(platform p in allPlatforms)
+        public enum platformTypes
         {
-            Physics2D.IgnoreCollision(col, p.collider);
+            grass,
+            wood,
+            concrete,
+            metal,
+            ERROR
         }
-    }
-    public void CollisionsPlease(Collider2D col)
-    {
-        foreach (platform p in allPlatforms)
+
+        public platformTypes whatPlatformIsThis(Collider2D col)
         {
-            Physics2D.IgnoreCollision(col, p.collider, false);
+            foreach (platform p in allPlatforms)
+            {
+                if (p.collider == col)
+                    return p.type;
+            }
+            return platformTypes.ERROR;
+        }
+
+        void Awake()
+        {
+            instance = this;
+        }
+
+        public void NoCollisionsPlease(Collider2D col)
+        {
+            foreach (platform p in allPlatforms)
+            {
+                Physics2D.IgnoreCollision(col, p.collider);
+            }
+        }
+        public void CollisionsPlease(Collider2D col)
+        {
+            foreach (platform p in allPlatforms)
+            {
+                Physics2D.IgnoreCollision(col, p.collider, false);
+            }
         }
     }
 }

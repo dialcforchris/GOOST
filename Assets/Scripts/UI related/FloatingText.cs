@@ -2,40 +2,43 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class FloatingText : MonoBehaviour, IPoolable<FloatingText>
+namespace GOOST
 {
-    #region IPoolable
-    public PoolData<FloatingText> poolData { get; set; }
-    #endregion
-    
-    public Text score;
-    private bool onOff = true;
-	
-    void Update()
+    public class FloatingText : MonoBehaviour, IPoolable<FloatingText>
     {
-        if (onOff)
+        #region IPoolable
+        public PoolData<FloatingText> poolData { get; set; }
+        #endregion
+
+        public Text score;
+        private bool onOff = true;
+
+        void Update()
         {
-            score.color = new Color(score.color.r, score.color.g, score.color.b, score.color.a - Time.deltaTime/2);
-            score.rectTransform.position = new Vector2 (score.rectTransform.position.x,score.rectTransform.position.y + Time.deltaTime);
+            if (onOff)
+            {
+                score.color = new Color(score.color.r, score.color.g, score.color.b, score.color.a - Time.deltaTime / 2);
+                score.rectTransform.position = new Vector2(score.rectTransform.position.x, score.rectTransform.position.y + Time.deltaTime);
+            }
+            if (score.color.a <= 0)
+            {
+                ReturnPool();
+            }
         }
-        if (score.color.a<=0)
+
+        public void OnPooled(string _score, Vector2 _position, Color _colour)
         {
-            ReturnPool();
+            gameObject.SetActive(true);
+            score.color = new Color(_colour.r, _colour.g, _colour.b, 1);
+            score.text = _score.ToString();
+            score.rectTransform.position = _position;
+        }
+
+        public void ReturnPool()
+        {
+            score.color = new Color(1, 1, 1, 1);
+            poolData.ReturnPool(this);
+            gameObject.SetActive(false);
         }
     }
-
-    public void OnPooled(string _score,Vector2 _position, Color _colour)
-    {
-        gameObject.SetActive(true);
-        score.color = new Color( _colour.r,_colour.g,_colour.b,1);
-        score.text = _score.ToString();
-        score.rectTransform.position = _position;
-    }
-
-    public void ReturnPool()
-    {
-        score.color = new Color(1, 1, 1, 1);
-        poolData.ReturnPool(this);
-        gameObject.SetActive(false);
-    } 
 }

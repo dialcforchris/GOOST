@@ -1,120 +1,127 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-[System.Serializable]
-public struct Wave
+namespace GOOST
 {
-    public WaveSettings[] settings;
-}
-
-[System.Serializable]
-public struct WaveSettings
-{
-    public EnemyBehaviour enemySpawnOrder;
-    public float spawnRate;
-    public float speed;
-}
-
-public class EnemyManager : MonoBehaviour
-{
-    public List<Enemy> AllEnemies = new List<Enemy>();
-
-    private static EnemyManager enemyManager = null;
-    public static EnemyManager instance { get { return enemyManager; } }
-
-    [SerializeField] private Enemy enemyPrefab = null;
-    private ObjectPool<Enemy> objectPool = null;
-
-    [SerializeField] private Transform[] spawnTransforms = null;
-
-    private float spawnTime = 0;
-
-    [SerializeField] private Wave[] waves = null;
-    private int currentWave = 0;
-    private int spawnIndex = 0;
-
-    [SerializeField] private float nextWaveLength = 1f;
-    private float nextWaveTime = 0.0f;
-    
-    private void Awake()
+    [System.Serializable]
+    public struct Wave
     {
-        enemyManager = this;
-        Enemy.total = 0;
+        public WaveSettings[] settings;
     }
 
-    private void Start()
+    [System.Serializable]
+    public struct WaveSettings
     {
-        objectPool = new ObjectPool<Enemy>(enemyPrefab, 10, transform);
-        Physics2D.IgnoreLayerCollision(10, 11);
+        public EnemyBehaviour enemySpawnOrder;
+        public float spawnRate;
+        public float speed;
     }
 
-    public void Reset()
+    public class EnemyManager : MonoBehaviour
     {
-        Enemy.total = 0;
-        Enemy.numActive = 0;
-        currentWave = 0;
-        for (int i = 0; i < AllEnemies.Count; i++)
+        public List<Enemy> AllEnemies = new List<Enemy>();
+
+        private static EnemyManager enemyManager = null;
+        public static EnemyManager instance { get { return enemyManager; } }
+
+        [SerializeField]
+        private Enemy enemyPrefab = null;
+        private ObjectPool<Enemy> objectPool = null;
+
+        [SerializeField]
+        private Transform[] spawnTransforms = null;
+
+        private float spawnTime = 0;
+
+        [SerializeField]
+        private Wave[] waves = null;
+        private int currentWave = 0;
+        private int spawnIndex = 0;
+
+        [SerializeField]
+        private float nextWaveLength = 1f;
+        private float nextWaveTime = 0.0f;
+
+        private void Awake()
         {
-            AllEnemies[i].gameObject.SetActive(false);
-            AllEnemies[i].poolData.ReturnPool(AllEnemies[i]);
+            enemyManager = this;
+            Enemy.total = 0;
         }
-    }
 
-    private void Update()
-    {
-        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+        private void Start()
         {
-            if (spawnIndex < waves[currentWave].settings.Length)
+            objectPool = new ObjectPool<Enemy>(enemyPrefab, 10, transform);
+            Physics2D.IgnoreLayerCollision(10, 11);
+        }
+
+        public void Reset()
+        {
+            Enemy.total = 0;
+            Enemy.numActive = 0;
+            currentWave = 0;
+            for (int i = 0; i < AllEnemies.Count; i++)
             {
-                spawnTime += Time.deltaTime;
-                if (spawnTime >= waves[currentWave].settings[spawnIndex].spawnRate)
-                {
-                    spawnTime = 0;
-                    Enemy _e = objectPool.GetPooledObject();
-                    if (!AllEnemies.Contains(_e))
-                        AllEnemies.Add(_e);
-                    _e.transform.position = spawnTransforms[Random.Range(0, spawnTransforms.Length)].position;
-                    _e.Spawn(waves[currentWave].settings[spawnIndex].enemySpawnOrder, waves[currentWave].settings[spawnIndex].speed);
-                    ++spawnIndex;
-                }
-                if (spawnTime >= waves[currentWave].settings[waves[currentWave].settings.Length-1].spawnRate && Enemy.numActive < 3)
-                {
-                    Debug.Log("inc");
-                    ++currentWave;
-                    spawnIndex = 0;
-                }
+                AllEnemies[i].gameObject.SetActive(false);
+                AllEnemies[i].poolData.ReturnPool(AllEnemies[i]);
             }
-            else
+        }
+
+        private void Update()
+        {
+            if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
             {
-                if (Enemy.numActive < 3)
+                if (spawnIndex < waves[currentWave].settings.Length)
                 {
-                    //++currentWave;
-                    //spawnIndex = 0;
-                    
-                    nextWaveTime += Time.deltaTime;
-                    if (nextWaveTime >= nextWaveLength)
+                    spawnTime += Time.deltaTime;
+                    if (spawnTime >= waves[currentWave].settings[spawnIndex].spawnRate)
                     {
-                        nextWaveTime = 0.0f;
+                        spawnTime = 0;
+                        Enemy _e = objectPool.GetPooledObject();
+                        if (!AllEnemies.Contains(_e))
+                            AllEnemies.Add(_e);
+                        _e.transform.position = spawnTransforms[Random.Range(0, spawnTransforms.Length)].position;
+                        _e.Spawn(waves[currentWave].settings[spawnIndex].enemySpawnOrder, waves[currentWave].settings[spawnIndex].speed);
+                        ++spawnIndex;
+                    }
+                    if (spawnTime >= waves[currentWave].settings[waves[currentWave].settings.Length - 1].spawnRate && Enemy.numActive < 3)
+                    {
+                        Debug.Log("inc");
                         ++currentWave;
                         spawnIndex = 0;
-                        if (currentWave == waves.Length)                     
+                    }
+                }
+                else
+                {
+                    if (Enemy.numActive < 3)
+                    {
+                        //++currentWave;
+                        //spawnIndex = 0;
+
+                        nextWaveTime += Time.deltaTime;
+                        if (nextWaveTime >= nextWaveLength)
                         {
-                            //////////////////////////////////////
-                            //////////////END THE GAME
-                            //////////////////////////////////////
-                            EndGameLogic.instance.TriggerGameEnd(true);
-                           GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
-                           
+                            nextWaveTime = 0.0f;
+                            ++currentWave;
+                            spawnIndex = 0;
+                            if (currentWave == waves.Length)
+                            {
+                                //////////////////////////////////////
+                                //////////////END THE GAME
+                                //////////////////////////////////////
+                                EndGameLogic.instance.TriggerGameEnd(true);
+                                GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
+
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    public Enemy EnemyPool()
-    {
-        Enemy _enemy = objectPool.GetPooledObject();
-        return _enemy;
+        public Enemy EnemyPool()
+        {
+            Enemy _enemy = objectPool.GetPooledObject();
+            return _enemy;
+        }
     }
 }

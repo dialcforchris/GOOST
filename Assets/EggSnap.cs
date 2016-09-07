@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EggSnap : MonoBehaviour 
+namespace GOOST
 {
-
-	void OnTriggerEnter2D(Collider2D col)
+    public class EggSnap : MonoBehaviour
     {
-        if (col.gameObject.tag == "Egg")
+
+        void OnTriggerEnter2D(Collider2D col)
         {
-           col.transform.SetParent(this.transform);
-           Rigidbody2D rb = col.gameObject.GetComponent<Rigidbody2D>();
-           rb.gravityScale = 0;
-           rb.mass = 0;
+            if (col.gameObject.tag == "Egg")
+            {
+                col.transform.SetParent(this.transform);
+                Rigidbody2D rb = col.gameObject.GetComponent<Rigidbody2D>();
+                rb.gravityScale = 0;
+                rb.mass = 0;
+            }
         }
     }
 }

@@ -2,20 +2,23 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class GameOverState : GameState
+namespace GOOST
 {
-    public override void OnStateActivate()
+    public class GameOverState : GameState
     {
-        //   SoundManager.instance.music.volume = 0;
-        //GameStats.instance.ShowStats();
-    }
+        public override void OnStateActivate()
+        {
+            //   SoundManager.instance.music.volume = 0;
+            //GameStats.instance.ShowStats();
+        }
 
-    public override void OnStateDeactivate()
-    {
+        public override void OnStateDeactivate()
+        {
 
-    }
+        }
 
-    public override void Update()
-    {
+        public override void Update()
+        {
+        }
     }
 }

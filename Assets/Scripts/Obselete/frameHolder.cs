@@ -1,40 +1,44 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//Create tiny pauses for certain events
-//i.e. clashing of beaks, defeat of geese etc.
-public class frameHolder : MonoBehaviour {
-
-    public static frameHolder instance;
-
-    public void holdFrame(float time)
+namespace GOOST
+{
+    //Create tiny pauses for certain events
+    //i.e. clashing of beaks, defeat of geese etc.
+    public class frameHolder : MonoBehaviour
     {
-        StartCoroutine(hold(time));
-    }
 
-    IEnumerator hold(float duration)
-    {
-        Time.timeScale = 0;
+        public static frameHolder instance;
 
-        float timer = 0;
-
-        while (timer < duration)
+        public void holdFrame(float time)
         {
-            timer += Time.fixedDeltaTime;
-            yield return new WaitForEndOfFrame();
+            StartCoroutine(hold(time));
         }
-        Time.timeScale = 1;
-    }
 
-    // Use this for initialization
-    void Start ()
-    {
-        instance = this;
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-	
-	}
+        IEnumerator hold(float duration)
+        {
+            Time.timeScale = 0;
+
+            float timer = 0;
+
+            while (timer < duration)
+            {
+                timer += Time.fixedDeltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+            Time.timeScale = 1;
+        }
+
+        // Use this for initialization
+        void Start()
+        {
+            instance = this;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+    }
 }

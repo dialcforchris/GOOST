@@ -1,35 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RespawnPlayerParticle : MonoBehaviour {
-   
-    private static RespawnPlayerParticle respawnManager = null;
-    public static RespawnPlayerParticle instance
+namespace GOOST
+{
+    public class RespawnPlayerParticle : MonoBehaviour
     {
-        get { return respawnManager; }
-    }
-    [SerializeField]
-    ParticleSystem respawnLookNice;
-    [SerializeField]
-    private Material[] rotParticles;
-    // Use this for initialization
-    void Start()
-    {
-        if (respawnManager == null)
-        {
-            respawnManager = this;
-        }
-    }
 
-    public void MakeLookNice(Vector2 _pos,int _playerId)//Color _colour)
-    {
-        respawnLookNice.transform.position = _pos;
-        if (respawnLookNice.isPlaying)
+        private static RespawnPlayerParticle respawnManager = null;
+        public static RespawnPlayerParticle instance
         {
-            respawnLookNice.Stop();
+            get { return respawnManager; }
         }
-        respawnLookNice.GetComponent<Renderer>().material = rotParticles[_playerId];
-        respawnLookNice.Play();
-        respawnLookNice.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+        [SerializeField]
+        ParticleSystem respawnLookNice;
+        [SerializeField]
+        private Material[] rotParticles;
+        // Use this for initialization
+        void Start()
+        {
+            if (respawnManager == null)
+            {
+                respawnManager = this;
+            }
+        }
+
+        public void MakeLookNice(Vector2 _pos, int _playerId)//Color _colour)
+        {
+            respawnLookNice.transform.position = _pos;
+            if (respawnLookNice.isPlaying)
+            {
+                respawnLookNice.Stop();
+            }
+            respawnLookNice.GetComponent<Renderer>().material = rotParticles[_playerId];
+            respawnLookNice.Play();
+            respawnLookNice.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+        }
     }
 }

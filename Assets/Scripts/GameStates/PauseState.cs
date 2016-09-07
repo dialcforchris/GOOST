@@ -1,34 +1,38 @@
 ﻿using UnityEngine;
-public class PauseState : GameState
+
+namespace GOOST
 {
-    public override void OnStateActivate()
+    public class PauseState : GameState
     {
-        Time.timeScale = 0.001f;
-        GameStateManager.instance.PauseMenu.SetActive(true);
-    }
-
-    public override void OnStateDeactivate()
-    {
-        Time.timeScale = 1;
-        GameStateManager.instance.PauseMenu.SetActive(false);
-    }
-
-    public override void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Joystick1Button10) || Input.GetKeyDown(KeyCode.Joystick1Button9))
-            GameStateManager.instance.ChangeState(GameStateManager.instance.previousState);
-
-        #region axis based input
-        /*
-        if (Input.GetAxis("Pause") != 0 && !GameStateManager.instance.pausePressed)
+        public override void OnStateActivate()
         {
-            GameStateManager.instance.pausePressed = true;
-            GameStateManager.instance.ChangeState(GameStates.STATE_GAMEPLAY);
+            Time.timeScale = 0.001f;
+            GameStateManager.instance.PauseMenu.SetActive(true);
         }
-        else if (Input.GetAxis("Pause")==0f)
+
+        public override void OnStateDeactivate()
         {
-            GameStateManager.instance.pausePressed = false;
-        }*/
-        #endregion
+            Time.timeScale = 1;
+            GameStateManager.instance.PauseMenu.SetActive(false);
+        }
+
+        public override void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Joystick1Button10) || Input.GetKeyDown(KeyCode.Joystick1Button9))
+                GameStateManager.instance.ChangeState(GameStateManager.instance.previousState);
+
+            #region axis based input
+            /*
+            if (Input.GetAxis("Pause") != 0 && !GameStateManager.instance.pausePressed)
+            {
+                GameStateManager.instance.pausePressed = true;
+                GameStateManager.instance.ChangeState(GameStates.STATE_GAMEPLAY);
+            }
+            else if (Input.GetAxis("Pause")==0f)
+            {
+                GameStateManager.instance.pausePressed = false;
+            }*/
+            #endregion
+        }
     }
 }

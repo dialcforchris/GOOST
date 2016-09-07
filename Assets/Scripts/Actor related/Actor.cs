@@ -2,368 +2,375 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public interface ISegmentable<T> where T : Actor
-{ 
-    T rigBase { get; }
-    string segmentName { get; }
-}
-
-public enum CollisionEffect
+namespace GOOST
 {
-    LAND = 0,
-    CRUSHED,
-    BACKSTABBER,
-    BACKSTABBED,
-    CLASH,
-    CLASH_WIN,
-    CLASH_LOSE,
-    REVERSE_BUMP,
-    COUNT
-}
-
-public class Actor : MonoBehaviour
-{
-    public SpriteRenderer headSprite;
-    [SerializeField] protected Animator anim = null;
-    [SerializeField] protected Collider2D col = null;
-    public Collider2D actorCollider { get { return col; } }
-    [SerializeField]
-    protected Rigidbody2D body = null;
-    public Rigidbody2D GooseyBod { get { return body; } }
-
-    public  ParticleSystem skidMark,landingParticle;
- 
-    [SerializeField]
-    protected PlayerType _playerType = PlayerType.GOODGUY;
-    public PlayerType playerType
+    public interface ISegmentable<T> where T : Actor
     {
-        get { return _playerType; }
+        T rigBase { get; }
+        string segmentName { get; }
     }
 
-    [SerializeField] protected Lance lance = null;
-    [SerializeField] protected Legs legs = null;
-
-    public static Vector3 worldMaxY;
-
-    protected bool onPlatform = false;
-    [SerializeField]
-    footstepPlayer footStepComponent;
-    [SerializeField]
-    public List<AudioClip> flappingSounds = new List<AudioClip>();
-    [HideInInspector]
-    public AudioClip lastFlapSound;
-    public AudioClip deathSound,specialDeathsound;
-
-    public platformManager.platformTypes currentSurface;
-
-    protected virtual void OnEnable()
+    public enum CollisionEffect
     {
-        Physics2D.IgnoreCollision(col, lance.lanceCollider);
-        Physics2D.IgnoreCollision(col, legs.legsCollider);
+        LAND = 0,
+        CRUSHED,
+        BACKSTABBER,
+        BACKSTABBED,
+        CLASH,
+        CLASH_WIN,
+        CLASH_LOSE,
+        REVERSE_BUMP,
+        COUNT
     }
 
-    public virtual void ApplyKnockback(Vector2 _direction, float _power)
+    public class Actor : MonoBehaviour
     {
-        Vector2 _velClear = body.velocity;
-        if(body.velocity.x * _direction.x < 0)
+        public SpriteRenderer headSprite;
+        [SerializeField]
+        protected Animator anim = null;
+        [SerializeField]
+        protected Collider2D col = null;
+        public Collider2D actorCollider { get { return col; } }
+        [SerializeField]
+        protected Rigidbody2D body = null;
+        public Rigidbody2D GooseyBod { get { return body; } }
+
+        public ParticleSystem skidMark, landingParticle;
+
+        [SerializeField]
+        protected PlayerType _playerType = PlayerType.GOODGUY;
+        public PlayerType playerType
         {
-            _velClear.x = 0.0f;
+            get { return _playerType; }
         }
-        if (body.velocity.y * _direction.y < 0)
+
+        [SerializeField]
+        protected Lance lance = null;
+        [SerializeField]
+        protected Legs legs = null;
+
+        public static Vector3 worldMaxY;
+
+        protected bool onPlatform = false;
+        [SerializeField]
+        footstepPlayer footStepComponent;
+        [SerializeField]
+        public List<AudioClip> flappingSounds = new List<AudioClip>();
+        [HideInInspector]
+        public AudioClip lastFlapSound;
+        public AudioClip deathSound, specialDeathsound;
+
+        public platformManager.platformTypes currentSurface;
+
+        protected virtual void OnEnable()
         {
-            _velClear.y = 0.0f;
+            Physics2D.IgnoreCollision(col, lance.lanceCollider);
+            Physics2D.IgnoreCollision(col, legs.legsCollider);
         }
-        body.velocity = _velClear;// new Vector2(0.0f, body.velocity.y);
-        body.AddForce(_direction.normalized * _power, ForceMode2D.Impulse);
-    }
 
-    public virtual void Defeat(PlayerType _type)
-    {
-        col.enabled = false;
-        body.velocity = Vector2.zero;
-        lance.ActorDefeated();
-        legs.ActorDefeated();
-        FeatherManager.instance.HaveSomeFeathers(transform.position);
-        StartCoroutine(DeathAnimation());
-    }
-
-    protected virtual IEnumerator DeathAnimation()
-    {
-        yield return new WaitForSeconds(0.01f);
-        anim.Stop();
-        gameObject.SetActive(false);
-    }
-
-    public virtual void Respawn()
-    {
-        col.enabled = true;
-        lance.ActorSpawned();
-        legs.ActorSpawned();
-        gameObject.SetActive(true);
-    }
-
-    protected virtual void FixedUpdate()
-    {
-        if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+        public virtual void ApplyKnockback(Vector2 _direction, float _power)
         {
-            if (transform.position.y > worldMaxY.y)
+            Vector2 _velClear = body.velocity;
+            if (body.velocity.x * _direction.x < 0)
             {
-                body.velocity = new Vector2(body.velocity.x, -0.5f);
+                _velClear.x = 0.0f;
             }
-            else if (transform.position.y < -5.5f)
+            if (body.velocity.y * _direction.y < 0)
             {
-                if (tag == "Player")
+                _velClear.y = 0.0f;
+            }
+            body.velocity = _velClear;// new Vector2(0.0f, body.velocity.y);
+            body.AddForce(_direction.normalized * _power, ForceMode2D.Impulse);
+        }
+
+        public virtual void Defeat(PlayerType _type)
+        {
+            col.enabled = false;
+            body.velocity = Vector2.zero;
+            lance.ActorDefeated();
+            legs.ActorDefeated();
+            FeatherManager.instance.HaveSomeFeathers(transform.position);
+            StartCoroutine(DeathAnimation());
+        }
+
+        protected virtual IEnumerator DeathAnimation()
+        {
+            yield return new WaitForSeconds(0.01f);
+            anim.Stop();
+            gameObject.SetActive(false);
+        }
+
+        public virtual void Respawn()
+        {
+            col.enabled = true;
+            lance.ActorSpawned();
+            legs.ActorSpawned();
+            gameObject.SetActive(true);
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            if (GameStateManager.instance.GetState() == GameStates.STATE_GAMEPLAY)
+            {
+                if (transform.position.y > worldMaxY.y)
                 {
-                    GetComponent<Player>().collectable = 0;
-                    Defeat(PlayerType.OTHER);
+                    body.velocity = new Vector2(body.velocity.x, -0.5f);
                 }
-                else
+                else if (transform.position.y < -5.5f)
                 {
-                    transform.position = new Vector2(transform.position.x, 5.5f);
+                    if (tag == "Player")
+                    {
+                        GetComponent<Player>().collectable = 0;
+                        Defeat(PlayerType.OTHER);
+                    }
+                    else
+                    {
+                        transform.position = new Vector2(transform.position.x, 5.5f);
+                    }
                 }
             }
         }
-    }
 
-    protected virtual void OnCollisionEnter2D(Collision2D _col)
-    {
-        if (tag == "Player")
+        protected virtual void OnCollisionEnter2D(Collision2D _col)
         {
-            CollisionEnterDetermineImpact(_col);
-            CollisionStayDetermineImpact(_col);
-        }
-        else
-        {
-            if (_col.transform.tag == "Player")
+            if (tag == "Player")
             {
                 CollisionEnterDetermineImpact(_col);
                 CollisionStayDetermineImpact(_col);
             }
-        }
-    }
-
-    private void CollisionEnterDetermineImpact(Collision2D _col)
-    {
-        ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        if (_rigSegment != null)
-        {
-            switch (CollisionDetermineImpact(_rigSegment, _col))
-            {
-                case CollisionEffect.LAND:
-                    _rigSegment.rigBase.Defeat(_playerType);
-                    break;
-                case CollisionEffect.BACKSTABBER:
-                    _rigSegment.rigBase.Defeat(_playerType);
-                    break;
-                case CollisionEffect.CLASH:
-                    Clash.instance.HaveClash(_col.contacts[0].point);
-                    StatTracker.instance.stats.totalClashes++;
-                    break;
-                case CollisionEffect.CLASH_WIN:
-                    _rigSegment.rigBase.Defeat(_playerType);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    private void CollisionStayDetermineImpact(Collision2D _col)
-    {
-        ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-        if (_rigSegment != null)
-        {
-            switch (CollisionDetermineImpact(_rigSegment, _col))
-            {
-                case CollisionEffect.LAND:
-                    _rigSegment.rigBase.ApplyKnockback(Vector3.down, 0.5f);
-                    break;
-                case CollisionEffect.CRUSHED:
-                    _rigSegment.rigBase.ApplyKnockback(Vector3.up, 1.0f);
-                    break;
-                case CollisionEffect.BACKSTABBER:
-                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
-                    break;
-                case CollisionEffect.CLASH:
-                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
-                    break;
-                case CollisionEffect.CLASH_WIN:
-                    _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    protected CollisionEffect CollisionDetermineImpact(ISegmentable<Actor> _rigSegment, Collision2D _col)
-    {
-        //Attack from above
-        if (_col.contacts[0].normal.y > 0.0f && transform.position.y > _col.transform.position.y + 0.1f)
-        {
-            return CollisionEffect.LAND;
-        }
-        else if(_col.contacts[0].normal.y < 0.0f && transform.position.y - 0.1f < _col.transform.position.y)
-        {
-            return CollisionEffect.CRUSHED;
-        }
-        //Attack from same direction
-        else if (col.transform.lossyScale.x == _col.transform.lossyScale.x)
-        {
-            if ((col.transform.lossyScale.x * -_col.contacts[0].normal.x) > 0.0f)
-            {
-                return CollisionEffect.BACKSTABBER;
-            }
             else
             {
-                return CollisionEffect.BACKSTABBED;
-            }
-        }
-        //Attack from different direction
-        else
-        {
-            //Back clash
-            if(_col.contacts[0].normal.x * transform.lossyScale.x > 0.0f)
-            {
-                return CollisionEffect.REVERSE_BUMP;
-            }
-            //Frontal clash
-            if (Mathf.Abs(col.transform.position.y - _col.transform.position.y) < 0.2f)
-            {
-                return CollisionEffect.CLASH;
-            }
-            else
-            {
-                //Frontal win
-                if (col.transform.position.y > _col.transform.position.y)
+                if (_col.transform.tag == "Player")
                 {
-                    return CollisionEffect.CLASH_WIN;
+                    CollisionEnterDetermineImpact(_col);
+                    CollisionStayDetermineImpact(_col);
                 }
-                //Frontal loss
+            }
+        }
+
+        private void CollisionEnterDetermineImpact(Collision2D _col)
+        {
+            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+            if (_rigSegment != null)
+            {
+                switch (CollisionDetermineImpact(_rigSegment, _col))
+                {
+                    case CollisionEffect.LAND:
+                        _rigSegment.rigBase.Defeat(_playerType);
+                        break;
+                    case CollisionEffect.BACKSTABBER:
+                        _rigSegment.rigBase.Defeat(_playerType);
+                        break;
+                    case CollisionEffect.CLASH:
+                        Clash.instance.HaveClash(_col.contacts[0].point);
+                        StatTracker.instance.stats.totalClashes++;
+                        break;
+                    case CollisionEffect.CLASH_WIN:
+                        _rigSegment.rigBase.Defeat(_playerType);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void CollisionStayDetermineImpact(Collision2D _col)
+        {
+            ISegmentable<Actor> _rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+            if (_rigSegment != null)
+            {
+                switch (CollisionDetermineImpact(_rigSegment, _col))
+                {
+                    case CollisionEffect.LAND:
+                        _rigSegment.rigBase.ApplyKnockback(Vector3.down, 0.5f);
+                        break;
+                    case CollisionEffect.CRUSHED:
+                        _rigSegment.rigBase.ApplyKnockback(Vector3.up, 1.0f);
+                        break;
+                    case CollisionEffect.BACKSTABBER:
+                        _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                        break;
+                    case CollisionEffect.CLASH:
+                        _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                        break;
+                    case CollisionEffect.CLASH_WIN:
+                        _rigSegment.rigBase.ApplyKnockback(Vector3.right * col.transform.lossyScale.x, 0.75f);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        protected CollisionEffect CollisionDetermineImpact(ISegmentable<Actor> _rigSegment, Collision2D _col)
+        {
+            //Attack from above
+            if (_col.contacts[0].normal.y > 0.0f && transform.position.y > _col.transform.position.y + 0.1f)
+            {
+                return CollisionEffect.LAND;
+            }
+            else if (_col.contacts[0].normal.y < 0.0f && transform.position.y - 0.1f < _col.transform.position.y)
+            {
+                return CollisionEffect.CRUSHED;
+            }
+            //Attack from same direction
+            else if (col.transform.lossyScale.x == _col.transform.lossyScale.x)
+            {
+                if ((col.transform.lossyScale.x * -_col.contacts[0].normal.x) > 0.0f)
+                {
+                    return CollisionEffect.BACKSTABBER;
+                }
                 else
                 {
-                    return CollisionEffect.CLASH_LOSE;
+                    return CollisionEffect.BACKSTABBED;
                 }
             }
-        }
-        //return CollisionEffect.COUNT;
-    }
-
-    protected virtual void OnCollisionStay2D(Collision2D _col)
-    {
-        //Head hit platform
-        if (_col.contacts[0].otherCollider == col)
-        {
-            if (_col.collider.tag == "Platform")
+            //Attack from different direction
+            else
             {
-                if (_col.contacts[0].normal.y > 0.0f)
+                //Back clash
+                if (_col.contacts[0].normal.x * transform.lossyScale.x > 0.0f)
                 {
-                    body.AddForce(new Vector2(_col.transform.position.x > transform.position.x ? -0.05f : 0.05f, 0.0f), ForceMode2D.Impulse);
+                    return CollisionEffect.REVERSE_BUMP;
+                }
+                //Frontal clash
+                if (Mathf.Abs(col.transform.position.y - _col.transform.position.y) < 0.2f)
+                {
+                    return CollisionEffect.CLASH;
+                }
+                else
+                {
+                    //Frontal win
+                    if (col.transform.position.y > _col.transform.position.y)
+                    {
+                        return CollisionEffect.CLASH_WIN;
+                    }
+                    //Frontal loss
+                    else
+                    {
+                        return CollisionEffect.CLASH_LOSE;
+                    }
                 }
             }
+            //return CollisionEffect.COUNT;
         }
 
-        if (tag == "Player")
+        protected virtual void OnCollisionStay2D(Collision2D _col)
         {
-            CollisionStayDetermineImpact(_col);
-        }
-        else
-        {
-            if (_col.transform.tag == "Player")
+            //Head hit platform
+            if (_col.contacts[0].otherCollider == col)
+            {
+                if (_col.collider.tag == "Platform")
+                {
+                    if (_col.contacts[0].normal.y > 0.0f)
+                    {
+                        body.AddForce(new Vector2(_col.transform.position.x > transform.position.x ? -0.05f : 0.05f, 0.0f), ForceMode2D.Impulse);
+                    }
+                }
+            }
+
+            if (tag == "Player")
             {
                 CollisionStayDetermineImpact(_col);
             }
-        }
-
-        if (_col.transform.tag == "Player" || _col.transform.tag == "Enemy")
-        {
-            ApplyKnockback(_col.contacts[0].normal, 0.1f);
-        }
-    }
-
-    public virtual void LandedOnPlatform(Collider2D col)
-    {
-        if (!onPlatform)
-        {
-            //Make sure the player hasn't sunk into the floor for some silly reason when we freeze the Y position of the player
-            if (!col.GetComponent<PolygonCollider2D>())
-            {
-                float landPosition = col.bounds.max.y;
-                transform.position = new Vector3(transform.position.x, landPosition + 0.37f, transform.position.z);//0.37f
-            }
-
-            currentSurface = platformManager.instance.whatPlatformIsThis(col);
-
-            if (!footStepComponent)
-                footStepComponent = GetComponentInChildren<footstepPlayer>();
-            footStepComponent.playFootstepSound();
-
-            landingParticle.Play();
-            onPlatform = true;
-            body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-            if (Mathf.Abs(body.velocity.x) > 0)
-                anim.Play("newGoose_run");
-            else
-                anim.Play("newGoose_idle");
-
-            if (body.velocity.x > 5 || body.velocity.x < -5)
-            {
-                skidMark.Emit(1);
-                //skidMark.transform.position = transform.position;
-            }
-        }
-    }
-
-    public virtual void TakeOffFromPlatform()
-    {
-        if (onPlatform)
-        {
-            onPlatform = false;
-            body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-            anim.Play("newGoose_flap");
-        }
-    }
-
-    public virtual void DetermineAnimationState()
-    {
-        if (onPlatform)
-        {
-            if (Mathf.Abs(body.velocity.x) < 0.01f)
-            {
-                anim.Play("newGoose_idle");
-            }
             else
             {
-                anim.Play("newGoose_run");
-            }
-        }
-        else
-        {
-            if (body.velocity.y > 0)
-            {
-                if (anim.GetCurrentAnimatorStateInfo(0).IsName("newGoose_glide"))
+                if (_col.transform.tag == "Player")
                 {
-                    //Play a flapping sound, but make sure we don't play the same one twice in a row
-                    int thisOne = Random.Range(0, flappingSounds.Count);
-                    SoundManager.instance.playSound(flappingSounds[thisOne],0.25f);
-                    AudioClip mostRecentSound = flappingSounds[thisOne];
-                    if (lastFlapSound)
-                        flappingSounds.Add(lastFlapSound);
-                    flappingSounds.Remove(mostRecentSound);
-                    lastFlapSound = mostRecentSound;
+                    CollisionStayDetermineImpact(_col);
+                }
+            }
 
-                    anim.Play("newGoose_flap");
+            if (_col.transform.tag == "Player" || _col.transform.tag == "Enemy")
+            {
+                ApplyKnockback(_col.contacts[0].normal, 0.1f);
+            }
+        }
+
+        public virtual void LandedOnPlatform(Collider2D col)
+        {
+            if (!onPlatform)
+            {
+                //Make sure the player hasn't sunk into the floor for some silly reason when we freeze the Y position of the player
+                if (!col.GetComponent<PolygonCollider2D>())
+                {
+                    float landPosition = col.bounds.max.y;
+                    transform.position = new Vector3(transform.position.x, landPosition + 0.37f, transform.position.z);//0.37f
+                }
+
+                currentSurface = platformManager.instance.whatPlatformIsThis(col);
+
+                if (!footStepComponent)
+                    footStepComponent = GetComponentInChildren<footstepPlayer>();
+                footStepComponent.playFootstepSound();
+
+                landingParticle.Play();
+                onPlatform = true;
+                body.constraints = RigidbodyConstraints2D.FreezePositionY | ~RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+                if (Mathf.Abs(body.velocity.x) > 0)
+                    anim.Play("newGoose_run");
+                else
+                    anim.Play("newGoose_idle");
+
+                if (body.velocity.x > 5 || body.velocity.x < -5)
+                {
+                    skidMark.Emit(1);
+                    //skidMark.transform.position = transform.position;
                 }
             }
         }
-    }
 
+        public virtual void TakeOffFromPlatform()
+        {
+            if (onPlatform)
+            {
+                onPlatform = false;
+                body.constraints = ~RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+                anim.Play("newGoose_flap");
+            }
+        }
+
+        public virtual void DetermineAnimationState()
+        {
+            if (onPlatform)
+            {
+                if (Mathf.Abs(body.velocity.x) < 0.01f)
+                {
+                    anim.Play("newGoose_idle");
+                }
+                else
+                {
+                    anim.Play("newGoose_run");
+                }
+            }
+            else
+            {
+                if (body.velocity.y > 0)
+                {
+                    if (anim.GetCurrentAnimatorStateInfo(0).IsName("newGoose_glide"))
+                    {
+                        //Play a flapping sound, but make sure we don't play the same one twice in a row
+                        int thisOne = Random.Range(0, flappingSounds.Count);
+                        SoundManager.instance.playSound(flappingSounds[thisOne], 0.25f);
+                        AudioClip mostRecentSound = flappingSounds[thisOne];
+                        if (lastFlapSound)
+                            flappingSounds.Add(lastFlapSound);
+                        flappingSounds.Remove(mostRecentSound);
+                        lastFlapSound = mostRecentSound;
+
+                        anim.Play("newGoose_flap");
+                    }
+                }
+            }
+        }
+
+    }
+    public enum PlayerType
+    {
+        BADGUY,
+        GOODGUY,
+        ENEMY,
+        OTHER,
+        COUNT
+    };
 }
-public enum PlayerType
-{
-    BADGUY,
-    GOODGUY,
-    ENEMY,
-    OTHER,
-    COUNT
-};

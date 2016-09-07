@@ -1,43 +1,46 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActorSegment : MonoBehaviour, ISegmentable<Actor>
+namespace GOOST
 {
-    [SerializeField]
-    private Actor actor = null;
-    [SerializeField]
-    private Collider2D col = null;
-    public Collider2D segmentCollider { get { return col; } }
-
-    #region ISegmentable
-    public Actor rigBase { get { return actor; } }
-    public string segmentName { get { return "Segment"; } }
-    #endregion
-
-
-    private void OnEnable()
+    public class ActorSegment : MonoBehaviour, ISegmentable<Actor>
     {
-        platformManager.instance.NoCollisionsPlease(col);
-    }
+        [SerializeField]
+        private Actor actor = null;
+        [SerializeField]
+        private Collider2D col = null;
+        public Collider2D segmentCollider { get { return col; } }
 
-    public void ActorSpawned()
-    {
-        col.enabled = true;
-    }
+        #region ISegmentable
+        public Actor rigBase { get { return actor; } }
+        public string segmentName { get { return "Segment"; } }
+        #endregion
 
-    public void ActorDefeated()
-    {
-        col.enabled = false;
-    }
 
-    private void OnCollisionEnter2D(Collision2D _col)
-    {
-        if (_col.collider.tag == "Enemy")
+        private void OnEnable()
         {
-            ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
-            if (rigSegment != null)
+            platformManager.instance.NoCollisionsPlease(col);
+        }
+
+        public void ActorSpawned()
+        {
+            col.enabled = true;
+        }
+
+        public void ActorDefeated()
+        {
+            col.enabled = false;
+        }
+
+        private void OnCollisionEnter2D(Collision2D _col)
+        {
+            if (_col.collider.tag == "Enemy")
             {
-                ((Enemy)rigSegment.rigBase).FindTarget();
+                ISegmentable<Actor> rigSegment = _col.collider.GetComponent<ISegmentable<Actor>>();
+                if (rigSegment != null)
+                {
+                    ((Enemy)rigSegment.rigBase).FindTarget();
+                }
             }
         }
     }

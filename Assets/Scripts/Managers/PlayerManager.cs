@@ -2,257 +2,261 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class PlayerManager : MonoBehaviour
+namespace GOOST
 {
-    private static PlayerManager playerManager= null;
-    public static PlayerManager instance
+    public class PlayerManager : MonoBehaviour
     {
-        get{return playerManager;}
-    }
-    [SerializeField] 
-    private Player[] players = null;
-    [SerializeField] 
-    private Text[] scores = null;
-    [SerializeField]
-    private Text[] lives;
-    [SerializeField]
-    private Text[] coll;
-    [SerializeField]
-    private Image[] lifeSprite;
-    [SerializeField]
-    Sprite[] playerSprites;
-    [SerializeField]
-    Sprite[] collectableSprites;
-    [SerializeField]
-    private Image[] collectables;
-    [SerializeField]
-    private Image[] boosts;
-    [Range(0, 1)]
-    public float fillAmount;
-    [SerializeField] private float respawnLength = 1.0f;
-    private bool[] playerRespawn = null;
-    private float[] respawnTime = null;
-    [SerializeField]
-    Transform[] spawnPositions;
-   
-
-    //set this properly when we have a splash screen menu
-    private int amountOfPlayers = 2;
-
-    public Vector3 GetRespawnPos(int playerIndex)
-    {
-        if (MainMenu.instance.getLevel() == 0)//Woodland level
+        private static PlayerManager playerManager = null;
+        public static PlayerManager instance
         {
-            if (Random.value > .7)
-                return spawnPositions[3].position;
-            else if (playerIndex == 0)
-                return spawnPositions[2].position;
-            else
-                return spawnPositions[4].position;
+            get { return playerManager; }
         }
-        else if (MainMenu.instance.getLevel() == 1)
+        [SerializeField]
+        private Player[] players = null;
+        [SerializeField]
+        private Text[] scores = null;
+        [SerializeField]
+        private Text[] lives;
+        [SerializeField]
+        private Text[] coll;
+        [SerializeField]
+        private Image[] lifeSprite;
+        [SerializeField]
+        Sprite[] playerSprites;
+        [SerializeField]
+        Sprite[] collectableSprites;
+        [SerializeField]
+        private Image[] collectables;
+        [SerializeField]
+        private Image[] boosts;
+        [Range(0, 1)]
+        public float fillAmount;
+        [SerializeField]
+        private float respawnLength = 1.0f;
+        private bool[] playerRespawn = null;
+        private float[] respawnTime = null;
+        [SerializeField]
+        Transform[] spawnPositions;
+
+
+        //set this properly when we have a splash screen menu
+        private int amountOfPlayers = 2;
+
+        public Vector3 GetRespawnPos(int playerIndex)
         {
-            if (playerIndex == 0)
+            if (MainMenu.instance.getLevel() == 0)//Woodland level
             {
-                return spawnPositions[5].position;
+                if (Random.value > .7)
+                    return spawnPositions[3].position;
+                else if (playerIndex == 0)
+                    return spawnPositions[2].position;
+                else
+                    return spawnPositions[4].position;
             }
-            else
+            else if (MainMenu.instance.getLevel() == 1)
             {
-                return spawnPositions[6].position;
-            }
-        }
-        else// if (MainMenu.instance.getLevel() == 2 ) //City level
-        {
-            if (playerIndex == 0)
-                return spawnPositions[0].position;
-            else
-                return spawnPositions[1].position;
-        }
-    }
-
-    // Use this for initialization
-    void Awake()
-    {
-        if (playerManager != null)
-        {
-            Destroy(gameObject);
-        }
-        else 
-        {
-            playerManager = this;
-            respawnTime = new float[amountOfPlayers];
-            playerRespawn = new bool[amountOfPlayers];
-            for(int i = 0; i < amountOfPlayers; ++i)
-            {
-                respawnTime[i] = 0.0f;
-                playerRespawn[i] = false;
-            }
-        }
-	}
-
-    void Start()
-    {
-        //This code has been relocated to SetupPlayer();
-        //Feel free to un-comment it for testing purposes.
-
-        /*for (int i = 0; i < Input.GetJoystickNames().Length; i++)
-        {
-            if (i < 2)
-            {
-                players[i].gameObject.SetActive(true);
-                players[i].playerId = i;
-                scores[i].gameObject.SetActive(true);
-            }
-            else
-            {
-                break;
-            }
-        }*/
-        foreach (Image i in boosts)
-        {
-            i.fillMethod = Image.FillMethod.Horizontal;
-            i.type = Image.Type.Filled;
-        }
-    }
-
-    public void SetupPlayer(int index)
-    {
-        players[index].eggLives = 3;
-        players[index].Respawn();
-        players[index].gameObject.SetActive(true);
-        players[index].playerId = index;
-        scores[index].gameObject.SetActive(true);
-        //Some sort of particle effect wouldn't go amiss here
-
-        //Set position
-        switch (index)
-        {
-            case 0:
-                players[index].transform.position = new Vector3(-3.5f, 29.5f, 0);
-                break;
-            case 1:
-                players[index].transform.position = new Vector3(3.5f, 29.5f, 0);
-                break;
-        }
-    }
-
-    public void ResetPlayers()
-    {
-        players[0].GooseyBod.velocity = Vector3.zero;
-        players[0].GooseyBod.angularVelocity = 0;
-        players[1].GooseyBod.velocity = Vector3.zero;
-        players[1].GooseyBod.angularVelocity = 0;
-
-
-        players[0].gameObject.SetActive(false);
-        players[1].gameObject.SetActive(false);
-    }
-
-    void Update()
-    {
-        for (int i = 0; i < playerRespawn.Length; ++i)
-        {
-            if (playerRespawn[i])
-            {
-                respawnTime[i] += Time.deltaTime;
-                if(respawnTime[i] >= respawnLength)
+                if (playerIndex == 0)
                 {
-                    playerRespawn[i] = false;
-                    players[i].Respawn();
-                }
-            }
-        }
-        UpdateUI();
-    }
-    public Player GetPlayer(int _playerIndex)
-    {
-        if (_playerIndex < players.Length)
-            return players[_playerIndex];
-        else
-            return null;
-    }
-
-    public int NumberOfPlayers()
-    {
-        return amountOfPlayers;
-    }
-
-    public void RespawnPlayer(int _index)
-    {
-        playerRespawn[_index] = true;
-        respawnTime[_index] = 0.0f;
-    }
-
-    public Player GetClosestPlayer(Vector3 _pos)
-    {
-        float _distance = Vector3.SqrMagnitude(players[0].transform.position - _pos);
-        if(players.Length == 2)
-        {
-            if(Vector3.SqrMagnitude(players[1].transform.position - _pos) < _distance)
-            {
-                if (players[1].isActiveAndEnabled)
-                {
-                    return players[1];
+                    return spawnPositions[5].position;
                 }
                 else
                 {
-                    return players[0];
+                    return spawnPositions[6].position;
+                }
+            }
+            else// if (MainMenu.instance.getLevel() == 2 ) //City level
+            {
+                if (playerIndex == 0)
+                    return spawnPositions[0].position;
+                else
+                    return spawnPositions[1].position;
+            }
+        }
+
+        // Use this for initialization
+        void Awake()
+        {
+            if (playerManager != null)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                playerManager = this;
+                respawnTime = new float[amountOfPlayers];
+                playerRespawn = new bool[amountOfPlayers];
+                for (int i = 0; i < amountOfPlayers; ++i)
+                {
+                    respawnTime[i] = 0.0f;
+                    playerRespawn[i] = false;
                 }
             }
         }
-        return players[0];
-    }
 
-    void UpdateUI()
-    {
-        for (int i = 0; i < 2; i++)
+        void Start()
         {
-            scores[i].text = "" + players[i].GetScore();
-            lives[i].text = "X" + players[i].eggLives;
-            coll[i].text = "X" + players[i].collectable;
-            lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
-            collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
-            boosts[i].fillAmount = players[i].dashcool;
+            //This code has been relocated to SetupPlayer();
+            //Feel free to un-comment it for testing purposes.
 
-            //lives[i].text = "X" + players[i].eggLives.ToString();
-            //coll[i].text = "X" + players[i].collectable.ToString();
-            //lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
-            //collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
-            boosts[i].fillAmount = 1 - players[i].dashcool / players[i].maxDashCool;
-
-            Color colA = boosts[i].color;
-            Color colB = boosts[i].transform.parent.GetComponent<Outline>().effectColor;
-            Color colC = boosts[i].transform.parent.GetComponent<Image>().color;
-
-            colA.a = 1 - players[i].dashcool / players[i].maxDashCool;
-            colB.a = colA.a;
-            colC.a = colA.a;
-
-            boosts[i].color = colA;
-            boosts[i].transform.parent.GetComponent<Outline>().effectColor = colB;
-            boosts[i].transform.parent.GetComponent<Image>().color = colC;
+            /*for (int i = 0; i < Input.GetJoystickNames().Length; i++)
+            {
+                if (i < 2)
+                {
+                    players[i].gameObject.SetActive(true);
+                    players[i].playerId = i;
+                    scores[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    break;
+                }
+            }*/
+            foreach (Image i in boosts)
+            {
+                i.fillMethod = Image.FillMethod.Horizontal;
+                i.type = Image.Type.Filled;
+            }
         }
-    }
 
-    public void ResetGameStart()
-    {
-        for (int i = 0; i < players.Length; i++)
+        public void SetupPlayer(int index)
         {
-            players[i].ResetGameStart();
+            players[index].eggLives = 3;
+            players[index].Respawn();
+            players[index].gameObject.SetActive(true);
+            players[index].playerId = index;
+            scores[index].gameObject.SetActive(true);
+            //Some sort of particle effect wouldn't go amiss here
 
-            boosts[i].fillAmount = 0.0f;
-            Color colA = boosts[i].color;
-            Color colB = boosts[i].transform.parent.GetComponent<Outline>().effectColor;
-            Color colC = boosts[i].transform.parent.GetComponent<Image>().color;
-
-            colA.a = 0.0f;
-            colB.a = colA.a;
-            colC.a = colA.a;
-
-            boosts[i].color = colA;
-            boosts[i].transform.parent.GetComponent<Outline>().effectColor = colB;
-            boosts[i].transform.parent.GetComponent<Image>().color = colC;
+            //Set position
+            switch (index)
+            {
+                case 0:
+                    players[index].transform.position = new Vector3(-3.5f, 29.5f, 0);
+                    break;
+                case 1:
+                    players[index].transform.position = new Vector3(3.5f, 29.5f, 0);
+                    break;
+            }
         }
-        UpdateUI();
+
+        public void ResetPlayers()
+        {
+            players[0].GooseyBod.velocity = Vector3.zero;
+            players[0].GooseyBod.angularVelocity = 0;
+            players[1].GooseyBod.velocity = Vector3.zero;
+            players[1].GooseyBod.angularVelocity = 0;
+
+
+            players[0].gameObject.SetActive(false);
+            players[1].gameObject.SetActive(false);
+        }
+
+        void Update()
+        {
+            for (int i = 0; i < playerRespawn.Length; ++i)
+            {
+                if (playerRespawn[i])
+                {
+                    respawnTime[i] += Time.deltaTime;
+                    if (respawnTime[i] >= respawnLength)
+                    {
+                        playerRespawn[i] = false;
+                        players[i].Respawn();
+                    }
+                }
+            }
+            UpdateUI();
+        }
+        public Player GetPlayer(int _playerIndex)
+        {
+            if (_playerIndex < players.Length)
+                return players[_playerIndex];
+            else
+                return null;
+        }
+
+        public int NumberOfPlayers()
+        {
+            return amountOfPlayers;
+        }
+
+        public void RespawnPlayer(int _index)
+        {
+            playerRespawn[_index] = true;
+            respawnTime[_index] = 0.0f;
+        }
+
+        public Player GetClosestPlayer(Vector3 _pos)
+        {
+            float _distance = Vector3.SqrMagnitude(players[0].transform.position - _pos);
+            if (players.Length == 2)
+            {
+                if (Vector3.SqrMagnitude(players[1].transform.position - _pos) < _distance)
+                {
+                    if (players[1].isActiveAndEnabled)
+                    {
+                        return players[1];
+                    }
+                    else
+                    {
+                        return players[0];
+                    }
+                }
+            }
+            return players[0];
+        }
+
+        void UpdateUI()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                scores[i].text = "" + players[i].GetScore();
+                lives[i].text = "X" + players[i].eggLives;
+                coll[i].text = "X" + players[i].collectable;
+                lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
+                collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 1 : 0];
+                boosts[i].fillAmount = players[i].dashcool;
+
+                //lives[i].text = "X" + players[i].eggLives.ToString();
+                //coll[i].text = "X" + players[i].collectable.ToString();
+                //lifeSprite[i].sprite = playerSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+                //collectables[i].sprite = collectableSprites[players[i].playerType == PlayerType.GOODGUY ? 0 : 1];
+                boosts[i].fillAmount = 1 - players[i].dashcool / players[i].maxDashCool;
+
+                Color colA = boosts[i].color;
+                Color colB = boosts[i].transform.parent.GetComponent<Outline>().effectColor;
+                Color colC = boosts[i].transform.parent.GetComponent<Image>().color;
+
+                colA.a = 1 - players[i].dashcool / players[i].maxDashCool;
+                colB.a = colA.a;
+                colC.a = colA.a;
+
+                boosts[i].color = colA;
+                boosts[i].transform.parent.GetComponent<Outline>().effectColor = colB;
+                boosts[i].transform.parent.GetComponent<Image>().color = colC;
+            }
+        }
+
+        public void ResetGameStart()
+        {
+            for (int i = 0; i < players.Length; i++)
+            {
+                players[i].ResetGameStart();
+
+                boosts[i].fillAmount = 0.0f;
+                Color colA = boosts[i].color;
+                Color colB = boosts[i].transform.parent.GetComponent<Outline>().effectColor;
+                Color colC = boosts[i].transform.parent.GetComponent<Image>().color;
+
+                colA.a = 0.0f;
+                colB.a = colA.a;
+                colC.a = colA.a;
+
+                boosts[i].color = colA;
+                boosts[i].transform.parent.GetComponent<Outline>().effectColor = colB;
+                boosts[i].transform.parent.GetComponent<Image>().color = colC;
+            }
+            UpdateUI();
+        }
     }
 }

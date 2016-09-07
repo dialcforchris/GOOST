@@ -1,19 +1,22 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(PolygonCollider2D))]
-public class PolygonCollider2DEditor : Editor
+namespace GOOST
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(PolygonCollider2D))]
+    public class PolygonCollider2DEditor : Editor
     {
-        base.OnInspectorGUI();
-        var collider = (PolygonCollider2D)target;
-        var points = collider.points;
-        for (int i = 0; i < points.Length; i++)
+        public override void OnInspectorGUI()
         {
-            points[i] = EditorGUILayout.Vector2Field(i.ToString(), points[i]);
+            base.OnInspectorGUI();
+            var collider = (PolygonCollider2D)target;
+            var points = collider.points;
+            for (int i = 0; i < points.Length; i++)
+            {
+                points[i] = EditorGUILayout.Vector2Field(i.ToString(), points[i]);
+            }
+            collider.points = points;
+            EditorUtility.SetDirty(target);
         }
-        collider.points = points;
-        EditorUtility.SetDirty(target);
     }
 }

@@ -2,39 +2,42 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class ScoreUI : MonoBehaviour 
+namespace GOOST
 {
-    [SerializeField]
-    private Text[] scores;
-    Player[] players;
-    [SerializeField]
-    private Text[] Lives;
-    [SerializeField]
-    private Text[] coll;
-    [SerializeField]
-    private Image[] lives;
-    [SerializeField]
-    private Image[] collectables;
-
-	// Use this for initialization
-	void Start () 
+    public class ScoreUI : MonoBehaviour
     {
-        for (int i=0;i<PlayerManager.instance.NumberOfPlayers();i++)
+        [SerializeField]
+        private Text[] scores;
+        Player[] players;
+        [SerializeField]
+        private Text[] Lives;
+        [SerializeField]
+        private Text[] coll;
+        [SerializeField]
+        private Image[] lives;
+        [SerializeField]
+        private Image[] collectables;
+
+        // Use this for initialization
+        void Start()
         {
-            scores[i].gameObject.SetActive(true);
-            players[i] = PlayerManager.instance.GetPlayer(i);
+            for (int i = 0; i < PlayerManager.instance.NumberOfPlayers(); i++)
+            {
+                scores[i].gameObject.SetActive(true);
+                players[i] = PlayerManager.instance.GetPlayer(i);
+            }
         }
-	}
-	
-	// Update is called once per frame
-	void Update () 
-    {
-     //   UpdateScores();
-	}
 
-   
-    void UpdateLives()
-    {
+        // Update is called once per frame
+        void Update()
+        {
+            //   UpdateScores();
+        }
 
+
+        void UpdateLives()
+        {
+
+        }
     }
 }

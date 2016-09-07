@@ -1,54 +1,59 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ScreenWrap : MonoBehaviour
+namespace GOOST
 {
-    public delegate void ScreenWrapped(bool _wrap);
-    private ScreenWrapped screenWrapped = null;
-       
-    private Vector2 screenToWorldMax;
-    private Vector2 screenToWorldMin;
-    [SerializeField]
-    Actor ActorComponent;
-    [SerializeField] private float wrapMin = -0.01f;
-    [SerializeField] private float wrapMax = 1.01f;
-
-    private void Start()
-    { 
-        screenToWorldMax = Camera.main.ViewportToWorldPoint(new Vector2(wrapMax, wrapMax));
-        screenToWorldMin = Camera.main.ViewportToWorldPoint(new Vector2(wrapMin, wrapMin));
-    }
-
-    private void Update()
+    public class ScreenWrap : MonoBehaviour
     {
-        if (transform.position.x > screenToWorldMax.x)
-        {
-            transform.position = new Vector2(screenToWorldMin.x, transform.position.y);
-            Wrapped();
-        }
-        else if (transform.position.x < screenToWorldMin.x)
-        {
-            transform.position = new Vector2(screenToWorldMax.x, transform.position.y);
-            Wrapped();
-        }
-    }
+        public delegate void ScreenWrapped(bool _wrap);
+        private ScreenWrapped screenWrapped = null;
 
-    private void Wrapped()
-    {
-        if (ActorComponent)
+        private Vector2 screenToWorldMax;
+        private Vector2 screenToWorldMin;
+        [SerializeField]
+        Actor ActorComponent;
+        [SerializeField]
+        private float wrapMin = -0.01f;
+        [SerializeField]
+        private float wrapMax = 1.01f;
+
+        private void Start()
         {
-            //Pure scum
-            transform.position -= Vector3.down * 0.01f;
+            screenToWorldMax = Camera.main.ViewportToWorldPoint(new Vector2(wrapMax, wrapMax));
+            screenToWorldMin = Camera.main.ViewportToWorldPoint(new Vector2(wrapMin, wrapMin));
         }
 
-        if (screenWrapped != null)
+        private void Update()
         {
-            screenWrapped(true);
+            if (transform.position.x > screenToWorldMax.x)
+            {
+                transform.position = new Vector2(screenToWorldMin.x, transform.position.y);
+                Wrapped();
+            }
+            else if (transform.position.x < screenToWorldMin.x)
+            {
+                transform.position = new Vector2(screenToWorldMax.x, transform.position.y);
+                Wrapped();
+            }
         }
-    }
 
-    public void AddScreenWrapCall(ScreenWrapped _wrap)
-    {
-        screenWrapped += _wrap;
+        private void Wrapped()
+        {
+            if (ActorComponent)
+            {
+                //Pure scum
+                transform.position -= Vector3.down * 0.01f;
+            }
+
+            if (screenWrapped != null)
+            {
+                screenWrapped(true);
+            }
+        }
+
+        public void AddScreenWrapCall(ScreenWrapped _wrap)
+        {
+            screenWrapped += _wrap;
+        }
     }
 }

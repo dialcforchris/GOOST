@@ -1,27 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FeatherManager : MonoBehaviour
+namespace GOOST
 {
-    private static FeatherManager featherManager =null;
-    public static FeatherManager instance
+    public class FeatherManager : MonoBehaviour
     {
-        get { return featherManager; }
-    }
-    [SerializeField]
-    ParticleSystem feathers;
-	// Use this for initialization
-	void Start()
-    {
-        if (featherManager == null)
+        private static FeatherManager featherManager = null;
+        public static FeatherManager instance
         {
-            featherManager = this;
+            get { return featherManager; }
         }
-    }
+        [SerializeField]
+        ParticleSystem feathers;
+        // Use this for initialization
+        void Start()
+        {
+            if (featherManager == null)
+            {
+                featherManager = this;
+            }
+        }
 
-    public void HaveSomeFeathers(Vector2 _pos)
-    {
-        feathers.transform.position = _pos;
-        feathers.Emit(1);
+        public void HaveSomeFeathers(Vector2 _pos)
+        {
+            feathers.transform.position = _pos;
+            feathers.Emit(1);
+        }
     }
 }

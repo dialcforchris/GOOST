@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
-public abstract class GameState
+
+namespace GOOST
 {
-    public abstract void OnStateActivate();
-    public abstract void OnStateDeactivate();
-    public abstract void Update();
+    public abstract class GameState
+    {
+        public abstract void OnStateActivate();
+        public abstract void OnStateDeactivate();
+        public abstract void Update();
+    }
 }
