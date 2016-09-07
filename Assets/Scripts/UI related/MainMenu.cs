@@ -297,6 +297,7 @@ public class MainMenu : MonoBehaviour
 
         if (idleTime > maxIdleTime && GameStateManager.instance.GetState() != GameStates.STATE_GAMEOVER)
         {
+            StatTracker.instance.SaveStatsToFile();
             GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
             StartCoroutine(FadeScreenInOut(false));
         }
