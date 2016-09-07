@@ -6,7 +6,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class StatTracker : MonoBehaviour
 {
-
     public static StatTracker instance;
     public GameStatistics stats;
 
@@ -25,7 +24,7 @@ public class StatTracker : MonoBehaviour
         instance = this;
 	}
 
-    void SaveStatsToFile()
+    public void SaveStatsToFile()
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.OpenWrite(Application.persistentDataPath + "/stats.dat");
