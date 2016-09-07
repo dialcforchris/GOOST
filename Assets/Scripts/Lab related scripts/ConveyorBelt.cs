@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class ConveyorBelt : MonoBehaviour
 {
     //false for left, true for right
@@ -17,4 +18,5 @@ public class ConveyorBelt : MonoBehaviour
         }
         col.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(col.gameObject.GetComponent<Rigidbody2D>().velocity.x, 0);
     }
+
 }
