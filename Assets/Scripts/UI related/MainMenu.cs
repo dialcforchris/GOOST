@@ -263,14 +263,14 @@ public class MainMenu : MonoBehaviour
                         LevelSelectionMenu();
                         break;
                     case menuState.tutorial:
-                        if (Input.GetButtonDown("Interact0") || Input.GetButtonDown("Interact1"))
+                        if (Input.GetButtonDown("Fly0") || Input.GetButtonDown("Fly1"))
                         {
                             TutorialAnimator.Play("tutorial_out");
                             transitioning = true;
                         }
                         break;
                     default:
-                        if (Input.GetButtonDown("Interact0") || Input.GetButtonDown("Interact1"))
+                        if (Input.GetButtonDown("Fly0") || Input.GetButtonDown("Fly1"))
                         {
                             switchMenus(0);
                         }
