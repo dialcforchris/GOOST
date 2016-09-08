@@ -25,6 +25,9 @@ namespace GOOST
         private GameStates currentState;
         public GameStates previousState;
 
+        [SerializeField]
+        float maxIdleTime, idleTime = 0;
+
         private void Awake()
         {
             if (singleton)
@@ -48,6 +51,22 @@ namespace GOOST
         private void Update()
         {
             states[(int)currentState].Update();
+
+            if (!Input.anyKey && Input.GetAxis("Horizontal0") == 0 && Input.GetAxis("Horizontal1") == 0
+                 && Input.GetAxis("Vertical0") == 0 && Input.GetAxis("Vertical1") == 0)
+            {
+                idleTime += Time.deltaTime;
+            }
+            else
+            {
+                idleTime = 0;
+            }
+
+            if (idleTime > maxIdleTime)
+            {
+                StatTracker.instance.SaveStatsToFile();
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            }
         }
 
         public void unPause()

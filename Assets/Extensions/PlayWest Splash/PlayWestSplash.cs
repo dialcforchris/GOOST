@@ -12,6 +12,8 @@ namespace GOOST
 
         public string levelToLoad;
         public float splashDuration;
+        [SerializeField] private GameObject blackScreen = null;
+        private bool skip = false;
 
         // Use this for initialization
         void Start()
@@ -30,6 +32,19 @@ namespace GOOST
             yield return new WaitForSeconds(splashDuration);
 
             SceneManager.LoadScene(levelToLoad);
+        }
+
+        private void Update()
+        {
+            if (skip)
+            {
+                SceneManager.LoadScene(3);
+            }
+            if (Input.GetButton("Fly0") || Input.GetButton("Fly1") || Input.GetButton("Interact0") || Input.GetButton("Interact1"))
+            {
+                blackScreen.gameObject.SetActive(true);
+                skip = true;
+            }
         }
     }
 }
