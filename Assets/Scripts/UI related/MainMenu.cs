@@ -76,8 +76,7 @@ namespace GOOST
         [Header("Misc")]
         [SerializeField]
         Image ScreenFade;
-        [SerializeField]
-        float maxIdleTime, idleTime = 0;
+        
 
         int mainMenuIndex, optionsIndex, levelSelectionIndex;
         bool transitioning;
@@ -286,24 +285,7 @@ namespace GOOST
             }
             #endregion
 
-            if (!Input.anyKey && GameStateManager.instance.GetState() != GameStates.STATE_GAMEPLAY
-                && Input.GetAxis("Horizontal0") == 0 && Input.GetAxis("Horizontal1") == 0
-                 && Input.GetAxis("Vertical0") == 0 && Input.GetAxis("Vertical1") == 0
-                 && currentState != menuState.tutorial)
-            {
-                idleTime += Time.deltaTime;
-            }
-            else
-            {
-                idleTime = 0;
-            }
-
-            if (idleTime > maxIdleTime && GameStateManager.instance.GetState() != GameStates.STATE_GAMEOVER)
-            {
-                StatTracker.instance.SaveStatsToFile();
-                GameStateManager.instance.ChangeState(GameStates.STATE_GAMEOVER);
-                StartCoroutine(FadeScreenInOut(false));
-            }
+            
 
         }
 
